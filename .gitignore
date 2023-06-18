@@ -1,0 +1,9 @@
+*.pdb
+*.exe
+*.pcu
+*.code-workspace
+GPATH
+GRTAGS
+GTAGS
+.*/*
+doc/*
