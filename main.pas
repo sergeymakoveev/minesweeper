@@ -316,7 +316,7 @@ procedure displayMenuMainStep;
   end;
 
 // выбор уровня сложности
-procedure difficultyChoice;
+procedure displayLevelStep;
   begin
     clearwindow;
     mouseX := 0;
@@ -601,7 +601,7 @@ begin
   // повторяем показ различных окон
   repeat
     case programStep of
-      'LevelStep': difficultyChoice;
+      'LevelStep': displayLevelStep;
       'game': game;
       'MenuMainStep': displayMenuMainStep;
       'RulesStep': displayRulesStep(programStep);
