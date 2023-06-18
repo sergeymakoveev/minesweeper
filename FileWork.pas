@@ -177,7 +177,7 @@ procedure records(var programStep: string);
           IsMouseDown := false;
       until backButtonPressed(mouseX, mouseY, button);
       
-      ProgramStep:='startMenu';
+      ProgramStep:='MenuMain';
     
   end;
 
@@ -203,7 +203,7 @@ procedure viewRules(var ProgramStep: string);
       end;
     until backButtonPressed(mouseX, mouseY, button);
     
-    ProgramStep := 'startMenu';
+    ProgramStep := 'MenuMain';
   end;
 
 begin 

@@ -281,7 +281,7 @@ procedure proLevel;
   end;
 
 // главное меню
-procedure startMenu;
+procedure displayMenuMain;
   begin
     mouseX := 0;
     mouseY := 0;
@@ -351,7 +351,7 @@ procedure difficultyChoice;
     else if proPressed(mouseX, mouseY, button) then proLevel;
 
     if customPressed(mouseX, mouseY, button) then ProgramStep := 'customLevel'
-    else if backButtonPressed(mouseX, mouseY, button) then ProgramStep := 'startMenu'
+    else if backButtonPressed(mouseX, mouseY, button) then ProgramStep := 'MenuMain'
     else ProgramStep := 'game';
   end;
 
@@ -362,7 +362,7 @@ procedure IngameButtonsPressed;
     // ytemp:=mouseY;
     
     // выход в меню
-    if menuButtonPressed(xtemp, ytemp, button, M) then ProgramStep := 'startMenu'
+    if menuButtonPressed(xtemp, ytemp, button, M) then ProgramStep := 'MenuMain'
     // начинаем заново
     else if againButtonPressed(xtemp, ytemp, button, M) then ProgramStep := 'game'
     // выход из игры
@@ -596,14 +596,14 @@ begin
       closewindow;
     end;
   
-  ProgramStep := 'startMenu';
+  ProgramStep := 'MenuMain';
   
   // повторяем показ различных окон
   repeat
     case ProgramStep of
       'difficultyChoice': difficultyChoice;
       'game': game;
-      'startMenu': startmenu;
+      'MenuMain': displayMenuMain;
       'viewRules': viewRules(programStep);
       'customLevel': customLevel(level,M,N,Nmines,programStep);
       'records': records(programStep);
