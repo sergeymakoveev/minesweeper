@@ -307,7 +307,11 @@ procedure displayMenuMainStep;
         begin
           IsMouseDown := false;
         end;
-    until playButtonPressed(mouseX, mouseY, button) or rulesButtonPressed(mouseX, mouseY, button) or  recordsButtonPressed(mouseX, mouseY, button) or exitButtonPressed(mouseX, mouseY, button);
+    until
+      playButtonPressed(mouseX, mouseY, button) or
+      rulesButtonPressed(mouseX, mouseY, button) or
+      recordsButtonPressed(mouseX, mouseY, button) or
+      exitButtonPressed(mouseX, mouseY, button);
     
     if playButtonPressed(mouseX, mouseY, button) then programStep := 'LevelStep';
     if rulesButtonPressed(mouseX, mouseY, button) then programStep := 'RulesStep';
