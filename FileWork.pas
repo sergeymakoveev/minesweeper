@@ -7,7 +7,7 @@ uses GameConstants, GameVariables;
 uses MyButtonsPressed, MyInput;
 
 procedure KeyPressName(ch: char);
-procedure viewRules(var ProgramStep: string);
+procedure displayRulesStep(var ProgramStep: string);
 procedure records(var programStep: string);
 procedure isBest(time: integer; level: byte);
   
@@ -177,12 +177,12 @@ procedure records(var programStep: string);
           IsMouseDown := false;
       until backButtonPressed(mouseX, mouseY, button);
       
-      ProgramStep:='MenuMain';
+      ProgramStep:='MenuMainStep';
     
   end;
 
 // вывод правил игры
-procedure viewRules(var ProgramStep: string);
+procedure displayRulesStep(var ProgramStep: string);
   begin
     mouseX:=-1;
     mouseY:=-1;
@@ -203,7 +203,7 @@ procedure viewRules(var ProgramStep: string);
       end;
     until backButtonPressed(mouseX, mouseY, button);
     
-    ProgramStep := 'MenuMain';
+    ProgramStep := 'MenuMainStep';
   end;
 
 begin 

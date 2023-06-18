@@ -12,7 +12,7 @@ var
   // число мин
   Nmines: integer;
   // отвечает за активное меню
-  ProgramStep: string;
+  programStep: string;
   // количество открытых ячеек
   fcount: integer;
   // отвечает за выбранный уровень 
@@ -281,7 +281,7 @@ procedure proLevel;
   end;
 
 // главное меню
-procedure displayMenuMain;
+procedure displayMenuMainStep;
   begin
     mouseX := 0;
     mouseY := 0;
@@ -290,14 +290,14 @@ procedure displayMenuMain;
     CenterWindow;
     clearwindow;
     
-    SetFontSize(70);
-    textOut(145, 40, 'САПЁР');
+    SetFontSize(65);
+    textOut(40, 40, 'Игра "Сапёр"');
     SetFontSize(10);
-    DrawTextCentered(300, 660, 700, 680, 'Выполнил ст.гр. 243 Трынкин Михаил');
+    TextOut(40, 660, 'Николаев Максим, группа 243');
     
     SetFontSize(20);
-    DrawButton(40,220,570,260,'ИГРАТЬ');
-    DrawButton(40,280,570,320,'Правила игры');
+    DrawButton(40,220,570,260,'Играть');
+    DrawButton(40,280,570,320,'Правила');
     DrawButton(40,340,570,380,'Рекорды');
     DrawButton(40,540,570,580,'Выход');
     
@@ -309,9 +309,9 @@ procedure displayMenuMain;
         end;
     until playButtonPressed(mouseX, mouseY, button) or rulesButtonPressed(mouseX, mouseY, button) or  recordsButtonPressed(mouseX, mouseY, button) or exitButtonPressed(mouseX, mouseY, button);
     
-    if playButtonPressed(mouseX, mouseY, button) then ProgramStep := 'difficultyChoice';
-    if rulesButtonPressed(mouseX, mouseY, button) then ProgramStep := 'viewRules';
-    if recordsButtonPressed(mouseX, mouseY, button) then ProgramStep := 'records';
+    if playButtonPressed(mouseX, mouseY, button) then programStep := 'LevelStep';
+    if rulesButtonPressed(mouseX, mouseY, button) then programStep := 'RulesStep';
+    if recordsButtonPressed(mouseX, mouseY, button) then programStep := 'records';
     if exitButtonPressed(mouseX, mouseY, button) then closewindow;
   end;
 
@@ -350,9 +350,9 @@ procedure difficultyChoice;
     else if advansedPressed(mouseX, mouseY, button) then advansedLevel
     else if proPressed(mouseX, mouseY, button) then proLevel;
 
-    if customPressed(mouseX, mouseY, button) then ProgramStep := 'customLevel'
-    else if backButtonPressed(mouseX, mouseY, button) then ProgramStep := 'MenuMain'
-    else ProgramStep := 'game';
+    if customPressed(mouseX, mouseY, button) then programStep := 'customLevel'
+    else if backButtonPressed(mouseX, mouseY, button) then programStep := 'MenuMainStep'
+    else programStep := 'game';
   end;
 
 // проверка кнопок в окне во время игры на нажатие (которые требуют подтверждения)
@@ -362,9 +362,9 @@ procedure IngameButtonsPressed;
     // ytemp:=mouseY;
     
     // выход в меню
-    if menuButtonPressed(xtemp, ytemp, button, M) then ProgramStep := 'MenuMain'
+    if menuButtonPressed(xtemp, ytemp, button, M) then programStep := 'MenuMainStep'
     // начинаем заново
-    else if againButtonPressed(xtemp, ytemp, button, M) then ProgramStep := 'game'
+    else if againButtonPressed(xtemp, ytemp, button, M) then programStep := 'game'
     // выход из игры
     else if endButtonPressed(xtemp, ytemp, button, N, M) then closewindow;
   end;
@@ -596,15 +596,15 @@ begin
       closewindow;
     end;
   
-  ProgramStep := 'MenuMain';
+  programStep := 'MenuMainStep';
   
   // повторяем показ различных окон
   repeat
-    case ProgramStep of
-      'difficultyChoice': difficultyChoice;
+    case programStep of
+      'LevelStep': difficultyChoice;
       'game': game;
-      'MenuMain': displayMenuMain;
-      'viewRules': viewRules(programStep);
+      'MenuMainStep': displayMenuMainStep;
+      'RulesStep': displayRulesStep(programStep);
       'customLevel': customLevel(level,M,N,Nmines,programStep);
       'records': records(programStep);
     end;
