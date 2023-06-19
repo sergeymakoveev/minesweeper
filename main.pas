@@ -319,7 +319,7 @@ procedure displayMenuMainStep;
     if exitButtonPressed(mouseX, mouseY, button) then closewindow;
   end;
 
-// выбор уровня сложности
+// Меню игры
 procedure displayMenuGameStep;
   begin
     clearwindow;
@@ -334,10 +334,8 @@ procedure displayMenuGameStep;
     DrawButton(40,280,570,320,'Любитель: поле 16х16, 40 мин');
     DrawButton(40,340,570,380,'Профессионал: поле 19х30, 70 мин');
     DrawButton(40,400,570,440,'Пользовательская');
-    DrawButton(40,540,570,580,'назад');
+    DrawButton(40,540,570,580,'Назад');
 
-    
-    // OnMouseDown := MouseDown;
     repeat
       if IsMouseDown then
         begin
@@ -356,7 +354,7 @@ procedure displayMenuGameStep;
 
     if customPressed(mouseX, mouseY, button) then programStep := 'customLevel'
     else if backButtonPressed(mouseX, mouseY, button) then programStep := 'MenuMainStep'
-    else programStep := 'game';
+    else programStep := 'GameStep';
   end;
 
 // проверка кнопок в окне во время игры на нажатие (которые требуют подтверждения)
@@ -368,7 +366,7 @@ procedure IngameButtonsPressed;
     // выход в меню
     if menuButtonPressed(xtemp, ytemp, button, M) then programStep := 'MenuMainStep'
     // начинаем заново
-    else if againButtonPressed(xtemp, ytemp, button, M) then programStep := 'game'
+    else if againButtonPressed(xtemp, ytemp, button, M) then programStep := 'GameStep'
     // выход из игры
     else if endButtonPressed(xtemp, ytemp, button, N, M) then closewindow;
   end;
@@ -518,7 +516,7 @@ procedure pause;
   end;
 
 // процесс игры
-procedure game;
+procedure displayGameStep;
   begin
     var  i, j: shortint;
     var sure: boolean;
@@ -602,11 +600,11 @@ begin
   
   programStep := 'MenuMainStep';
   
-  // повторяем показ различных окон
+  // Отрисовка текущего окна
   repeat
     case programStep of
       'MenuGameStep': displayMenuGameStep;
-      'game': game;
+      'GameStep': displayGameStep;
       'MenuMainStep': displayMenuMainStep;
       'RulesStep': displayRulesStep(programStep);
       'customLevel': customLevel(level,M,N,Nmines,programStep);

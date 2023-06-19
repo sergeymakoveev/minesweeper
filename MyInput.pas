@@ -122,7 +122,7 @@ procedure customLevel(var level: byte; var M,N: integer; var Nmines: integer; va
     SetWindowSize((M + 6) * Width, (N + 2) * Width);
     CenterWindow;
     
-    programStep := 'game';
+    programStep := 'GameStep';
   end;
 
 begin 
