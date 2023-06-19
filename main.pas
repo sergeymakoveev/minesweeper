@@ -313,14 +313,14 @@ procedure displayMenuMainStep;
       recordsButtonPressed(mouseX, mouseY, button) or
       exitButtonPressed(mouseX, mouseY, button);
     
-    if playButtonPressed(mouseX, mouseY, button) then programStep := 'LevelStep';
+    if playButtonPressed(mouseX, mouseY, button) then programStep := 'MenuGameStep';
     if rulesButtonPressed(mouseX, mouseY, button) then programStep := 'RulesStep';
     if recordsButtonPressed(mouseX, mouseY, button) then programStep := 'records';
     if exitButtonPressed(mouseX, mouseY, button) then closewindow;
   end;
 
 // выбор уровня сложности
-procedure displayLevelStep;
+procedure displayMenuGameStep;
   begin
     clearwindow;
     mouseX := 0;
@@ -605,7 +605,7 @@ begin
   // повторяем показ различных окон
   repeat
     case programStep of
-      'LevelStep': displayLevelStep;
+      'MenuGameStep': displayMenuGameStep;
       'game': game;
       'MenuMainStep': displayMenuMainStep;
       'RulesStep': displayRulesStep(programStep);
