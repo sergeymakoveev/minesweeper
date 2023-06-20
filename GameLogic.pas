@@ -8,18 +8,6 @@ Interface
   uses MyButtonsPressed;
 
   procedure displayGameStep;
-  procedure pole;
-  procedure pause;
-  procedure FirstStep(i, j: shortint);
-  procedure Step(i, j: shortint);
-  procedure EmptyStep(i, j, fcount: shortint);
-  procedure flag(i, j: shortint);
-  procedure deleteFlag(var i: shortint; j: shortint);
-  procedure youLose;
-  procedure youWin;
-  procedure IngameButtonsPressed;
-  procedure filling;
-  procedure isBest(time: integer; level: byte);
 
   function notMine(i, j: integer): boolean;
   function WantSetFlag(i, j: integer): boolean;
@@ -37,74 +25,6 @@ var
   // переменные, отвечающие за время прохождения
   time0, time1, time: integer;
 
-// процесс игры
-procedure displayGameStep;
-  begin
-    var  i, j: shortint;
-    var sure: boolean;
-    clearwindow;
-    lockDrawing;
-    SetFontSize(10);
-    
-    // обнуляем переменные
-    fcount := 0;
-    i := 0;
-    j := 0;
-    mouseX := 0;
-    mouseY := 0;
-    xtemp:=0;
-    ytemp:=0;
-    
-    // рисуем поле
-    pole;
-    
-    // рисуем кнопки
-    DrawButton(39 * (M + 3), 39 * 1, 39 * (M + 3) + 39 * 2, 39 * 1 + 39, 'переиграть');
-    DrawButton(39 * (M + 3), round(39*2.5), 39 * (M + 3) + 39 * 2, round(39*2.5) + 39, 'пауза');
-    DrawButton(39 * (M + 3), 39 * 4, 39 * (M + 3) + 39 * 2, 39 * 5, 'назад в меню');
-    DrawButton(39 * (M + 3), 39 * N, 39 * (M + 3) + 39 * 2, 39 * (N+1), 'выход из игры');
-    
-    redraw;
-    unlockdrawing;
-    
-    repeat
-      if IsMouseDown then
-        begin
-          IsMouseDown := false;
-          i := mouseX div width;
-          j := mouseY div width;
-          SetFontSize(15);
-          // безопасное первое открытие клетки + заполнение поля минами
-          if (i in 1..M) and (j in 1..N) and (button = 1) and (fcount = 0) then FirstStep(i, j)
-          else if pauseButtonPressed(mouseX,mouseY,button,M) then pause
-          // нажали на клетку без мины
-          else if notMine(i, j) then
-            begin
-                // открыли клетку без мины с минами вокруг
-                if (Field[i,j].nearbyMines <> 0) then Step(i, j)
-                // открыли клетку без мины без мин вокруг
-                else Emptystep(i,j,fcount);
-            end
-          // поставили флаг
-          else if WantSetFlag(i, j) then flag(i, j)
-          // убрали флаг
-          else if WantDeleteFlag(i, j) then deleteFlag(i, j)
-          // хотим нажать на кнопку выхода/в меню/заново
-          else if (againButtonPressed(mouseX, mouseY, button, M)) or (menuButtonPressed(mouseX, mouseY, button, M)) or (endButtonPressed(mouseX, mouseY, button, N, M)) then
-              sure := AreYouSure;
-        end;
-    // завершение процесса игры при одном из трёх условий
-    until sure or (fcount = M * N - Nmines) or lose(i, j);
-    
-    // если выполнилось условие проигрыша, то проиграл
-    if lose(i,j) then youLose;
-    
-    // если открыл все поля без мин, то победил
-    if fcount = int(M * N) - Nmines then youWin;
-    
-    // последний исход завершения процесса игры - нажата кнопка меню/выход/переиграть
-    IngameButtonsPressed;
-  end;
 
 // поле + очищение клеток от мин + состояния открытия + флагов на случай начала новой игры без перезапуска программы
 procedure pole;
@@ -359,39 +279,6 @@ procedure youLose;
     IngameButtonsPressed;
   end;
 
-// победа
-procedure youWin;
-  begin
-    var finishText: string;  
-    // записываем время
-    time1 := Milliseconds;
-    // считаем суммарное время прохождения уровня
-    time := time + (time1 - time0) div 1000 + 1;
-    
-    fillrectangle(39 * (M + 3), round(39*2.5), 39 * (M + 3) + 39 * 2, round(39*2.5) + 39);// убрать кнопку паузы
-    
-    finishText := 'Вы победили! Секунд затрачено: ' + time;
-    SetFontSize(10);
-    TextOut(38,0,finishtext);
-    
-    // отключаем мышь на время записи рекорда
-    OnMouseDown:=Nil;
-    
-    // если не на пользовательском уровне, то проверяем время на рекорд
-    if level <> 3 then isBest(time,level);
-    
-    OnMouseDown:=MouseDown;
-    repeat
-      if IsMouseDown then
-        begin
-          IsMouseDown := false;
-        end;
-    until (endButtonPressed(mouseX, mouseY, button, N, M)) or (againButtonPressed(mouseX, mouseY, button, M)) or (menuButtonPressed(mouseX, mouseY, button, M));
-    xtemp:=mouseX;
-    ytemp:=mouseY;
-    IngameButtonsPressed;
-  end;
-
 // нажатие на клавиатуру (имя рекордсмена)
 procedure KeyPressName(ch: char);
   begin
@@ -479,6 +366,39 @@ procedure isBest(time: integer; level: byte);
     else close(f);
   end;
 
+// победа
+procedure youWin;
+  begin
+    var finishText: string;  
+    // записываем время
+    time1 := Milliseconds;
+    // считаем суммарное время прохождения уровня
+    time := time + (time1 - time0) div 1000 + 1;
+    
+    fillrectangle(39 * (M + 3), round(39*2.5), 39 * (M + 3) + 39 * 2, round(39*2.5) + 39);// убрать кнопку паузы
+    
+    finishText := 'Вы победили! Секунд затрачено: ' + time;
+    SetFontSize(10);
+    TextOut(38,0,finishtext);
+    
+    // отключаем мышь на время записи рекорда
+    OnMouseDown:=Nil;
+    
+    // если не на пользовательском уровне, то проверяем время на рекорд
+    if level <> 3 then isBest(time,level);
+    
+    OnMouseDown:=MouseDown;
+    repeat
+      if IsMouseDown then
+        begin
+          IsMouseDown := false;
+        end;
+    until (endButtonPressed(mouseX, mouseY, button, N, M)) or (againButtonPressed(mouseX, mouseY, button, M)) or (menuButtonPressed(mouseX, mouseY, button, M));
+    xtemp:=mouseX;
+    ytemp:=mouseY;
+    IngameButtonsPressed;
+  end;
+
 // подтверждение нажатия на кнопку Переиграть/в меню/выйти
 function AreYouSure: boolean;
   begin
@@ -547,6 +467,75 @@ procedure pause;
     // не открылась ячейка сразу после отрисовки игрового поля
     mouseX:=0;
     mouseY:=0;
+  end;
+
+// процесс игры
+procedure displayGameStep;
+  begin
+    var  i, j: shortint;
+    var sure: boolean;
+    clearwindow;
+    lockDrawing;
+    SetFontSize(10);
+    
+    // обнуляем переменные
+    fcount := 0;
+    i := 0;
+    j := 0;
+    mouseX := 0;
+    mouseY := 0;
+    xtemp:=0;
+    ytemp:=0;
+    
+    // рисуем поле
+    pole;
+    
+    // рисуем кнопки
+    DrawButton(39 * (M + 3), 39 * 1, 39 * (M + 3) + 39 * 2, 39 * 1 + 39, 'переиграть');
+    DrawButton(39 * (M + 3), round(39*2.5), 39 * (M + 3) + 39 * 2, round(39*2.5) + 39, 'пауза');
+    DrawButton(39 * (M + 3), 39 * 4, 39 * (M + 3) + 39 * 2, 39 * 5, 'назад в меню');
+    DrawButton(39 * (M + 3), 39 * N, 39 * (M + 3) + 39 * 2, 39 * (N+1), 'выход из игры');
+    
+    redraw;
+    unlockdrawing;
+    
+    repeat
+      if IsMouseDown then
+        begin
+          IsMouseDown := false;
+          i := mouseX div width;
+          j := mouseY div width;
+          SetFontSize(15);
+          // безопасное первое открытие клетки + заполнение поля минами
+          if (i in 1..M) and (j in 1..N) and (button = 1) and (fcount = 0) then FirstStep(i, j)
+          else if pauseButtonPressed(mouseX,mouseY,button,M) then pause
+          // нажали на клетку без мины
+          else if notMine(i, j) then
+            begin
+                // открыли клетку без мины с минами вокруг
+                if (Field[i,j].nearbyMines <> 0) then Step(i, j)
+                // открыли клетку без мины без мин вокруг
+                else Emptystep(i,j,fcount);
+            end
+          // поставили флаг
+          else if WantSetFlag(i, j) then flag(i, j)
+          // убрали флаг
+          else if WantDeleteFlag(i, j) then deleteFlag(i, j)
+          // хотим нажать на кнопку выхода/в меню/заново
+          else if (againButtonPressed(mouseX, mouseY, button, M)) or (menuButtonPressed(mouseX, mouseY, button, M)) or (endButtonPressed(mouseX, mouseY, button, N, M)) then
+              sure := AreYouSure;
+        end;
+    // завершение процесса игры при одном из трёх условий
+    until sure or (fcount = M * N - Nmines) or lose(i, j);
+    
+    // если выполнилось условие проигрыша, то проиграл
+    if lose(i,j) then youLose;
+    
+    // если открыл все поля без мин, то победил
+    if fcount = int(M * N) - Nmines then youWin;
+    
+    // последний исход завершения процесса игры - нажата кнопка меню/выход/переиграть
+    IngameButtonsPressed;
   end;
 
 begin 
