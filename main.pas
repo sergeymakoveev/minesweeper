@@ -1,5 +1,5 @@
 ﻿uses graphABC, PABCSystem;
-uses GameConstants, GlobalVariables, CommonFunctions;
+uses GlobalConstants, GlobalVariables, CommonFunctions;
 uses GameLogic;
 uses UserLevelForm;
 uses MyButtonsPressed;

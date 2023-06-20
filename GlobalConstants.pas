@@ -1,4 +1,4 @@
-unit GameConstants;
+unit GlobalConstants;
 
 const
   // ширина клетки
