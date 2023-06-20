@@ -1,12 +1,12 @@
-﻿unit MyInput;
+﻿unit UserLevelForm;
 
 Interface
 
   uses graphABC;
   uses GameConstants, GameVariables;
 
-  procedure KeyPressCustom(ch: char);
-  procedure customLevel(var level: byte; var M,N: integer; var Nmines: integer; var programStep: string);
+  procedure inputInteger(ch: char);
+  procedure displayUserLevelForm(var level: byte; var M,N: integer; var Nmines: integer; var programStep: string);
   
 Implementation
  
@@ -14,8 +14,8 @@ var
   // отвечают за то, в из какой точки выводить введённые пользователем параметры поля
   outX,outY: integer;
 
-// нажатие на клавиатуру (редактирование поля)
-procedure KeyPressCustom(ch: char);
+// Процедура пользовательского ввода целого числа
+procedure inputInteger(ch: char);
   begin
     lockdrawing;
     fillrect(outX,outY,2000,outY+20);
@@ -39,7 +39,7 @@ procedure KeyPressCustom(ch: char);
   end;
 
 // играть на пользовательской сложности
-procedure customLevel(var level: byte; var M,N: integer; var Nmines: integer; var programStep: string);
+procedure displayUserLevelForm(var level: byte; var M,N: integer; var Nmines: integer; var programStep: string);
   begin
     ClearWindow;
     SetFontSize(15);
@@ -51,7 +51,7 @@ procedure customLevel(var level: byte; var M,N: integer; var Nmines: integer; va
     textout(10,10,'Введите ширину поля (поддерживается не более 34):');
     outX:=520;
     outY:=10;
-    onKeyPress:=KeyPressCustom;
+    onKeyPress:=inputInteger;
     repeat s:=ss until InputDone;
     InputDone:=False;
     val(s,M,err);
@@ -62,7 +62,7 @@ procedure customLevel(var level: byte; var M,N: integer; var Nmines: integer; va
         SetFontSize(15);
         sleep(1500);
         textout(50,35,' '*100);// закрасить место, где было выведено предыдущее сообщение
-        onKeyPress:=KeyPressCustom;
+        onKeyPress:=inputInteger;
         repeat s:=ss until InputDone;
         InputDone:=False;
         val(s,M,err);
@@ -70,7 +70,7 @@ procedure customLevel(var level: byte; var M,N: integer; var Nmines: integer; va
     outX:=500;
     outY:=50;
     textout(10,50,'Введите высоту поля (поддерживается от 5 до 19):');
-    onKeyPress:=KeyPressCustom;
+    onKeyPress:=inputInteger;
     repeat s:=ss until InputDone;
     InputDone:=False;
     val(s,N,err);
@@ -81,7 +81,7 @@ procedure customLevel(var level: byte; var M,N: integer; var Nmines: integer; va
         SetFontSize(15);
         sleep(1500);
         textout(50,75,' '*100);
-        onKeyPress:=KeyPressCustom;
+        onKeyPress:=inputInteger;
         repeat s:=ss until InputDone;
         InputDone:=False;
         SetFontSize(15);
@@ -90,7 +90,7 @@ procedure customLevel(var level: byte; var M,N: integer; var Nmines: integer; va
     outX:=510;
     outY:=90;
     textout(10,90,'Введите количество мин (зависит от размера поля):');
-    onKeyPress:=KeyPressCustom;
+    onKeyPress:=inputInteger;
     repeat s:=ss until InputDone;
     InputDone:=False;
     val(s,Nmines,err);
@@ -101,7 +101,7 @@ procedure customLevel(var level: byte; var M,N: integer; var Nmines: integer; va
         SetFontSize(15);
         sleep(1500);
         textout(50,115,' '*100);
-        onKeyPress:=KeyPressCustom;
+        onKeyPress:=inputInteger;
         repeat s:=ss until InputDone;
         InputDone:=False;
         SetFontSize(15);

@@ -4,7 +4,7 @@ Interface
 
 uses graphABC;
 uses GameConstants, GameVariables, CommonFunctions;
-uses MyButtonsPressed, MyInput;
+uses MyButtonsPressed;
 
 procedure KeyPressName(ch: char);
 procedure displayRulesStep(var programStep: string);
@@ -12,13 +12,7 @@ procedure records(var programStep: string);
   
   
 Implementation
- 
-var 
-  // отвечает за конец события OnKeyPress (True когда закончилось)
-  InputDone: boolean;
-  // отвечают за то, в из какой точки выводить введённые пользователем параметры поля
-  outX,outY: integer;
-  
+
 // нажатие на клавиатуру (имя рекордсмена)
 procedure KeyPressName(ch: char);
   begin

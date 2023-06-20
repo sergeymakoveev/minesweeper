@@ -4,7 +4,8 @@ Interface
 
   uses graphABC, PABCSystem;
   uses GameConstants, GameVariables, CommonFunctions;
-  uses MyButtonsPressed, MyInput, FileWork;
+  uses UserLevelForm;
+  uses MyButtonsPressed, FileWork;
 
   procedure displayGameStep;
   procedure pole;

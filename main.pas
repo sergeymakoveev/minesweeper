@@ -1,7 +1,8 @@
 ﻿uses graphABC, PABCSystem;
 uses GameConstants, GameVariables, CommonFunctions;
 uses GameLogic;
-uses MyButtonsPressed, MyInput, FileWork;
+uses UserLevelForm;
+uses MyButtonsPressed, FileWork;
 
 // играть на сложности новичок
 procedure setEasyLevel;
@@ -161,7 +162,7 @@ begin
       'GameStep': displayGameStep;
       'MenuMainStep': displayMenuMainStep;
       'RulesStep': displayRulesStep(programStep);
-      'UserLevelStep': customLevel(level,M,N,Nmines,programStep);
+      'UserLevelStep': displayUserLevelForm(level,M,N,Nmines,programStep);
       'records': records(programStep);
     end;
   // игру закрывается из окна startmenu или game
