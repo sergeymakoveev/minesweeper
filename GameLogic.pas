@@ -3,7 +3,7 @@ unit GameLogic;
 Interface
 
   uses graphABC, PABCSystem;
-  uses GameConstants, GameVariables, CommonFunctions;
+  uses GameConstants, GlobalVariables, CommonFunctions;
   uses UserLevelForm;
   uses MyButtonsPressed;
 

@@ -3,7 +3,7 @@ unit CommonFunctions;
 Interface
 
   uses graphABC;
-  uses GameVariables;
+  uses GlobalVariables;
   procedure DrawButton(x0,y0,x,y: integer; text: string);
   procedure MouseDown(x, y, mb: integer);
 

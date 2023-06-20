@@ -3,7 +3,7 @@
 Interface
 
   uses graphABC;
-  uses GameConstants, GameVariables;
+  uses GameConstants, GlobalVariables;
 
   procedure inputInteger(ch: char);
   procedure displayUserLevelForm(var level: byte; var M,N: integer; var Nmines: integer; var programStep: string);

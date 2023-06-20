@@ -1,4 +1,4 @@
-unit GameVariables;
+unit GlobalVariables;
 
 type
   // тип данных КЛЕТКА (ячейка)
