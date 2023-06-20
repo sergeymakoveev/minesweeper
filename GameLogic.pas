@@ -9,12 +9,6 @@ Interface
 
   procedure displayGameStep;
 
-  function notMine(i, j: integer): boolean;
-  function WantSetFlag(i, j: integer): boolean;
-  function WantDeleteFlag(i, j: integer): boolean;
-  function AreYouSure: boolean;
-  function lose(i, j: integer): boolean;
-
 Implementation
 
 var
