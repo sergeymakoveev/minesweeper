@@ -36,6 +36,30 @@ procedure proLevel;
     CenterWindow
   end;
 
+// проверка клика по кнопке: уровень "легкий"
+function isEasyLevelClick(mouseX, mouseY, button: integer): boolean;
+  begin
+    if (mouseX in 40..570) and (mouseY in 220..260) and (button = 1) then isEasyLevelClick := true;
+  end;
+
+// проверка клика по кнопке: уровень "нормальный"
+function isNormalLevelClick(mouseX, mouseY, button: integer): boolean;
+  begin
+    if (mouseX in 40..570) and (mouseY in 280..320) and (button = 1) then isNormalLevelClick := true;
+  end;
+
+// проверка клика по кнопке: уровень "сложный"
+function isHardLevelClick(mouseX, mouseY, button: integer): boolean;
+  begin
+    if (mouseX in 40..570) and (mouseY in 340..380) and (button = 1) then isHardLevelClick := true;
+  end;
+
+// проверка клика по кнопке: уровень "пользовательский"
+function isCustomLevelClick(mouseX, mouseY, button: integer): boolean;
+  begin
+    if (mouseX in 40..570) and (mouseY in 400..440) and (button = 1) then isCustomLevelClick := true;
+  end;
+
 // главное меню
 procedure displayMenuMainStep;
   begin
@@ -59,9 +83,9 @@ procedure displayMenuMainStep;
     
     OnMouseDown := MouseDown;
     repeat
-      if IsMouseDown then
+      if isMouseDown then
         begin
-          IsMouseDown := false;
+          isMouseDown := false;
         end;
     until
       playButtonPressed(mouseX, mouseY, button) or
@@ -85,30 +109,30 @@ procedure displayMenuGameStep;
     CenterWindow;
     
     SetFontSize(20);
-    DrawTextCentered(40, 140, 570, 190, 'Выберите уровень сложности');
-    DrawButton(40,220,570,260,'Новичок: поле 8х8, 10 мин');
-    DrawButton(40,280,570,320,'Любитель: поле 16х16, 40 мин');
-    DrawButton(40,340,570,380,'Профессионал: поле 19х30, 70 мин');
-    DrawButton(40,400,570,440,'Пользовательская');
+    DrawTextCentered(40, 140, 570, 190, 'Выберите уровень:');
+    DrawButton(40,220,570,260,'Легкий: поле 8х8, 10 мин');
+    DrawButton(40,280,570,320,'Нормальный: поле 16х16, 40 мин');
+    DrawButton(40,340,570,380,'Сложный: поле 19х30, 70 мин');
+    DrawButton(40,400,570,440,'Пользовательский');
     DrawButton(40,540,570,580,'Назад');
 
     repeat
-      if IsMouseDown then
+      if isMouseDown then
         begin
-          IsMouseDown := false;
+          isMouseDown := false;
         end;
     until 
-      novicePressed(mouseX, mouseY, button) or
-      advansedPressed(mouseX, mouseY, button) or
-      proPressed(mouseX, mouseY, button) or
-      customPressed(mouseX, mouseY, button) or
+      isEasyLevelClick(mouseX, mouseY, button) or
+      isNormalLevelClick(mouseX, mouseY, button) or
+      isHardLevelClick(mouseX, mouseY, button) or
+      isCustomLevelClick(mouseX, mouseY, button) or
       backButtonPressed(mouseX, mouseY, button);
     
-    if novicePressed(mouseX, mouseY, button) then noviceLevel
-    else if advansedPressed(mouseX, mouseY, button) then advansedLevel
-    else if proPressed(mouseX, mouseY, button) then proLevel;
+    if isEasyLevelClick(mouseX, mouseY, button) then noviceLevel
+    else if isNormalLevelClick(mouseX, mouseY, button) then advansedLevel
+    else if isHardLevelClick(mouseX, mouseY, button) then proLevel;
 
-    if customPressed(mouseX, mouseY, button) then programStep := 'customLevel'
+    if isCustomLevelClick(mouseX, mouseY, button) then programStep := 'customLevel'
     else if backButtonPressed(mouseX, mouseY, button) then programStep := 'MenuMainStep'
     else programStep := 'GameStep';
   end;

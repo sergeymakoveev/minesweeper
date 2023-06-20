@@ -7,10 +7,6 @@ Interface
   function recordsButtonPressed(mouseX, mouseY, button: integer): boolean;
   function exitButtonPressed(mouseX, mouseY, button: integer): boolean;
   function backButtonPressed(mouseX, mouseY, button: integer): boolean;
-  function novicePressed(mouseX, mouseY, button: integer): boolean;
-  function advansedPressed(mouseX, mouseY, button: integer): boolean;
-  function proPressed(mouseX, mouseY, button: integer): boolean;
-  function customPressed(mouseX, mouseY, button: integer): boolean;
   function menuButtonPressed(mouseX, mouseY, button, M: integer): boolean;
   function endButtonPressed(mouseX, mouseY, button, N, M: integer): boolean;
   function againButtonPressed(mouseX, mouseY, button, M: integer): boolean;
@@ -49,30 +45,6 @@ function exitButtonPressed(mouseX, mouseY, button: integer): boolean;
 function backButtonPressed(mouseX, mouseY, button: integer): boolean;
   begin
     if (mouseX in 40..570) and (mouseY in 540..580) and (button = 1) then backButtonPressed := true;
-  end;
-
-// кнопка сложность: новичок нажата
-function novicePressed(mouseX, mouseY, button: integer): boolean;
-  begin
-    if (mouseX in 40..570) and (mouseY in 220..260) and (button = 1) then novicePressed := true;
-  end;
-
-// кнопка сложность: любитель нажата
-function advansedPressed(mouseX, mouseY, button: integer): boolean;
-  begin
-    if (mouseX in 40..570) and (mouseY in 280..320) and (button = 1) then advansedPressed := true;
-  end;
-
-// кнопка сложность: профессионал нажата
-function proPressed(mouseX, mouseY, button: integer): boolean;
-  begin
-    if (mouseX in 40..570) and (mouseY in 340..380) and (button = 1) then proPressed := true;
-  end;
-
-// кнопка сложность: пользовательская нажата
-function customPressed(mouseX, mouseY, button: integer): boolean;
-  begin
-    if (mouseX in 40..570) and (mouseY in 400..440) and (button = 1) then customPressed := true;
   end;
 
 // кнопка паузы нажата
