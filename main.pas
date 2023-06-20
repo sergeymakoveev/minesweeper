@@ -4,7 +4,7 @@ uses GameLogic;
 uses MyButtonsPressed, MyInput, FileWork;
 
 // играть на сложности новичок
-procedure noviceLevel;
+procedure setEasyLevel;
   begin
     level := 0;
     N := 8;
@@ -15,7 +15,7 @@ procedure noviceLevel;
   end;
 
 // играть на сложности любитель
-procedure advansedLevel;
+procedure setNormalLevel;
   begin
     level := 1;
     N := 16;
@@ -26,7 +26,7 @@ procedure advansedLevel;
   end;
 
 // играть на сложности профессионал
-procedure proLevel;
+procedure setHardLevel;
   begin
     level := 3;
     N := 19;
@@ -128,11 +128,11 @@ procedure displayMenuGameStep;
       isCustomLevelClick(mouseX, mouseY, button) or
       backButtonPressed(mouseX, mouseY, button);
     
-    if isEasyLevelClick(mouseX, mouseY, button) then noviceLevel
-    else if isNormalLevelClick(mouseX, mouseY, button) then advansedLevel
-    else if isHardLevelClick(mouseX, mouseY, button) then proLevel;
+    if isEasyLevelClick(mouseX, mouseY, button) then setEasyLevel
+    else if isNormalLevelClick(mouseX, mouseY, button) then setNormalLevel
+    else if isHardLevelClick(mouseX, mouseY, button) then setHardLevel;
 
-    if isCustomLevelClick(mouseX, mouseY, button) then programStep := 'customLevel'
+    if isCustomLevelClick(mouseX, mouseY, button) then programStep := 'UserLevelStep'
     else if backButtonPressed(mouseX, mouseY, button) then programStep := 'MenuMainStep'
     else programStep := 'GameStep';
   end;
@@ -161,7 +161,7 @@ begin
       'GameStep': displayGameStep;
       'MenuMainStep': displayMenuMainStep;
       'RulesStep': displayRulesStep(programStep);
-      'customLevel': customLevel(level,M,N,Nmines,programStep);
+      'UserLevelStep': customLevel(level,M,N,Nmines,programStep);
       'records': records(programStep);
     end;
   // игру закрывается из окна startmenu или game
