@@ -2,7 +2,7 @@
 uses GameConstants, GameVariables, CommonFunctions;
 uses GameLogic;
 uses UserLevelForm;
-uses MyButtonsPressed, FileWork;
+uses MyButtonsPressed;
 
 // играть на сложности новичок
 procedure setEasyLevel;
