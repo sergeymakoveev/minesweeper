@@ -102,7 +102,7 @@ procedure displayMenuMainStep;
     
     if playButtonPressed(mouseX, mouseY, button) then programStep := 'MenuGameStep';
     if rulesButtonPressed(mouseX, mouseY, button) then programStep := 'RulesStep';
-    if recordsButtonPressed(mouseX, mouseY, button) then programStep := 'records';
+    if recordsButtonPressed(mouseX, mouseY, button) then programStep := 'RecordsStep';
     if exitButtonPressed(mouseX, mouseY, button) then closewindow;
   end;
 
@@ -145,7 +145,7 @@ procedure displayMenuGameStep;
   end;
 
 // Вывод таблицы рекордов
-procedure records;
+procedure displayRecordsStep;
   type 
     highScore = record
       name: string;
@@ -256,7 +256,7 @@ begin
       'MenuMainStep': displayMenuMainStep;
       'RulesStep': displayRulesStep(programStep);
       'UserLevelStep': displayUserLevelForm(level,M,N,Nmines,programStep);
-      'records': records;
+      'RecordsStep': displayRecordsStep;
     end;
   // игру закрывается из окна startmenu или game
   until false;
