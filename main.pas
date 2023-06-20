@@ -61,6 +61,12 @@ function isCustomLevelClick(mouseX, mouseY, button: integer): boolean;
     if (mouseX in 40..570) and (mouseY in 400..440) and (button = 1) then isCustomLevelClick := true;
   end;
 
+// кнопка назад (в окне с правилами) нажата
+function isBackClick(mouseX, mouseY, button: integer): boolean;
+  begin
+    if (mouseX in 40..570) and (mouseY in 540..580) and (button = 1) then isBackClick := true;
+  end;
+
 // главное меню
 procedure displayMenuMainStep;
   begin
@@ -127,17 +133,104 @@ procedure displayMenuGameStep;
       isNormalLevelClick(mouseX, mouseY, button) or
       isHardLevelClick(mouseX, mouseY, button) or
       isCustomLevelClick(mouseX, mouseY, button) or
-      backButtonPressed(mouseX, mouseY, button);
+      isBackClick(mouseX, mouseY, button);
     
     if isEasyLevelClick(mouseX, mouseY, button) then setEasyLevel
     else if isNormalLevelClick(mouseX, mouseY, button) then setNormalLevel
     else if isHardLevelClick(mouseX, mouseY, button) then setHardLevel;
 
     if isCustomLevelClick(mouseX, mouseY, button) then programStep := 'UserLevelStep'
-    else if backButtonPressed(mouseX, mouseY, button) then programStep := 'MenuMainStep'
+    else if isBackClick(mouseX, mouseY, button) then programStep := 'MenuMainStep'
     else programStep := 'GameStep';
   end;
 
+// Вывод таблицы рекордов
+procedure records;
+  type 
+    highScore = record
+      name: string;
+      score: integer;
+    end;
+
+  begin
+    var players: array [0..2] of highscore;
+    var i: byte;
+    var f: text;
+    var output: string;
+    
+    mouseX:=-1;
+    mouseY:=-1;
+    
+    clearWindow;
+    
+    i:=0;
+
+    DrawButton(40, 540, 570, 580, 'назад');
+
+    assign(f,'records.txt');
+    // открытие файла
+    reset(f);
+    
+    // запись содержимого в переменные
+    while (not eof(f)) do
+    begin
+      readln(f,players[i].name);
+      readln(f,players[i].score);
+      i+=1;
+    end;
+    
+    SetFontSize(50);
+    drawTextCentered(0,0,600,100,'Лучшее время');
+    SetFontSize(20);
+    
+    for i:=0 to 2 do
+    begin
+      case i of
+        0: output:='Новичок: ';
+        1: output:='Любитель: ';
+        2: output:='Профессионал: ';
+      end;
+      if not (players[i].score = 0) then output += players[i].name + ' ' + players[i].score + 'с'
+      else output += 'рекорда нет';
+      drawTextCentered(0,100+50*(i+1),0+620,130+50*(i+1),output);
+    end;
+    
+    close(f);
+    IsMouseDown := false;
+    OnMouseDown := MouseDown;
+      repeat
+        if IsMouseDown then
+          IsMouseDown := false;
+      until isBackClick(mouseX, mouseY, button);
+      
+      programStep:='MenuMainStep';
+
+  end;
+
+// вывод правил игры
+procedure displayRulesStep(var programStep: string);
+  begin
+    mouseX:=-1;
+    mouseY:=-1;
+    
+    clearwindow;
+    SetFontSize(20);
+    Assign(input, 'Rules.txt');
+    var rules := ReadString;
+    DrawTextCentered(40, 20, 570, 450, rules);
+    
+    DrawButton(40, 540, 570, 580, 'назад');
+    
+    OnMouseDown := MouseDown;
+    repeat
+      if IsMouseDown then
+      begin
+        IsMouseDown := false;
+      end;
+    until isBackClick(mouseX, mouseY, button);
+    
+    programStep := 'MenuMainStep';
+  end;
 
 // Запуск игры
 begin
@@ -163,7 +256,7 @@ begin
       'MenuMainStep': displayMenuMainStep;
       'RulesStep': displayRulesStep(programStep);
       'UserLevelStep': displayUserLevelForm(level,M,N,Nmines,programStep);
-      'records': records(programStep);
+      'records': records;
     end;
   // игру закрывается из окна startmenu или game
   until false;

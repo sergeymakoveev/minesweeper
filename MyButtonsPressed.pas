@@ -6,7 +6,6 @@ Interface
   function rulesButtonPressed(mouseX, mouseY, button: integer): boolean;
   function recordsButtonPressed(mouseX, mouseY, button: integer): boolean;
   function exitButtonPressed(mouseX, mouseY, button: integer): boolean;
-  function backButtonPressed(mouseX, mouseY, button: integer): boolean;
   function menuButtonPressed(mouseX, mouseY, button, M: integer): boolean;
   function endButtonPressed(mouseX, mouseY, button, N, M: integer): boolean;
   function againButtonPressed(mouseX, mouseY, button, M: integer): boolean;
@@ -39,12 +38,6 @@ function recordsButtonPressed(mouseX, mouseY, button: integer): boolean;
 function exitButtonPressed(mouseX, mouseY, button: integer): boolean;
   begin
     if (mouseX in 40..570) and (mouseY in 540..580) and (button = 1) then exitButtonPressed := true;
-  end;
-
-// кнопка назад (в окне с правилами) нажата
-function backButtonPressed(mouseX, mouseY, button: integer): boolean;
-  begin
-    if (mouseX in 40..570) and (mouseY in 540..580) and (button = 1) then backButtonPressed := true;
   end;
 
 // кнопка паузы нажата
