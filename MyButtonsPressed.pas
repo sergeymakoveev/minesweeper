@@ -2,7 +2,6 @@
 
 Interface
   uses graphABC;
-  procedure DrawButton(x0,y0,x,y: integer; text: string);
   function playButtonPressed(mouseX, mouseY, button: integer): boolean;
   function rulesButtonPressed(mouseX, mouseY, button: integer): boolean;
   function recordsButtonPressed(mouseX, mouseY, button: integer): boolean;
@@ -21,13 +20,6 @@ Interface
   function noButtonPressed(mouseX, mouseY, button: integer): boolean;
   
 Implementation
-
-// универсальная отрисовка кнопок
-procedure DrawButton(x0,y0,x,y: integer; text: string);
-  begin
-    rectangle(x0, y0, x, y);
-    DrawTextCentered(x0, y0, x, y, text);
-  end;
 
 // кнопка играть нажата
 function playButtonPressed(mouseX, mouseY, button: integer): boolean;

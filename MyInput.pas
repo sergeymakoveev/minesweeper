@@ -11,9 +11,6 @@ Interface
 Implementation
  
 var 
-  ss: string;
-  // отвечает за конец события OnKeyPress (True когда закончилось)
-  InputDone: boolean;
   // отвечают за то, в из какой точки выводить введённые пользователем параметры поля
   outX,outY: integer;
 
