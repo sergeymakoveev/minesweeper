@@ -411,6 +411,20 @@ procedure youWin;
 
 // подтверждение нажатия на кнопку Переиграть/в меню/выйти
 function AreYouSure: boolean;
+
+  // кнопка НЕТ в подтверждении действия нажата
+  function checkNoButtonClick(mouseX, mouseY, button: integer): boolean;
+    begin
+      if (mouseX in (GraphBoxWidth div 2 - 200)..(GraphBoxWidth div 2 - 100)) and (mouseY in (GraphBoxHeight div 2)..(GraphBoxHeight div 2 + 40)) and (button = 1) then
+        checkNoButtonClick := true;
+    end;
+  // кнопка ДА в подтверждении действия нажата
+  function checkYesButtonClick(mouseX, mouseY, button: integer): boolean;
+    begin
+      if (mouseX in (GraphBoxWidth div 2 + 100)..(GraphBoxWidth div 2 + 200)) and (mouseY in (GraphBoxHeight div 2)..(GraphBoxHeight div 2 + 40)) and (button = 1) then
+        checkYesButtonClick := true;
+    end;
+
   begin
     SaveWindow('gamewindow');
     clearwindow;
@@ -431,14 +445,14 @@ function AreYouSure: boolean;
     
     repeat
       IsMouseDown := false;
-    until yesButtonPressed(mouseX,mouseY,button) or noButtonPressed(mouseX,mouseY,button);
+    until checkYesButtonClick(mouseX,mouseY,button) or checkNoButtonClick(mouseX,mouseY,button);
     
-    if yesButtonPressed(mouseX,mouseY,button) then AreYouSure:=true
+    if checkYesButtonClick(mouseX,mouseY,button) then AreYouSure:=true
     else AreYouSure:=false;
     
     // если пользователь не хочет переигрывать/выходить в меню/закрывать игру
     // то отрисовываем сохранённое окно с прохождением уровня
-    if noButtonPressed(mouseX,mouseY,button) then loadwindow('gamewindow');
+    if checkNoButtonClick(mouseX,mouseY,button) then loadwindow('gamewindow');
     
     // зануляем положение курсора чтобы
     // не открылась ячейка сразу после отрисовки игрового поля
