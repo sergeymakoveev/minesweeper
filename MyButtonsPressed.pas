@@ -2,10 +2,6 @@
 
 Interface
   uses graphABC;
-  function playButtonPressed(mouseX, mouseY, button: integer): boolean;
-  function rulesButtonPressed(mouseX, mouseY, button: integer): boolean;
-  function recordsButtonPressed(mouseX, mouseY, button: integer): boolean;
-  function exitButtonPressed(mouseX, mouseY, button: integer): boolean;
   function menuButtonPressed(mouseX, mouseY, button, M: integer): boolean;
   function endButtonPressed(mouseX, mouseY, button, N, M: integer): boolean;
   function againButtonPressed(mouseX, mouseY, button, M: integer): boolean;
@@ -15,31 +11,6 @@ Interface
   function noButtonPressed(mouseX, mouseY, button: integer): boolean;
   
 Implementation
-
-// кнопка играть нажата
-function playButtonPressed(mouseX, mouseY, button: integer): boolean;
-  begin
-    if (mouseX in 40..570) and (mouseY in 220..260) and (button = 1) then playButtonPressed := true;
-  end;
-
-// кнопка правила нажата
-function rulesButtonPressed(mouseX, mouseY, button: integer): boolean;
-  begin
-    if (mouseX in 40..570) and (mouseY in 280..320) and (button = 1) then rulesButtonPressed := true;
-  end;
-
-// кнопка рекордов нажата
-function recordsButtonPressed(mouseX, mouseY, button: integer): boolean;
-  begin
-    if (mouseX in 40..570) and (mouseY in 340..380) and (button = 1) then recordsButtonPressed := true;
-  end;
-
-// кнопка выхода из главного меню
-function exitButtonPressed(mouseX, mouseY, button: integer): boolean;
-  begin
-    if (mouseX in 40..570) and (mouseY in 540..580) and (button = 1) then exitButtonPressed := true;
-  end;
-
 // кнопка паузы нажата
 function pauseButtonPressed(mouseX, mouseY, button, M: integer): boolean;
   begin
