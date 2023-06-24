@@ -35,28 +35,6 @@ function checkAgainButtonClick(mouseX, mouseY, button, M: integer): boolean;
       checkAgainButtonClick := true;
   end;
 
-// поле + очищение клеток от мин + состояния открытия + флагов на случай начала новой игры без перезапуска программы
-procedure pole;
-  begin
-    var i, j: shortint;
-    lockdrawing;
-    setPenWidth(1);
-    SetBrushColor(clLightGray);
-    for i := 1 to M do
-      begin
-        for j := 1 to N do
-          begin
-            rectangle(WIDTH_CELL * i, WIDTH_CELL * j, WIDTH_CELL * i + WIDTH_CELL, WIDTH_CELL * j + WIDTH_CELL);
-            Field[i, j].opened := False;
-            Field[i, j].mine := False;
-            Field[i, j].flag := False;
-          end;
-      end;
-    redraw;
-    unlockdrawing;
-    SetBrushColor(clWhite);
-  end;
-
 // заполнение минами
 procedure filling;
   begin
@@ -118,7 +96,7 @@ procedure nearby;
   end;
 
 // открытие клетки
-procedure Step(i, j: shortint);
+procedure openCell(i, j: shortint);
   begin
     Field[i, j].opened := True;
     // счётчик открытых клеток
@@ -141,10 +119,10 @@ procedure Step(i, j: shortint);
   end;
 
 // открыть все соседние клетки для пустой клетки
-procedure EmptyStep(i, j, fcount: shortint);
+procedure openEmptyCells(i, j, fcount: shortint);
   var ii,jj: shortint;
   begin
-    Step(i,j);
+    openCell(i,j);
     for ii := -1 to 1 do
       begin
         for jj := -1 to 1 do
@@ -153,16 +131,16 @@ procedure EmptyStep(i, j, fcount: shortint);
             if (i+ii in 1..M) and (j+jj in 1..N) and (Field[i+ii,j+jj].opened = False) then
               begin
                 // останавливаем открытие на клетке с цифрой
-                if (Field[i+ii,j+jj].nearbyMines <> 0) and (Field[i+ii,j+jj].flag = False) then Step(i+ii,j+jj)
+                if (Field[i+ii,j+jj].nearbyMines <> 0) and (Field[i+ii,j+jj].flag = False) then openCell(i+ii,j+jj)
                 // если пустая - открываем дальше
-                else  if (Field[i+ii,j+jj].nearbyMines = 0) and (Field[i+ii,j+jj].flag = False) then EmptyStep(i+ii,j+jj,fcount);
+                else  if (Field[i+ii,j+jj].nearbyMines = 0) and (Field[i+ii,j+jj].flag = False) then openEmptyCells(i+ii,j+jj,fcount);
               end;
           end;
       end;
   end;
 
 // первое открытие клетки за игру
-procedure FirstStep(i, j: shortint);
+procedure openFirstCell(i, j: shortint);
   begin
     time0 := Milliseconds;
     time:=0;
@@ -170,7 +148,7 @@ procedure FirstStep(i, j: shortint);
     Field[i, j].mine := False;
     filling;
     nearby;
-    if Field[i,j].nearbyMines = 0 then EmptyStep(i,j,fcount);
+    if Field[i,j].nearbyMines = 0 then openEmptyCells(i,j,fcount);
     FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + WIDTH_CELL - 2, 39 * j + WIDTH_CELL - 2);
     case Field[i, j].nearbyMines of 
       1: SetFontColor(clGreen);
@@ -191,7 +169,7 @@ procedure FirstStep(i, j: shortint);
   end;
 
 // поставили флаг
-procedure flag(i, j: shortint);
+procedure setFlag(i, j: shortint);
   begin
     SetFontColor(clRed);
     DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, 'F');
@@ -264,7 +242,7 @@ procedure youLose();
   end;
 
 // нажатие на клавиатуру (имя рекордсмена)
-procedure KeyPressName(ch: char);
+procedure onKeyPressName(ch: char);
   begin
     InputDone := false;
     lockdrawing();
@@ -290,7 +268,7 @@ procedure KeyPressName(ch: char);
   end;
 
 // проверка на лучшее время и изменение рекорда
-procedure isBest(time: integer; level: byte);
+procedure checkIsBest(time: integer; level: byte);
   type 
     highScore = record
       name: string;
@@ -336,7 +314,7 @@ procedure isBest(time: integer; level: byte);
         else
           begin
             ss:='';
-            onKeyPress:=KeyPressName;
+            onKeyPress:=onKeyPressName;
             repeat i:=i+0 until InputDone;
             writeln(f2,ss);
           end;
@@ -351,7 +329,7 @@ procedure isBest(time: integer; level: byte);
   end;
 
 // победа
-procedure youWin();
+procedure displayWin();
   begin
     var finishText: string;  
     // записываем время
@@ -369,7 +347,7 @@ procedure youWin();
     OnMouseDown:=Nil;
     
     // если не на пользовательском уровне, то проверяем время на рекорд
-    if level <> 3 then isBest(time,level);
+    if level <> 3 then checkIsBest(time,level);
     
     OnMouseDown:=MouseDown;
     repeat
@@ -477,7 +455,29 @@ procedure pause();
   end;
 
 // процесс игры
-procedure displayGameStep();
+procedure displayGameStep;
+
+  // поле + очищение клеток от мин + состояния открытия + флагов на случай начала новой игры без перезапуска программы
+  procedure drawField;
+    begin
+      var i, j: shortint;
+      lockdrawing();
+      setPenWidth(1);
+      SetBrushColor(clLightGray);
+      for i := 1 to M do
+        begin
+          for j := 1 to N do
+            begin
+              rectangle(WIDTH_CELL * i, WIDTH_CELL * j, WIDTH_CELL * i + WIDTH_CELL, WIDTH_CELL * j + WIDTH_CELL);
+              Field[i, j].opened := False;
+              Field[i, j].mine := False;
+              Field[i, j].flag := False;
+            end;
+        end;
+      redraw();
+      unlockdrawing();
+      SetBrushColor(clWhite);
+    end;
 
   // кнопка паузы нажата
   function checkPauseButtonClick(mouseX, mouseY, button, M: integer): boolean;
@@ -526,7 +526,7 @@ procedure displayGameStep();
     ytemp:=0;
     
     // рисуем поле
-    pole();
+    drawField();
     
     // рисуем кнопки
     DrawButton(39 * (M + 3), 39 * 1, 39 * (M + 3) + 39 * 2, 39 * 1 + 39, 'переиграть');
@@ -545,18 +545,18 @@ procedure displayGameStep();
           j := mouseY div WIDTH_CELL;
           SetFontSize(15);
           // безопасное первое открытие клетки + заполнение поля минами
-          if (i in 1..M) and (j in 1..N) and (button = 1) and (fcount = 0) then FirstStep(i, j)
+          if (i in 1..M) and (j in 1..N) and (button = 1) and (fcount = 0) then openFirstCell(i, j)
           else if checkPauseButtonClick(mouseX,mouseY,button,M) then pause()
           // нажали на клетку без мины
           else if notMine(i, j) then
             begin
                 // открыли клетку без мины с минами вокруг
-                if (Field[i,j].nearbyMines <> 0) then Step(i, j)
+                if (Field[i,j].nearbyMines <> 0) then openCell(i, j)
                 // открыли клетку без мины без мин вокруг
-                else Emptystep(i,j,fcount);
+                else openEmptyCells(i,j,fcount);
             end
           // поставили флаг
-          else if WantSetFlag(i, j) then flag(i, j)
+          else if WantSetFlag(i, j) then setFlag(i, j)
           // убрали флаг
           else if WantDeleteFlag(i, j) then deleteFlag(i, j)
           // хотим нажать на кнопку выхода/в меню/заново
@@ -570,7 +570,7 @@ procedure displayGameStep();
     if lose(i,j) then youLose();
     
     // если открыл все поля без мин, то победил
-    if fcount = int(M * N) - Nmines then youWin();
+    if fcount = int(M * N) - Nmines then displayWin();
     
     // последний исход завершения процесса игры - нажата кнопка меню/выход/переиграть
     checkButtonsClick();
