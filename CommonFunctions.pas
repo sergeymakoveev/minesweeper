@@ -13,8 +13,8 @@ Implementation
 procedure MouseDown(x, y, mb: integer);
   begin
     IS_MOUSE_DOWN := true;
-    mouseX := x;
-    mouseY := y;
+    MOUSE_X := x;
+    MOUSE_Y := y;
     BUTTON_TYPE := mb;
   end;
 

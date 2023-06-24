@@ -19,19 +19,19 @@ var
   time0, time1, time: integer;
 
 // кнопа вернуться в главное меню нажата
-function checkMenuButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
+function checkMenuButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
   begin
-    if (mouseX in 39 * (FIELD_WIDTH + 3)..39 * (FIELD_WIDTH + 3) + 39 * 2) and (mouseY in 39 * 4..39 * 5) and (BUTTON_TYPE = 1) then checkMenuButtonClick := true;
+    if (MOUSE_X in 39 * (FIELD_WIDTH + 3)..39 * (FIELD_WIDTH + 3) + 39 * 2) and (MOUSE_Y in 39 * 4..39 * 5) and (BUTTON_TYPE = 1) then checkMenuButtonClick := true;
   end;
 // кнопка завершить программу нажата
-function checkEndButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH: integer): boolean;
+function checkEndButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH: integer): boolean;
   begin
-    if (mouseX in 39 * (FIELD_WIDTH + 3)..39 * (FIELD_WIDTH + 3) + 39 * 2) and (mouseY in 39 * FIELD_HEIGHT..39 * (FIELD_HEIGHT+1)) and (BUTTON_TYPE = 1) then checkEndButtonClick := true;
+    if (MOUSE_X in 39 * (FIELD_WIDTH + 3)..39 * (FIELD_WIDTH + 3) + 39 * 2) and (MOUSE_Y in 39 * FIELD_HEIGHT..39 * (FIELD_HEIGHT+1)) and (BUTTON_TYPE = 1) then checkEndButtonClick := true;
   end;
 // кнопка переиграть нажата
-function checkAgainButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
+function checkAgainButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
   begin
-    if (mouseX in (39 * (FIELD_WIDTH + 3))..(39 * (FIELD_WIDTH + 3) + 39 * 2)) and (mouseY in 39 * 1..39 * 1 + 39) and (BUTTON_TYPE = 1) then
+    if (MOUSE_X in (39 * (FIELD_WIDTH + 3))..(39 * (FIELD_WIDTH + 3) + 39 * 2)) and (MOUSE_Y in 39 * 1..39 * 1 + 39) and (BUTTON_TYPE = 1) then
       checkAgainButtonClick := true;
   end;
 
@@ -234,8 +234,8 @@ procedure youLose();
         begin
           IS_MOUSE_DOWN := false;
           // обязательно, так как иначе возможно неопределённое действие
-          xtemp:=mouseX;
-          ytemp:=mouseY;
+          xtemp:=MOUSE_X;
+          ytemp:=MOUSE_Y;
         end;
     until (checkEndButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH)) or (checkAgainButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH)) or (checkMenuButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH));
     checkButtonsClick();
@@ -355,9 +355,9 @@ procedure displayWin();
         begin
           IS_MOUSE_DOWN := false;
         end;
-    until (checkEndButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH)) or (checkAgainButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH)) or (checkMenuButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH));
-    xtemp:=mouseX;
-    ytemp:=mouseY;
+    until (checkEndButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH)) or (checkAgainButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)) or (checkMenuButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH));
+    xtemp:=MOUSE_X;
+    ytemp:=MOUSE_Y;
     checkButtonsClick();
   end;
 
@@ -365,15 +365,15 @@ procedure displayWin();
 function AreYouSure(): boolean;
 
   // кнопка НЕТ в подтверждении действия нажата
-  function checkNoButtonClick(mouseX, mouseY, BUTTON_TYPE: integer): boolean;
+  function checkNoButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (mouseX in (GraphBoxWidth div 2 - 200)..(GraphBoxWidth div 2 - 100)) and (mouseY in (GraphBoxHeight div 2)..(GraphBoxHeight div 2 + 40)) and (BUTTON_TYPE = 1) then
+      if (MOUSE_X in (GraphBoxWidth div 2 - 200)..(GraphBoxWidth div 2 - 100)) and (MOUSE_Y in (GraphBoxHeight div 2)..(GraphBoxHeight div 2 + 40)) and (BUTTON_TYPE = 1) then
         checkNoButtonClick := true;
     end;
   // кнопка ДА в подтверждении действия нажата
-  function checkYesButtonClick(mouseX, mouseY, BUTTON_TYPE: integer): boolean;
+  function checkYesButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (mouseX in (GraphBoxWidth div 2 + 100)..(GraphBoxWidth div 2 + 200)) and (mouseY in (GraphBoxHeight div 2)..(GraphBoxHeight div 2 + 40)) and (BUTTON_TYPE = 1) then
+      if (MOUSE_X in (GraphBoxWidth div 2 + 100)..(GraphBoxWidth div 2 + 200)) and (MOUSE_Y in (GraphBoxHeight div 2)..(GraphBoxHeight div 2 + 40)) and (BUTTON_TYPE = 1) then
         checkYesButtonClick := true;
     end;
 
@@ -382,8 +382,8 @@ function AreYouSure(): boolean;
     clearwindow;
     
     // для запоминания, какую кнопку хотел нажать игрок
-    xtemp:=mouseX;
-    ytemp:=mouseY;
+    xtemp:=MOUSE_X;
+    ytemp:=MOUSE_Y;
     
     drawTextCentered(GraphBoxWidth div 2 - 200,GraphBoxHeight div 2 - 100,GraphBoxWidth div 2 + 200,GraphBoxHeight div 2 - 50,'Вы уверены? Прогресс будет утерян!');
     
@@ -398,28 +398,28 @@ function AreYouSure(): boolean;
     repeat
       IS_MOUSE_DOWN := false;
     until
-      checkYesButtonClick(mouseX,mouseY,BUTTON_TYPE) or checkNoButtonClick(mouseX,mouseY,BUTTON_TYPE);
+      checkYesButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE) or checkNoButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE);
     
-    if checkYesButtonClick(mouseX,mouseY,BUTTON_TYPE) then AreYouSure:=true
+    if checkYesButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE) then AreYouSure:=true
     else AreYouSure:=false;
     
     // если пользователь не хочет переигрывать/выходить в меню/закрывать игру
     // то отрисовываем сохранённое окно с прохождением уровня
-    if checkNoButtonClick(mouseX,mouseY,BUTTON_TYPE) then loadwindow('gamewindow');
+    if checkNoButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE) then loadwindow('gamewindow');
     
     // зануляем положение курсора чтобы
     // не открылась ячейка сразу после отрисовки игрового поля
-    mouseX:=0;
-    mouseY:=0;
+    MOUSE_X:=0;
+    MOUSE_Y:=0;
   end;
 
 // пауза
 procedure pause();
 
   // кнопка снять с паузы нажата
-  function checkUnpauseButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
+  function checkUnpauseButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
     begin
-      if (mouseX in GraphBoxWidth div 2 - 100..GraphBoxWidth div 2 + 100) and (mouseY in GraphBoxHeight div 2 - 50..GraphBoxHeight div 2 + 40) and (BUTTON_TYPE = 1) then checkUnpauseButtonClick := true;
+      if (MOUSE_X in GraphBoxWidth div 2 - 100..GraphBoxWidth div 2 + 100) and (MOUSE_Y in GraphBoxHeight div 2 - 50..GraphBoxHeight div 2 + 40) and (BUTTON_TYPE = 1) then checkUnpauseButtonClick := true;
     end;
 
   begin
@@ -440,7 +440,7 @@ procedure pause();
     repeat
       IS_MOUSE_DOWN := false;
     until
-      checkUnpauseButtonClick(mouseX,mouseY,BUTTON_TYPE,FIELD_WIDTH);
+      checkUnpauseButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE,FIELD_WIDTH);
     
     // возобновляем отсчёт времени
     time0 := milliseconds;
@@ -450,8 +450,8 @@ procedure pause();
     
     // зануляем положение курсора чтобы
     // не открылась ячейка сразу после отрисовки игрового поля
-    mouseX:=0;
-    mouseY:=0;
+    MOUSE_X:=0;
+    MOUSE_Y:=0;
   end;
 
 // процесс игры
@@ -480,9 +480,9 @@ procedure displayGameStep;
     end;
 
   // кнопка паузы нажата
-  function checkPauseButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
+  function checkPauseButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
     begin
-      if (mouseX in 39 * (FIELD_WIDTH + 3)..39 * (FIELD_WIDTH + 3) + 39 * 2) and (mouseY in round(39*2.5)..round(39*2.5) + 39) and (BUTTON_TYPE = 1) then checkPauseButtonClick := true;
+      if (MOUSE_X in 39 * (FIELD_WIDTH + 3)..39 * (FIELD_WIDTH + 3) + 39 * 2) and (MOUSE_Y in round(39*2.5)..round(39*2.5) + 39) and (BUTTON_TYPE = 1) then checkPauseButtonClick := true;
     end;
 
   // открытие клетки без мины (условие)
@@ -520,8 +520,8 @@ procedure displayGameStep;
     fcount := 0;
     i := 0;
     j := 0;
-    mouseX := 0;
-    mouseY := 0;
+    MOUSE_X := 0;
+    MOUSE_Y := 0;
     xtemp:=0;
     ytemp:=0;
     
@@ -541,12 +541,12 @@ procedure displayGameStep;
       if IS_MOUSE_DOWN then
         begin
           IS_MOUSE_DOWN := false;
-          i := mouseX div WIDTH_CELL;
-          j := mouseY div WIDTH_CELL;
+          i := MOUSE_X div WIDTH_CELL;
+          j := MOUSE_Y div WIDTH_CELL;
           SetFontSize(15);
           // безопасное первое открытие клетки + заполнение поля минами
           if (i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (fcount = 0) then openFirstCell(i, j)
-          else if checkPauseButtonClick(mouseX,mouseY,BUTTON_TYPE,FIELD_WIDTH) then pause()
+          else if checkPauseButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE,FIELD_WIDTH) then pause()
           // нажали на клетку без мины
           else if notMine(i, j) then
             begin
@@ -560,7 +560,7 @@ procedure displayGameStep;
           // убрали флаг
           else if WantDeleteFlag(i, j) then deleteFlag(i, j)
           // хотим нажать на кнопку выхода/в меню/заново
-          else if (checkAgainButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH)) or (checkMenuButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH)) or (checkEndButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH)) then
+          else if (checkAgainButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)) or (checkMenuButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)) or (checkEndButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH)) then
               sure := AreYouSure;
         end;
     // завершение процесса игры при одном из трёх условий

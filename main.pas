@@ -7,32 +7,32 @@ uses UserLevelForm;
 procedure displayMenuMainStep;
 
   // кнопка играть нажата
-  function checkPlayButtonClick(mouseX, mouseY, BUTTON_TYPE: integer): boolean;
+  function checkPlayButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (mouseX in 40..570) and (mouseY in 220..260) and (BUTTON_TYPE = 1) then checkPlayButtonClick := true;
+      if (MOUSE_X in 40..570) and (MOUSE_Y in 220..260) and (BUTTON_TYPE = 1) then checkPlayButtonClick := true;
     end;
 
   // кнопка правила нажата
-  function checkRulesButtonClick(mouseX, mouseY, BUTTON_TYPE: integer): boolean;
+  function checkRulesButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (mouseX in 40..570) and (mouseY in 280..320) and (BUTTON_TYPE = 1) then checkRulesButtonClick := true;
+      if (MOUSE_X in 40..570) and (MOUSE_Y in 280..320) and (BUTTON_TYPE = 1) then checkRulesButtonClick := true;
     end;
 
   // кнопка рекордов нажата
-  function checkRecordsButtonClick(mouseX, mouseY, BUTTON_TYPE: integer): boolean;
+  function checkRecordsButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (mouseX in 40..570) and (mouseY in 340..380) and (BUTTON_TYPE = 1) then checkRecordsButtonClick := true;
+      if (MOUSE_X in 40..570) and (MOUSE_Y in 340..380) and (BUTTON_TYPE = 1) then checkRecordsButtonClick := true;
     end;
 
   // кнопка выхода из главного меню
-  function checkExitButtonClick(mouseX, mouseY, BUTTON_TYPE: integer): boolean;
+  function checkExitButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (mouseX in 40..570) and (mouseY in 540..580) and (BUTTON_TYPE = 1) then checkExitButtonClick := true;
+      if (MOUSE_X in 40..570) and (MOUSE_Y in 540..580) and (BUTTON_TYPE = 1) then checkExitButtonClick := true;
     end;
 
   begin
-    mouseX := 0;
-    mouseY := 0;
+    MOUSE_X := 0;
+    MOUSE_Y := 0;
     SetWindowSize(620, 700);
     
     CenterWindow;
@@ -56,48 +56,48 @@ procedure displayMenuMainStep;
           IS_MOUSE_DOWN := false;
         end;
     until
-      checkPlayButtonClick(mouseX, mouseY, BUTTON_TYPE) or
-      checkRulesButtonClick(mouseX, mouseY, BUTTON_TYPE) or
-      checkRecordsButtonClick(mouseX, mouseY, BUTTON_TYPE) or
-      checkExitButtonClick(mouseX, mouseY, BUTTON_TYPE);
+      checkPlayButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) or
+      checkRulesButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) or
+      checkRecordsButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) or
+      checkExitButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE);
     
-    if checkPlayButtonClick(mouseX, mouseY, BUTTON_TYPE) then PROGRAM_STEP := 'MenuGameStep';
-    if checkRulesButtonClick(mouseX, mouseY, BUTTON_TYPE) then PROGRAM_STEP := 'RulesStep';
-    if checkRecordsButtonClick(mouseX, mouseY, BUTTON_TYPE) then PROGRAM_STEP := 'RecordsStep';
-    if checkExitButtonClick(mouseX, mouseY, BUTTON_TYPE) then closewindow;
+    if checkPlayButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then PROGRAM_STEP := 'MenuGameStep';
+    if checkRulesButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then PROGRAM_STEP := 'RulesStep';
+    if checkRecordsButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then PROGRAM_STEP := 'RecordsStep';
+    if checkExitButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then closewindow;
   end;
 
 // кнопка назад (в окне с правилами) нажата
-function checkBackButtonClick(mouseX, mouseY, BUTTON_TYPE: integer): boolean;
+function checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
   begin
-    if (mouseX in 40..570) and (mouseY in 540..580) and (BUTTON_TYPE = 1) then checkBackButtonClick := true;
+    if (MOUSE_X in 40..570) and (MOUSE_Y in 540..580) and (BUTTON_TYPE = 1) then checkBackButtonClick := true;
   end;
 
 // Меню игры
 procedure displayMenuGameStep;
 
   // проверка клика по кнопке: уровень "легкий"
-  function checkEasyLevelButtonClick(mouseX, mouseY, BUTTON_TYPE: integer): boolean;
+  function checkEasyLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (mouseX in 40..570) and (mouseY in 220..260) and (BUTTON_TYPE = 1) then checkEasyLevelButtonClick := true;
+      if (MOUSE_X in 40..570) and (MOUSE_Y in 220..260) and (BUTTON_TYPE = 1) then checkEasyLevelButtonClick := true;
     end;
 
   // проверка клика по кнопке: уровень "нормальный"
-  function checkNormalLevelButtonClick(mouseX, mouseY, BUTTON_TYPE: integer): boolean;
+  function checkNormalLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (mouseX in 40..570) and (mouseY in 280..320) and (BUTTON_TYPE = 1) then checkNormalLevelButtonClick := true;
+      if (MOUSE_X in 40..570) and (MOUSE_Y in 280..320) and (BUTTON_TYPE = 1) then checkNormalLevelButtonClick := true;
     end;
 
   // проверка клика по кнопке: уровень "сложный"
-  function checkHardLevelButtonClick(mouseX, mouseY, BUTTON_TYPE: integer): boolean;
+  function checkHardLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (mouseX in 40..570) and (mouseY in 340..380) and (BUTTON_TYPE = 1) then checkHardLevelButtonClick := true;
+      if (MOUSE_X in 40..570) and (MOUSE_Y in 340..380) and (BUTTON_TYPE = 1) then checkHardLevelButtonClick := true;
     end;
 
   // проверка клика по кнопке: уровень "пользовательский"
-  function checkCustomLevelButtonClick(mouseX, mouseY, BUTTON_TYPE: integer): boolean;
+  function checkCustomLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (mouseX in 40..570) and (mouseY in 400..440) and (BUTTON_TYPE = 1) then checkCustomLevelButtonClick := true;
+      if (MOUSE_X in 40..570) and (MOUSE_Y in 400..440) and (BUTTON_TYPE = 1) then checkCustomLevelButtonClick := true;
     end;
 
   // настройка уровня игры
@@ -113,8 +113,8 @@ procedure displayMenuGameStep;
 
   begin
     clearwindow;
-    mouseX := 0;
-    mouseY := 0;
+    MOUSE_X := 0;
+    MOUSE_Y := 0;
     SetWindowSize(620, 700);
     CenterWindow;
     
@@ -132,18 +132,18 @@ procedure displayMenuGameStep;
           IS_MOUSE_DOWN := false;
         end;
     until 
-      checkEasyLevelButtonClick(mouseX, mouseY, BUTTON_TYPE) or
-      checkNormalLevelButtonClick(mouseX, mouseY, BUTTON_TYPE) or
-      checkHardLevelButtonClick(mouseX, mouseY, BUTTON_TYPE) or
-      checkCustomLevelButtonClick(mouseX, mouseY, BUTTON_TYPE) or
-      checkBackButtonClick(mouseX, mouseY, BUTTON_TYPE);
+      checkEasyLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) or
+      checkNormalLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) or
+      checkHardLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) or
+      checkCustomLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) or
+      checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE);
     
-    if checkEasyLevelButtonClick(mouseX, mouseY, BUTTON_TYPE) then configureGameLevel(0, 8, 8, 10)
-    else if checkNormalLevelButtonClick(mouseX, mouseY, BUTTON_TYPE) then configureGameLevel(1, 16, 16, 40)
-    else if checkHardLevelButtonClick(mouseX, mouseY, BUTTON_TYPE) then configureGameLevel(2, 30, 19, 70);
+    if checkEasyLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then configureGameLevel(0, 8, 8, 10)
+    else if checkNormalLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then configureGameLevel(1, 16, 16, 40)
+    else if checkHardLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then configureGameLevel(2, 30, 19, 70);
 
-    if checkCustomLevelButtonClick(mouseX, mouseY, BUTTON_TYPE) then PROGRAM_STEP := 'UserLevelStep'
-    else if checkBackButtonClick(mouseX, mouseY, BUTTON_TYPE) then PROGRAM_STEP := 'MenuMainStep'
+    if checkCustomLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then PROGRAM_STEP := 'UserLevelStep'
+    else if checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then PROGRAM_STEP := 'MenuMainStep'
     else PROGRAM_STEP := 'GameStep';
   end;
 
@@ -161,8 +161,8 @@ procedure displayRecordsStep;
     var f: text;
     var output: string;
     
-    mouseX:=-1;
-    mouseY:=-1;
+    MOUSE_X:=-1;
+    MOUSE_Y:=-1;
     
     clearWindow;
     
@@ -204,7 +204,7 @@ procedure displayRecordsStep;
       repeat
         if IS_MOUSE_DOWN then
           IS_MOUSE_DOWN := false;
-      until checkBackButtonClick(mouseX, mouseY, BUTTON_TYPE);
+      until checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE);
       
       PROGRAM_STEP:='MenuMainStep';
 
@@ -213,8 +213,8 @@ procedure displayRecordsStep;
 // вывод правил игры
 procedure displayRulesStep(var PROGRAM_STEP: string);
   begin
-    mouseX:=-1;
-    mouseY:=-1;
+    MOUSE_X:=-1;
+    MOUSE_Y:=-1;
     
     clearwindow;
     SetFontSize(20);
@@ -230,7 +230,7 @@ procedure displayRulesStep(var PROGRAM_STEP: string);
       begin
         IS_MOUSE_DOWN := false;
       end;
-    until checkBackButtonClick(mouseX, mouseY, BUTTON_TYPE);
+    until checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE);
     
     PROGRAM_STEP := 'MenuMainStep';
   end;
