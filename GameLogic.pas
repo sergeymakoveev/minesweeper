@@ -444,9 +444,9 @@ function AreYouSure: boolean;
 procedure pause;
 
   // кнопка снять с паузы нажата
-  function unpauseButtonPressed(mouseX, mouseY, button, M: integer): boolean;
+  function checkUnpauseButtonClick(mouseX, mouseY, button, M: integer): boolean;
     begin
-      if (mouseX in GraphBoxWidth div 2 - 100..GraphBoxWidth div 2 + 100) and (mouseY in GraphBoxHeight div 2 - 50..GraphBoxHeight div 2 + 40) and (button = 1) then unpauseButtonPressed := true;
+      if (mouseX in GraphBoxWidth div 2 - 100..GraphBoxWidth div 2 + 100) and (mouseY in GraphBoxHeight div 2 - 50..GraphBoxHeight div 2 + 40) and (button = 1) then checkUnpauseButtonClick := true;
     end;
 
   begin
@@ -466,7 +466,7 @@ procedure pause;
     
     repeat
       IsMouseDown := false;
-    until unpauseButtonPressed(mouseX,mouseY,button,M);
+    until checkUnpauseButtonClick(mouseX,mouseY,button,M);
     
     // возобновляем отсчёт времени
     time0 := milliseconds;
