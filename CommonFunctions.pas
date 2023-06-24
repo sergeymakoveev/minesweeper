@@ -4,7 +4,7 @@ Interface
 
   uses graphABC;
   uses GlobalVariables;
-  procedure DrawButton(x0,y0,x,y: integer; text: string);
+  procedure drawButton(x0,y0,x,y: integer; text: string);
   procedure MouseDown(x, y, mb: integer);
 
 Implementation
@@ -19,7 +19,7 @@ procedure MouseDown(x, y, mb: integer);
   end;
 
 // универсальная отрисовка кнопок
-procedure DrawButton(x0,y0,x,y: integer; text: string);
+procedure drawButton(x0,y0,x,y: integer; text: string);
   begin
     rectangle(x0, y0, x, y);
     DrawTextCentered(x0, y0, x, y, text);

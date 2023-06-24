@@ -387,10 +387,10 @@ function AreYouSure(): boolean;
     drawTextCentered(GraphBoxWidth div 2 - 200,GraphBoxHeight div 2 - 100,GraphBoxWidth div 2 + 200,GraphBoxHeight div 2 - 50,'Вы уверены? Прогресс будет утерян!');
     
     SetBrushColor(clIndianRed);
-    DrawButton(GraphBoxWidth div 2 + 100,GraphBoxHeight div 2,GraphBoxWidth div 2 + 200,GraphBoxHeight div 2 + 40,'да');
+    drawButton(GraphBoxWidth div 2 + 100,GraphBoxHeight div 2,GraphBoxWidth div 2 + 200,GraphBoxHeight div 2 + 40,'да');
     
     setBrushColor(clLightGreen);
-    DrawButton(GraphBoxWidth div 2 - 200,GraphBoxHeight div 2,GraphBoxWidth div 2 - 100,GraphBoxHeight div 2 + 40,'нет');
+    drawButton(GraphBoxWidth div 2 - 200,GraphBoxHeight div 2,GraphBoxWidth div 2 - 100,GraphBoxHeight div 2 + 40,'нет');
     
     SetBrushColor(clWhite);
     
@@ -433,7 +433,7 @@ procedure pause();
     clearWindow();
     
     setBrushColor(clLightGreen);
-    DrawButton(GraphBoxWidth div 2 - 100,GraphBoxHeight div 2 - 50,GraphBoxWidth div 2 + 100,GraphBoxHeight div 2 + 40,'продолжить');
+    drawButton(GraphBoxWidth div 2 - 100,GraphBoxHeight div 2 - 50,GraphBoxWidth div 2 + 100,GraphBoxHeight div 2 + 40,'продолжить');
     SetBrushColor(clWhite);
     
     repeat
@@ -528,10 +528,10 @@ procedure displayGameStep;
     drawField();
     
     // рисуем кнопки
-    DrawButton(39 * (FIELD_WIDTH + 3), 39 * 1, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * 1 + 39, 'переиграть');
-    DrawButton(39 * (FIELD_WIDTH + 3), round(39*2.5), 39 * (FIELD_WIDTH + 3) + 39 * 2, round(39*2.5) + 39, 'пауза');
-    DrawButton(39 * (FIELD_WIDTH + 3), 39 * 4, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * 5, 'назад в меню');
-    DrawButton(39 * (FIELD_WIDTH + 3), 39 * FIELD_HEIGHT, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * (FIELD_HEIGHT+1), 'выход из игры');
+    drawButton(39 * (FIELD_WIDTH + 3), 39 * 1, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * 1 + 39, 'переиграть');
+    drawButton(39 * (FIELD_WIDTH + 3), round(39*2.5), 39 * (FIELD_WIDTH + 3) + 39 * 2, round(39*2.5) + 39, 'пауза');
+    drawButton(39 * (FIELD_WIDTH + 3), 39 * 4, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * 5, 'назад в меню');
+    drawButton(39 * (FIELD_WIDTH + 3), 39 * FIELD_HEIGHT, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * (FIELD_HEIGHT+1), 'выход из игры');
     
     redraw();
     unlockdrawing();

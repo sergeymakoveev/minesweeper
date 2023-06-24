@@ -35,8 +35,8 @@ procedure displayMenuMainStep;
     MOUSE_Y := 0;
     SetWindowSize(620, 700);
     
-    CenterWindow;
-    clearwindow;
+    CenterWindow();
+    clearwindow();
     
     SetFontSize(65);
     textOut(40, 40, 'Игра "Сапёр"');
@@ -44,10 +44,10 @@ procedure displayMenuMainStep;
     TextOut(40, 660, 'Николаев Максим, группа 243');
     
     SetFontSize(20);
-    DrawButton(40,220,570,260,'Играть');
-    DrawButton(40,280,570,320,'Правила');
-    DrawButton(40,340,570,380,'Рекорды');
-    DrawButton(40,540,570,580,'Выход');
+    drawButton(40,220,570,260,'Играть');
+    drawButton(40,280,570,320,'Правила');
+    drawButton(40,340,570,380,'Рекорды');
+    drawButton(40,540,570,580,'Выход');
     
     OnMouseDown := MouseDown;
     repeat
@@ -120,11 +120,11 @@ procedure displayMenuGameStep;
     
     SetFontSize(20);
     DrawTextCentered(40, 140, 570, 190, 'Выберите уровень:');
-    DrawButton(40,220,570,260,'Легкий: поле 8х8, 10 мин');
-    DrawButton(40,280,570,320,'Нормальный: поле 16х16, 40 мин');
-    DrawButton(40,340,570,380,'Сложный: поле 19х30, 70 мин');
-    DrawButton(40,400,570,440,'Пользовательский');
-    DrawButton(40,540,570,580,'Назад');
+    drawButton(40,220,570,260,'Легкий: поле 8х8, 10 мин');
+    drawButton(40,280,570,320,'Нормальный: поле 16х16, 40 мин');
+    drawButton(40,340,570,380,'Сложный: поле 19х30, 70 мин');
+    drawButton(40,400,570,440,'Пользовательский');
+    drawButton(40,540,570,580,'Назад');
 
     repeat
       if IS_MOUSE_DOWN then
@@ -168,7 +168,7 @@ procedure displayRecordsStep;
     
     i:=0;
 
-    DrawButton(40, 540, 570, 580, 'назад');
+    drawButton(40, 540, 570, 580, 'назад');
 
     assign(f,'records.txt');
     // открытие файла
@@ -224,7 +224,7 @@ procedure displayRulesStep(var PROGRAM_STEP: string);
     var rules := ReadString;
     DrawTextCentered(40, 20, 570, 450, rules);
     
-    DrawButton(40, 540, 570, 580, 'назад');
+    drawButton(40, 540, 570, 580, 'назад');
     
     OnMouseDown := MouseDown;
     repeat
