@@ -2,18 +2,11 @@
 
 Interface
   uses graphABC;
-  function againButtonPressed(mouseX, mouseY, button, M: integer): boolean;
   function yesButtonPressed(mouseX, mouseY, button: integer): boolean;
   function noButtonPressed(mouseX, mouseY, button: integer): boolean;
   
 Implementation
 
-// кнопка переиграть нажата
-function againButtonPressed(mouseX, mouseY, button, M: integer): boolean;
-  begin
-    if (mouseX in (39 * (M + 3))..(39 * (M + 3) + 39 * 2)) and (mouseY in 39 * 1..39 * 1 + 39) and (button = 1) then
-      againButtonPressed := true;
-  end;
 
 // кнопка ДА в подтверждении действия нажата
 function yesButtonPressed(mouseX, mouseY, button: integer): boolean;
