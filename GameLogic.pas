@@ -348,7 +348,7 @@ procedure displayWin();
     // если не на пользовательском уровне, то проверяем время на рекорд
     if GAME_LEVEL <> 3 then checkIsBest(time,GAME_LEVEL);
     
-    OnMouseDown:=MouseDown;
+    OnMouseDown:=handleMouseDown;
     repeat
       if IS_MOUSE_DOWN then
         begin

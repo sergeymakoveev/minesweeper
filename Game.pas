@@ -39,7 +39,7 @@ procedure displayMenuMainStep;
     clearwindow();
     
     SetFontSize(65);
-    textOut(40, 40, 'Игра "Сапёр"');
+    TextOut(40, 40, 'Игра "Сапёр"');
     SetFontSize(10);
     TextOut(40, 660, 'Николаев Максим, группа 243');
     
@@ -49,7 +49,7 @@ procedure displayMenuMainStep;
     drawButton(40,340,570,380,'Рекорды');
     drawButton(40,540,570,580,'Выход');
     
-    OnMouseDown := MouseDown;
+    OnMouseDown := handleMouseDown;
     repeat
       if IS_MOUSE_DOWN then
         begin
@@ -200,7 +200,7 @@ procedure displayRecordsStep;
     
     close(f);
     IS_MOUSE_DOWN := false;
-    OnMouseDown := MouseDown;
+    OnMouseDown := handleMouseDown;
 
     repeat
       if IS_MOUSE_DOWN then
@@ -226,7 +226,7 @@ procedure displayRulesStep(var PROGRAM_STEP: string);
     
     drawButton(40, 540, 570, 580, 'назад');
     
-    OnMouseDown := MouseDown;
+    OnMouseDown := handleMouseDown;
     repeat
       if IS_MOUSE_DOWN then
         begin
