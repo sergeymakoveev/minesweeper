@@ -61,9 +61,9 @@ procedure displayMenuMainStep;
       checkRecordsButtonClick(mouseX, mouseY, button) or
       checkExitButtonClick(mouseX, mouseY, button);
     
-    if checkPlayButtonClick(mouseX, mouseY, button) then programStep := 'MenuGameStep';
-    if checkRulesButtonClick(mouseX, mouseY, button) then programStep := 'RulesStep';
-    if checkRecordsButtonClick(mouseX, mouseY, button) then programStep := 'RecordsStep';
+    if checkPlayButtonClick(mouseX, mouseY, button) then PROGRAM_STEP := 'MenuGameStep';
+    if checkRulesButtonClick(mouseX, mouseY, button) then PROGRAM_STEP := 'RulesStep';
+    if checkRecordsButtonClick(mouseX, mouseY, button) then PROGRAM_STEP := 'RecordsStep';
     if checkExitButtonClick(mouseX, mouseY, button) then closewindow;
   end;
 
@@ -142,9 +142,9 @@ procedure displayMenuGameStep;
     else if checkNormalLevelButtonClick(mouseX, mouseY, button) then configureGameLevel(1, 16, 16, 40)
     else if checkHardLevelButtonClick(mouseX, mouseY, button) then configureGameLevel(2, 30, 19, 70);
 
-    if checkCustomLevelButtonClick(mouseX, mouseY, button) then programStep := 'UserLevelStep'
-    else if checkBackButtonClick(mouseX, mouseY, button) then programStep := 'MenuMainStep'
-    else programStep := 'GameStep';
+    if checkCustomLevelButtonClick(mouseX, mouseY, button) then PROGRAM_STEP := 'UserLevelStep'
+    else if checkBackButtonClick(mouseX, mouseY, button) then PROGRAM_STEP := 'MenuMainStep'
+    else PROGRAM_STEP := 'GameStep';
   end;
 
 // Вывод таблицы рекордов
@@ -206,12 +206,12 @@ procedure displayRecordsStep;
           IsMouseDown := false;
       until checkBackButtonClick(mouseX, mouseY, button);
       
-      programStep:='MenuMainStep';
+      PROGRAM_STEP:='MenuMainStep';
 
   end;
 
 // вывод правил игры
-procedure displayRulesStep(var programStep: string);
+procedure displayRulesStep(var PROGRAM_STEP: string);
   begin
     mouseX:=-1;
     mouseY:=-1;
@@ -232,7 +232,7 @@ procedure displayRulesStep(var programStep: string);
       end;
     until checkBackButtonClick(mouseX, mouseY, button);
     
-    programStep := 'MenuMainStep';
+    PROGRAM_STEP := 'MenuMainStep';
   end;
 
 // Запуск игры
@@ -249,16 +249,16 @@ begin
       closewindow;
     end;
   
-  programStep := 'MenuMainStep';
+  PROGRAM_STEP := 'MenuMainStep';
   
   // Отрисовка текущего окна
   repeat
-    case programStep of
+    case PROGRAM_STEP of
       'MenuGameStep': displayMenuGameStep();
       'GameStep': displayGameStep();
       'MenuMainStep': displayMenuMainStep();
-      'RulesStep': displayRulesStep(programStep);
-      'UserLevelStep': displayUserLevelForm(GAME_LEVEL,M,N,Nmines,programStep);
+      'RulesStep': displayRulesStep(PROGRAM_STEP);
+      'UserLevelStep': displayUserLevelForm(GAME_LEVEL,M,N,Nmines,PROGRAM_STEP);
       'RecordsStep': displayRecordsStep();
     end;
   // игру закрывается из окна startmenu или game

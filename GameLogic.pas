@@ -193,9 +193,9 @@ procedure deleteFlag(var i: shortint; j: shortint);
 procedure checkButtonsClick();
   begin
     // выход в меню
-    if checkMenuButtonClick(xtemp, ytemp, button, M) then programStep := 'MenuMainStep'
+    if checkMenuButtonClick(xtemp, ytemp, button, M) then PROGRAM_STEP := 'MenuMainStep'
     // начинаем заново
-    else if checkAgainButtonClick(xtemp, ytemp, button, M) then programStep := 'GameStep'
+    else if checkAgainButtonClick(xtemp, ytemp, button, M) then PROGRAM_STEP := 'GameStep'
     // выход из игры
     else if checkEndButtonClick(xtemp, ytemp, button, N, M) then closewindow();
   end;

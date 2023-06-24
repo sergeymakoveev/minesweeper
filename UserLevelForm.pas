@@ -6,7 +6,7 @@ Interface
   uses GlobalConstants, GlobalVariables;
 
   procedure inputInteger(ch: char);
-  procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var Nmines: integer; var programStep: string);
+  procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var Nmines: integer; var PROGRAM_STEP: string);
   
 Implementation
  
@@ -39,7 +39,7 @@ procedure inputInteger(ch: char);
   end;
 
 // играть на пользовательской сложности
-procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var Nmines: integer; var programStep: string);
+procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var Nmines: integer; var PROGRAM_STEP: string);
 
   const
     // максимальная ширина минного поля
@@ -126,7 +126,7 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var Nmine
     SetWindowSize((M + 6) * WIDTH_CELL, (N + 2) * WIDTH_CELL);
     CenterWindow;
     
-    programStep := 'GameStep';
+    PROGRAM_STEP := 'GameStep';
   end;
 
 begin 

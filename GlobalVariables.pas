@@ -29,7 +29,7 @@ var
   // число мин
   Nmines: integer;
   // отвечает за активное меню
-  programStep: string;
+  PROGRAM_STEP: string;
   // отвечает за выбранный уровень 
   GAME_LEVEL: byte;
   // Флаг завершения пользовательского ввода
