@@ -142,7 +142,7 @@ procedure displayMenuGameStep;
     else if checkNormalLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then configureGameLevel(1, 16, 16, 40)
     else if checkHardLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then configureGameLevel(2, 30, 19, 70);
 
-    if checkCustomLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then PROGRAM_STEP := 'UserLevelStep'
+    if checkCustomLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then PROGRAM_STEP := 'GameLevelFormStep'
     else if checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then PROGRAM_STEP := 'MenuMainStep'
     else PROGRAM_STEP := 'GameStep';
   end;
@@ -260,10 +260,10 @@ begin
       'GameStep': displayGameStep();
       'MenuMainStep': displayMenuMainStep();
       'RulesStep': displayRulesStep(PROGRAM_STEP);
-      'UserLevelStep': displayGameLevelForm(GAME_LEVEL,FIELD_WIDTH,FIELD_HEIGHT,FIELD_MINES_COUNT,PROGRAM_STEP);
+      'GameLevelFormStep': displayGameLevelForm(GAME_LEVEL,FIELD_WIDTH,FIELD_HEIGHT,FIELD_MINES_COUNT,PROGRAM_STEP);
       'RecordsStep': displayRecordsStep();
     end;
-  // игру закрывается из окна startmenu или game
+  // игра закрывается из окна startmenu или game
   until false;
   
 end.
