@@ -19,6 +19,11 @@ var
   // переменные, отвечающие за время прохождения
   time0, time1, time: integer;
 
+// кнопа вернуться в главное меню нажата
+function menuButtonPressed(mouseX, mouseY, button, M: integer): boolean;
+  begin
+    if (mouseX in 39 * (M + 3)..39 * (M + 3) + 39 * 2) and (mouseY in 39 * 4..39 * 5) and (button = 1) then menuButtonPressed := true;
+  end;
 
 // поле + очищение клеток от мин + состояния открытия + флагов на случай начала новой игры без перезапуска программы
 procedure pole;
@@ -465,6 +470,13 @@ procedure pause;
 
 // процесс игры
 procedure displayGameStep;
+
+  // кнопка паузы нажата
+  function checkPauseButtonClick(mouseX, mouseY, button, M: integer): boolean;
+    begin
+      if (mouseX in 39 * (M + 3)..39 * (M + 3) + 39 * 2) and (mouseY in round(39*2.5)..round(39*2.5) + 39) and (button = 1) then checkPauseButtonClick := true;
+    end;
+
   begin
     var  i, j: shortint;
     var sure: boolean;
@@ -502,7 +514,7 @@ procedure displayGameStep;
           SetFontSize(15);
           // безопасное первое открытие клетки + заполнение поля минами
           if (i in 1..M) and (j in 1..N) and (button = 1) and (fcount = 0) then FirstStep(i, j)
-          else if pauseButtonPressed(mouseX,mouseY,button,M) then pause
+          else if checkPauseButtonClick(mouseX,mouseY,button,M) then pause
           // нажали на клетку без мины
           else if notMine(i, j) then
             begin
