@@ -3,39 +3,6 @@ uses GlobalConstants, GlobalVariables, CommonFunctions;
 uses GameLogic;
 uses UserLevelForm;
 
-// играть на сложности новичок
-procedure setEasyLevel;
-  begin
-    level := 0;
-    N := 8;
-    M := 8;
-    Nmines := 10;
-    SetWindowSize((N + 6) * WIDTH_CELL, (N + 2) * WIDTH_CELL);
-    CenterWindow;
-  end;
-
-// играть на сложности любитель
-procedure setNormalLevel;
-  begin
-    level := 1;
-    N := 16;
-    M := 16;
-    Nmines := 40;
-    SetWindowSize((N + 6) * WIDTH_CELL, (N + 2) * WIDTH_CELL);
-    CenterWindow;
-  end;
-
-// играть на сложности профессионал
-procedure setHardLevel;
-  begin
-    level := 3;
-    N := 19;
-    M := 30;
-    Nmines := 70;
-    SetWindowSize((M + 6) * WIDTH_CELL, (N + 2) * WIDTH_CELL);
-    CenterWindow
-  end;
-
 // главное меню
 procedure displayMenuMainStep;
 
@@ -133,6 +100,17 @@ procedure displayMenuGameStep;
       if (mouseX in 40..570) and (mouseY in 400..440) and (button = 1) then checkCustomLevelButtonClick := true;
     end;
 
+  // настройка уровня игры
+  procedure configureGameLevel(gameLevel: byte; fieldWidth, fieldHeight, minesCount: integer);
+    begin
+      level := gameLevel;
+      M := fieldWidth;
+      N := fieldHeight;
+      Nmines := minesCount;
+      SetWindowSize((N + 6) * WIDTH_CELL, (N + 2) * WIDTH_CELL);
+      CenterWindow;
+    end;
+
   begin
     clearwindow;
     mouseX := 0;
@@ -160,9 +138,9 @@ procedure displayMenuGameStep;
       checkCustomLevelButtonClick(mouseX, mouseY, button) or
       checkBackButtonClick(mouseX, mouseY, button);
     
-    if checkEasyLevelButtonClick(mouseX, mouseY, button) then setEasyLevel
-    else if checkNormalLevelButtonClick(mouseX, mouseY, button) then setNormalLevel
-    else if checkHardLevelButtonClick(mouseX, mouseY, button) then setHardLevel;
+    if checkEasyLevelButtonClick(mouseX, mouseY, button) then configureGameLevel(0, 8, 8, 10)
+    else if checkNormalLevelButtonClick(mouseX, mouseY, button) then configureGameLevel(1, 16, 16, 40)
+    else if checkHardLevelButtonClick(mouseX, mouseY, button) then configureGameLevel(2, 30, 19, 70);
 
     if checkCustomLevelButtonClick(mouseX, mouseY, button) then programStep := 'UserLevelStep'
     else if checkBackButtonClick(mouseX, mouseY, button) then programStep := 'MenuMainStep'
