@@ -25,9 +25,9 @@ function menuButtonPressed(mouseX, mouseY, button, M: integer): boolean;
     if (mouseX in 39 * (M + 3)..39 * (M + 3) + 39 * 2) and (mouseY in 39 * 4..39 * 5) and (button = 1) then menuButtonPressed := true;
   end;
 // кнопка завершить программу нажата
-function endButtonPressed(mouseX, mouseY, button, N, M: integer): boolean;
+function checkEndButtonClick(mouseX, mouseY, button, N, M: integer): boolean;
   begin
-    if (mouseX in 39 * (M + 3)..39 * (M + 3) + 39 * 2) and (mouseY in 39 * N..39 * (N+1)) and (button = 1) then endButtonPressed := true;
+    if (mouseX in 39 * (M + 3)..39 * (M + 3) + 39 * 2) and (mouseY in 39 * N..39 * (N+1)) and (button = 1) then checkEndButtonClick := true;
   end;
 
 // поле + очищение клеток от мин + состояния открытия + флагов на случай начала новой игры без перезапуска программы
@@ -239,7 +239,7 @@ procedure IngameButtonsPressed;
     // начинаем заново
     else if againButtonPressed(xtemp, ytemp, button, M) then programStep := 'GameStep'
     // выход из игры
-    else if endButtonPressed(xtemp, ytemp, button, N, M) then closewindow;
+    else if checkEndButtonClick(xtemp, ytemp, button, N, M) then closewindow;
   end;
 
 // поражение
@@ -279,7 +279,7 @@ procedure youLose;
           xtemp:=mouseX;
           ytemp:=mouseY;
         end;
-    until (endButtonPressed(xtemp, ytemp, button, N, M)) or (againButtonPressed(xtemp, ytemp, button, M)) or (menuButtonPressed(xtemp, ytemp, button, M));
+    until (checkEndButtonClick(xtemp, ytemp, button, N, M)) or (againButtonPressed(xtemp, ytemp, button, M)) or (menuButtonPressed(xtemp, ytemp, button, M));
     IngameButtonsPressed;
   end;
 
@@ -397,7 +397,7 @@ procedure youWin;
         begin
           IsMouseDown := false;
         end;
-    until (endButtonPressed(mouseX, mouseY, button, N, M)) or (againButtonPressed(mouseX, mouseY, button, M)) or (menuButtonPressed(mouseX, mouseY, button, M));
+    until (checkEndButtonClick(mouseX, mouseY, button, N, M)) or (againButtonPressed(mouseX, mouseY, button, M)) or (menuButtonPressed(mouseX, mouseY, button, M));
     xtemp:=mouseX;
     ytemp:=mouseY;
     IngameButtonsPressed;
@@ -533,7 +533,7 @@ procedure displayGameStep;
           // убрали флаг
           else if WantDeleteFlag(i, j) then deleteFlag(i, j)
           // хотим нажать на кнопку выхода/в меню/заново
-          else if (againButtonPressed(mouseX, mouseY, button, M)) or (menuButtonPressed(mouseX, mouseY, button, M)) or (endButtonPressed(mouseX, mouseY, button, N, M)) then
+          else if (againButtonPressed(mouseX, mouseY, button, M)) or (menuButtonPressed(mouseX, mouseY, button, M)) or (checkEndButtonClick(mouseX, mouseY, button, N, M)) then
               sure := AreYouSure;
         end;
     // завершение процесса игры при одном из трёх условий
