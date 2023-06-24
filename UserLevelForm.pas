@@ -42,10 +42,10 @@ procedure inputInteger(ch: char);
 procedure displayUserLevelForm(var level: byte; var M,N: integer; var Nmines: integer; var programStep: string);
 
   const
-    // макс.длина
-    Mmax = 34;
-    // макс.ширина
-    Nmax = 19;
+    // максимальная ширина минного поля
+    maxFieldWidth = 34;
+    // максимальная высота минного поля
+    maxFieldHeight = 19;
 
   begin
     ClearWindow;
@@ -62,7 +62,7 @@ procedure displayUserLevelForm(var level: byte; var M,N: integer; var Nmines: in
     repeat s:=ss until InputDone;
     InputDone:=False;
     val(s,M,err);
-    while M not in 1..Mmax do
+    while M not in 1..maxFieldWidth do
       begin
         SetFontSize(9);
         textout(50,35,'Недопустимое значение. Повторите ввод');
@@ -81,7 +81,7 @@ procedure displayUserLevelForm(var level: byte; var M,N: integer; var Nmines: in
     repeat s:=ss until InputDone;
     InputDone:=False;
     val(s,N,err);
-    while N not in 5..Nmax do
+    while N not in 5..maxFieldHeight do
       begin
         SetFontSize(9);
         textout(50,75,'Недопустимое значение. Повторите ввод');
