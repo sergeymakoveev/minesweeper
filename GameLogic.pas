@@ -70,8 +70,10 @@ procedure filling;
           begin
             Field[i, j].mine := True;
             count += 1;
-            // отладочная строка для быстрой победы (видны все мины)
-            // DrawTextCentered(39 * i, 39 * j, 39 * i + width, 39 * j + width, 'M');
+            if DEBUG_MODE = true then
+              // debug
+              // отладочная строка для быстрой победы (видны все мины)
+              DrawTextCentered(39 * i, 39 * j, 39 * i + width, 39 * j + width, 'M');
           end;
       end;
     until count = Nmines;
