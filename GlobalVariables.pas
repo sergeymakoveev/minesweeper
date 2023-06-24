@@ -21,7 +21,7 @@ var
   // тип нажатой кнопки мыши (левая/правая)
   BUTTON_TYPE: integer;
   // высота поля
-  N: integer;
+  FIELD_HEIGHT: integer;
   // ширина поля
   M: integer;
   // игровое поле (матрица клеток)

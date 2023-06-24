@@ -6,7 +6,7 @@ Interface
   uses GlobalConstants, GlobalVariables;
 
   procedure inputInteger(ch: char);
-  procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var MINES_COUNT: integer; var PROGRAM_STEP: string);
+  procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,FIELD_HEIGHT: integer; var MINES_COUNT: integer; var PROGRAM_STEP: string);
   
 Implementation
  
@@ -39,7 +39,7 @@ procedure inputInteger(ch: char);
   end;
 
 // играть на пользовательской сложности
-procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var MINES_COUNT: integer; var PROGRAM_STEP: string);
+procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,FIELD_HEIGHT: integer; var MINES_COUNT: integer; var PROGRAM_STEP: string);
 
   const
     // максимальная ширина минного поля
@@ -80,8 +80,8 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var MINES
     onKeyPress:=inputInteger;
     repeat s:=ss until IS_INPUT_DONE;
     IS_INPUT_DONE:=False;
-    val(s,N,err);
-    while N not in 5..maxFieldHeight do
+    val(s,FIELD_HEIGHT,err);
+    while FIELD_HEIGHT not in 5..maxFieldHeight do
       begin
         SetFontSize(9);
         textout(50,75,'Недопустимое значение. Повторите ввод');
@@ -92,7 +92,7 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var MINES
         repeat s:=ss until IS_INPUT_DONE;
         IS_INPUT_DONE:=False;
         SetFontSize(15);
-        val(s,N,err);
+        val(s,FIELD_HEIGHT,err);
       end;
     outX:=510;
     outY:=90;
@@ -101,7 +101,7 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var MINES
     repeat s:=ss until IS_INPUT_DONE;
     IS_INPUT_DONE:=False;
     val(s,MINES_COUNT,err);
-    while MINES_COUNT not in 1..(M * N - 1) do
+    while MINES_COUNT not in 1..(M * FIELD_HEIGHT - 1) do
       begin
         SetFontSize(9);
         textout(50,115,'Недопустимое значение. Повторите ввод');
@@ -123,7 +123,7 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var MINES
         sleep(1000);
       end;
     
-    SetWindowSize((M + 6) * WIDTH_CELL, (N + 2) * WIDTH_CELL);
+    SetWindowSize((M + 6) * WIDTH_CELL, (FIELD_HEIGHT + 2) * WIDTH_CELL);
     CenterWindow;
     
     PROGRAM_STEP := 'GameStep';
