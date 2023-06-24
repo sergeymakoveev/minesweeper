@@ -5,7 +5,6 @@ Interface
   uses graphABC, PABCSystem;
   uses GlobalConstants, GlobalVariables, CommonFunctions;
   uses UserLevelForm;
-  uses MyButtonsPressed;
 
   procedure displayGameStep;
 

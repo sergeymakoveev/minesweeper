@@ -2,7 +2,6 @@
 uses GlobalConstants, GlobalVariables, CommonFunctions;
 uses GameLogic;
 uses UserLevelForm;
-uses MyButtonsPressed;
 
 // играть на сложности новичок
 procedure setEasyLevel;
