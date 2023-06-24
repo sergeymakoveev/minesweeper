@@ -9,45 +9,49 @@ procedure displayMenuMainStep;
   // кнопка играть нажата
   function checkPlayButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (MOUSE_X in 40..570) and (MOUSE_Y in 220..260) and (BUTTON_TYPE = 1) then checkPlayButtonClick := true;
+      if (MOUSE_X in 0..200) and (MOUSE_Y in 100..140) and (BUTTON_TYPE = 1) then checkPlayButtonClick := true;
     end;
 
   // кнопка правила нажата
   function checkRulesButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (MOUSE_X in 40..570) and (MOUSE_Y in 280..320) and (BUTTON_TYPE = 1) then checkRulesButtonClick := true;
+      if (MOUSE_X in 0..200) and (MOUSE_Y in 160..200) and (BUTTON_TYPE = 1) then checkRulesButtonClick := true;
     end;
 
   // кнопка рекордов нажата
   function checkRecordsButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (MOUSE_X in 40..570) and (MOUSE_Y in 340..380) and (BUTTON_TYPE = 1) then checkRecordsButtonClick := true;
+      if (MOUSE_X in 0..200) and (MOUSE_Y in 220..260) and (BUTTON_TYPE = 1) then checkRecordsButtonClick := true;
     end;
 
   // кнопка выхода из главного меню
   function checkExitButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (MOUSE_X in 40..570) and (MOUSE_Y in 540..580) and (BUTTON_TYPE = 1) then checkExitButtonClick := true;
+      if (MOUSE_X in 0..200) and (MOUSE_Y in 280..320) and (BUTTON_TYPE = 1) then checkExitButtonClick := true;
     end;
 
   begin
     MOUSE_X := 0;
     MOUSE_Y := 0;
-    SetWindowSize(620, 700);
-    
+
+    SetWindowSize(800, 400);
     CenterWindow();
     clearwindow();
-    
-    SetFontSize(65);
-    TextOut(40, 40, 'Игра "Сапёр"');
-    SetFontSize(10);
-    TextOut(40, 660, 'Николаев Максим, группа 243');
+    Window.load('./GameBackground.png');
+
+    SetFontSize(20);
+    SetBrushColor(ARGB(200,255,255,255));
+    rectangle(0, 20, 250, 60);
+    DrawTextCentered(0, 20, 250, 60, 'Игра ¤ Сапёр');
     
     SetFontSize(20);
-    drawButton(40,220,570,260,'Играть');
-    drawButton(40,280,570,320,'Правила');
-    drawButton(40,340,570,380,'Рекорды');
-    drawButton(40,540,570,580,'Выход');
+    drawButton(0,100,200,140,'Игра');
+    drawButton(0,160,200,200,'Правила');
+    drawButton(0,220,200,260,'Рекорды');
+    drawButton(0,280,200,320,'Выход');
+    
+    SetFontSize(10);
+    TextOut(0, 360, '   © Николаев Максим, группа 243   ');
     
     OnMouseDown := handleMouseDown;
     repeat

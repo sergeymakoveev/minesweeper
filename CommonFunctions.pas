@@ -2,7 +2,7 @@ unit CommonFunctions;
 
 Interface
 
-  uses graphABC;
+  uses GraphABC;
   uses GlobalVariables;
   procedure drawButton(x0,y0,x,y: integer; text: string);
   procedure handleMouseDown(x, y, mb: integer);
@@ -21,7 +21,8 @@ procedure handleMouseDown(x, y, mb: integer);
 // универсальная отрисовка кнопок
 procedure drawButton(x0,y0,x,y: integer; text: string);
   begin
-    rectangle(x0, y0, x, y);
+    SetBrushColor(ARGB(200,255,255,255));
+    Rectangle(x0, y0, x, y);
     DrawTextCentered(x0, y0, x, y, text);
   end;
 
