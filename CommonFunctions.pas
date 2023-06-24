@@ -12,7 +12,7 @@ Implementation
 // мышь (нажатие)
 procedure MouseDown(x, y, mb: integer);
   begin
-    isMouseDown := true;
+    IS_MOUSE_DOWN := true;
     mouseX := x;
     mouseY := y;
     BUTTON_TYPE := mb;

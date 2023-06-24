@@ -230,9 +230,9 @@ procedure youLose();
     TextOut(38,20,finishtext);
       
     repeat
-      if IsMouseDown then
+      if IS_MOUSE_DOWN then
         begin
-          IsMouseDown := false;
+          IS_MOUSE_DOWN := false;
           // обязательно, так как иначе возможно неопределённое действие
           xtemp:=mouseX;
           ytemp:=mouseY;
@@ -351,9 +351,9 @@ procedure displayWin();
     
     OnMouseDown:=MouseDown;
     repeat
-      if IsMouseDown then
+      if IS_MOUSE_DOWN then
         begin
-          IsMouseDown := false;
+          IS_MOUSE_DOWN := false;
         end;
     until (checkEndButtonClick(mouseX, mouseY, BUTTON_TYPE, N, M)) or (checkAgainButtonClick(mouseX, mouseY, BUTTON_TYPE, M)) or (checkMenuButtonClick(mouseX, mouseY, BUTTON_TYPE, M));
     xtemp:=mouseX;
@@ -396,7 +396,7 @@ function AreYouSure(): boolean;
     SetBrushColor(clWhite);
     
     repeat
-      IsMouseDown := false;
+      IS_MOUSE_DOWN := false;
     until
       checkYesButtonClick(mouseX,mouseY,BUTTON_TYPE) or checkNoButtonClick(mouseX,mouseY,BUTTON_TYPE);
     
@@ -438,7 +438,7 @@ procedure pause();
     SetBrushColor(clWhite);
     
     repeat
-      IsMouseDown := false;
+      IS_MOUSE_DOWN := false;
     until
       checkUnpauseButtonClick(mouseX,mouseY,BUTTON_TYPE,M);
     
@@ -538,9 +538,9 @@ procedure displayGameStep;
     unlockdrawing();
     
     repeat
-      if IsMouseDown then
+      if IS_MOUSE_DOWN then
         begin
-          IsMouseDown := false;
+          IS_MOUSE_DOWN := false;
           i := mouseX div WIDTH_CELL;
           j := mouseY div WIDTH_CELL;
           SetFontSize(15);

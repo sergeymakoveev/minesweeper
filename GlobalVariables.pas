@@ -17,7 +17,7 @@ var
   // положение курсора в окне
   mouseX, mouseY: integer;
   // нажата ли кнопка мыши
-  isMouseDown: boolean;
+  IS_MOUSE_DOWN: boolean;
   // тип нажатой кнопки мыши (левая/правая)
   BUTTON_TYPE: integer;
   // высота поля

@@ -51,9 +51,9 @@ procedure displayMenuMainStep;
     
     OnMouseDown := MouseDown;
     repeat
-      if isMouseDown then
+      if IS_MOUSE_DOWN then
         begin
-          isMouseDown := false;
+          IS_MOUSE_DOWN := false;
         end;
     until
       checkPlayButtonClick(mouseX, mouseY, BUTTON_TYPE) or
@@ -127,9 +127,9 @@ procedure displayMenuGameStep;
     DrawButton(40,540,570,580,'Назад');
 
     repeat
-      if isMouseDown then
+      if IS_MOUSE_DOWN then
         begin
-          isMouseDown := false;
+          IS_MOUSE_DOWN := false;
         end;
     until 
       checkEasyLevelButtonClick(mouseX, mouseY, BUTTON_TYPE) or
@@ -199,11 +199,11 @@ procedure displayRecordsStep;
     end;
     
     close(f);
-    IsMouseDown := false;
+    IS_MOUSE_DOWN := false;
     OnMouseDown := MouseDown;
       repeat
-        if IsMouseDown then
-          IsMouseDown := false;
+        if IS_MOUSE_DOWN then
+          IS_MOUSE_DOWN := false;
       until checkBackButtonClick(mouseX, mouseY, BUTTON_TYPE);
       
       PROGRAM_STEP:='MenuMainStep';
@@ -226,9 +226,9 @@ procedure displayRulesStep(var PROGRAM_STEP: string);
     
     OnMouseDown := MouseDown;
     repeat
-      if IsMouseDown then
+      if IS_MOUSE_DOWN then
       begin
-        IsMouseDown := false;
+        IS_MOUSE_DOWN := false;
       end;
     until checkBackButtonClick(mouseX, mouseY, BUTTON_TYPE);
     
