@@ -6,7 +6,7 @@ Interface
   uses GlobalConstants, GlobalVariables;
 
   procedure inputInteger(ch: char);
-  procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,FIELD_HEIGHT: integer; var MINES_COUNT: integer; var PROGRAM_STEP: string);
+  procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGHT: integer; var MINES_COUNT: integer; var PROGRAM_STEP: string);
   
 Implementation
  
@@ -39,7 +39,7 @@ procedure inputInteger(ch: char);
   end;
 
 // играть на пользовательской сложности
-procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,FIELD_HEIGHT: integer; var MINES_COUNT: integer; var PROGRAM_STEP: string);
+procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGHT: integer; var MINES_COUNT: integer; var PROGRAM_STEP: string);
 
   const
     // максимальная ширина минного поля
@@ -61,8 +61,8 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,FIELD_HEIGHT: integer
     onKeyPress:=inputInteger;
     repeat s:=ss until IS_INPUT_DONE;
     IS_INPUT_DONE:=False;
-    val(s,M,err);
-    while M not in 1..maxFieldWidth do
+    val(s,FIELD_WIDTH,err);
+    while FIELD_WIDTH not in 1..maxFieldWidth do
       begin
         SetFontSize(9);
         textout(50,35,'Недопустимое значение. Повторите ввод');
@@ -72,7 +72,7 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,FIELD_HEIGHT: integer
         onKeyPress:=inputInteger;
         repeat s:=ss until IS_INPUT_DONE;
         IS_INPUT_DONE:=False;
-        val(s,M,err);
+        val(s,FIELD_WIDTH,err);
       end;
     outX:=500;
     outY:=50;
@@ -101,7 +101,7 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,FIELD_HEIGHT: integer
     repeat s:=ss until IS_INPUT_DONE;
     IS_INPUT_DONE:=False;
     val(s,MINES_COUNT,err);
-    while MINES_COUNT not in 1..(M * FIELD_HEIGHT - 1) do
+    while MINES_COUNT not in 1..(FIELD_WIDTH * FIELD_HEIGHT - 1) do
       begin
         SetFontSize(9);
         textout(50,115,'Недопустимое значение. Повторите ввод');
@@ -123,7 +123,7 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,FIELD_HEIGHT: integer
         sleep(1000);
       end;
     
-    SetWindowSize((M + 6) * WIDTH_CELL, (FIELD_HEIGHT + 2) * WIDTH_CELL);
+    SetWindowSize((FIELD_WIDTH + 6) * WIDTH_CELL, (FIELD_HEIGHT + 2) * WIDTH_CELL);
     CenterWindow;
     
     PROGRAM_STEP := 'GameStep';

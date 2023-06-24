@@ -104,7 +104,7 @@ procedure displayMenuGameStep;
   procedure configureGameLevel(gameLevel: byte; fieldWidth, fieldHeight, minesCount: integer);
     begin
       GAME_LEVEL := gameLevel;
-      M := fieldWidth;
+      FIELD_WIDTH := fieldWidth;
       FIELD_HEIGHT := fieldHeight;
       MINES_COUNT := minesCount;
       SetWindowSize((FIELD_HEIGHT + 6) * WIDTH_CELL, (FIELD_HEIGHT + 2) * WIDTH_CELL);
@@ -258,7 +258,7 @@ begin
       'GameStep': displayGameStep();
       'MenuMainStep': displayMenuMainStep();
       'RulesStep': displayRulesStep(PROGRAM_STEP);
-      'UserLevelStep': displayUserLevelForm(GAME_LEVEL,M,FIELD_HEIGHT,MINES_COUNT,PROGRAM_STEP);
+      'UserLevelStep': displayUserLevelForm(GAME_LEVEL,FIELD_WIDTH,FIELD_HEIGHT,MINES_COUNT,PROGRAM_STEP);
       'RecordsStep': displayRecordsStep();
     end;
   // игру закрывается из окна startmenu или game

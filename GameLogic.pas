@@ -19,19 +19,19 @@ var
   time0, time1, time: integer;
 
 // кнопа вернуться в главное меню нажата
-function checkMenuButtonClick(mouseX, mouseY, BUTTON_TYPE, M: integer): boolean;
+function checkMenuButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
   begin
-    if (mouseX in 39 * (M + 3)..39 * (M + 3) + 39 * 2) and (mouseY in 39 * 4..39 * 5) and (BUTTON_TYPE = 1) then checkMenuButtonClick := true;
+    if (mouseX in 39 * (FIELD_WIDTH + 3)..39 * (FIELD_WIDTH + 3) + 39 * 2) and (mouseY in 39 * 4..39 * 5) and (BUTTON_TYPE = 1) then checkMenuButtonClick := true;
   end;
 // кнопка завершить программу нажата
-function checkEndButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_HEIGHT, M: integer): boolean;
+function checkEndButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH: integer): boolean;
   begin
-    if (mouseX in 39 * (M + 3)..39 * (M + 3) + 39 * 2) and (mouseY in 39 * FIELD_HEIGHT..39 * (FIELD_HEIGHT+1)) and (BUTTON_TYPE = 1) then checkEndButtonClick := true;
+    if (mouseX in 39 * (FIELD_WIDTH + 3)..39 * (FIELD_WIDTH + 3) + 39 * 2) and (mouseY in 39 * FIELD_HEIGHT..39 * (FIELD_HEIGHT+1)) and (BUTTON_TYPE = 1) then checkEndButtonClick := true;
   end;
 // кнопка переиграть нажата
-function checkAgainButtonClick(mouseX, mouseY, BUTTON_TYPE, M: integer): boolean;
+function checkAgainButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
   begin
-    if (mouseX in (39 * (M + 3))..(39 * (M + 3) + 39 * 2)) and (mouseY in 39 * 1..39 * 1 + 39) and (BUTTON_TYPE = 1) then
+    if (mouseX in (39 * (FIELD_WIDTH + 3))..(39 * (FIELD_WIDTH + 3) + 39 * 2)) and (mouseY in 39 * 1..39 * 1 + 39) and (BUTTON_TYPE = 1) then
       checkAgainButtonClick := true;
   end;
 
@@ -42,7 +42,7 @@ procedure fillField();
     count := 0;
     repeat
       begin
-        i := random(M) + 1;
+        i := random(FIELD_WIDTH) + 1;
         j := random(FIELD_HEIGHT) + 1;
         if (FIELD[i, j].mine = False) and (FIELD[i, j].opened = False) then
           begin
@@ -60,7 +60,7 @@ procedure fillField();
 procedure setupField();
   begin
     var i, j, k: shortint;
-    for i := 1 to M do
+    for i := 1 to FIELD_WIDTH do
       for j := 1 to FIELD_HEIGHT do
         if FIELD[i, j].mine = False then
         // если клетка без мины
@@ -72,13 +72,13 @@ procedure setupField();
           if (j - 1 >= 1) and (FIELD[i, j - 1].mine = True) then
             k := k + 1;
           // правее выше мина
-          if (i + 1 <= M) and (j - 1 >= 1) and (FIELD[i + 1, j - 1].mine = True) then
+          if (i + 1 <= FIELD_WIDTH) and (j - 1 >= 1) and (FIELD[i + 1, j - 1].mine = True) then
             k := k + 1;
           // левее мина
           if (i - 1 >= 1) and (FIELD[i - 1, j].mine = True) then
             k := k + 1;
           // правее мина
-          if (i + 1 <= M) and (FIELD[i + 1, j].mine = True) then
+          if (i + 1 <= FIELD_WIDTH) and (FIELD[i + 1, j].mine = True) then
             k := k + 1;
           // ниже левее мина
           if (i - 1 >= 1) and (j + 1 <= FIELD_HEIGHT) and (FIELD[i - 1, j + 1].mine = True) then
@@ -87,7 +87,7 @@ procedure setupField();
           if (j + 1 <= FIELD_HEIGHT) and (FIELD[i, j + 1].mine = True) then
             k := k + 1;
           // ниже правее мина
-          if (i + 1 <= M) and (j + 1 <= FIELD_HEIGHT) and (FIELD[i + 1, j + 1].mine = True) then
+          if (i + 1 <= FIELD_WIDTH) and (j + 1 <= FIELD_HEIGHT) and (FIELD[i + 1, j + 1].mine = True) then
             k := k + 1;
           // количество мин возле клетки
           FIELD[i, j].nearbyMines := k;
@@ -128,7 +128,7 @@ procedure openEmptyCells(i, j, fcount: shortint);
         for jj := -1 to 1 do
           begin
             // если не за пределами поля и закрыта
-            if (i+ii in 1..M) and (j+jj in 1..FIELD_HEIGHT) and (FIELD[i+ii,j+jj].opened = False) then
+            if (i+ii in 1..FIELD_WIDTH) and (j+jj in 1..FIELD_HEIGHT) and (FIELD[i+ii,j+jj].opened = False) then
               begin
                 // останавливаем открытие на клетке с цифрой
                 if (FIELD[i+ii,j+jj].nearbyMines <> 0) and (FIELD[i+ii,j+jj].flag = False) then openCell(i+ii,j+jj)
@@ -193,11 +193,11 @@ procedure deleteFlag(var i: shortint; j: shortint);
 procedure checkButtonsClick();
   begin
     // выход в меню
-    if checkMenuButtonClick(xtemp, ytemp, BUTTON_TYPE, M) then PROGRAM_STEP := 'MenuMainStep'
+    if checkMenuButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH) then PROGRAM_STEP := 'MenuMainStep'
     // начинаем заново
-    else if checkAgainButtonClick(xtemp, ytemp, BUTTON_TYPE, M) then PROGRAM_STEP := 'GameStep'
+    else if checkAgainButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH) then PROGRAM_STEP := 'GameStep'
     // выход из игры
-    else if checkEndButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_HEIGHT, M) then closewindow();
+    else if checkEndButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH) then closewindow();
   end;
 
 // поражение
@@ -210,12 +210,12 @@ procedure youLose();
     ytemp:=0;
     
     // спрятать кнопку паузы
-    fillrectangle(39 * (M + 3), round(39*2.5), 39 * (M + 3) + 39 * 2, round(39*2.5) + 39);
+    fillrectangle(39 * (FIELD_WIDTH + 3), round(39*2.5), 39 * (FIELD_WIDTH + 3) + 39 * 2, round(39*2.5) + 39);
       
     time1 := Milliseconds;
     time := time + (time1 - time0) div 1000 + 1;
     finishText := 'Вы проиграли потратив ' + time + ' секунд(ы)...';
-    for i := 1 to M do
+    for i := 1 to FIELD_WIDTH do
       for j := 1 to FIELD_HEIGHT do
         begin
           if FIELD[i, j].flag = True then
@@ -224,7 +224,7 @@ procedure youLose();
               FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + WIDTH_CELL - 2, 39 * j + WIDTH_CELL - 2);
               SetBrushColor(clWhite);
             end;
-          if FIELD[i, j].mine = True then DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, 'M');
+          if FIELD[i, j].mine = True then DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, 'FIELD_WIDTH');
         end;
     SetFontSize(10);
     TextOut(38,20,finishtext);
@@ -237,7 +237,7 @@ procedure youLose();
           xtemp:=mouseX;
           ytemp:=mouseY;
         end;
-    until (checkEndButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_HEIGHT, M)) or (checkAgainButtonClick(xtemp, ytemp, BUTTON_TYPE, M)) or (checkMenuButtonClick(xtemp, ytemp, BUTTON_TYPE, M));
+    until (checkEndButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH)) or (checkAgainButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH)) or (checkMenuButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH));
     checkButtonsClick();
   end;
 
@@ -337,7 +337,7 @@ procedure displayWin();
     // считаем суммарное время прохождения уровня
     time := time + (time1 - time0) div 1000 + 1;
     
-    fillrectangle(39 * (M + 3), round(39*2.5), 39 * (M + 3) + 39 * 2, round(39*2.5) + 39);// убрать кнопку паузы
+    fillrectangle(39 * (FIELD_WIDTH + 3), round(39*2.5), 39 * (FIELD_WIDTH + 3) + 39 * 2, round(39*2.5) + 39);// убрать кнопку паузы
     
     finishText := 'Вы победили! Секунд затрачено: ' + time;
     SetFontSize(10);
@@ -355,7 +355,7 @@ procedure displayWin();
         begin
           IS_MOUSE_DOWN := false;
         end;
-    until (checkEndButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_HEIGHT, M)) or (checkAgainButtonClick(mouseX, mouseY, BUTTON_TYPE, M)) or (checkMenuButtonClick(mouseX, mouseY, BUTTON_TYPE, M));
+    until (checkEndButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH)) or (checkAgainButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH)) or (checkMenuButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH));
     xtemp:=mouseX;
     ytemp:=mouseY;
     checkButtonsClick();
@@ -417,7 +417,7 @@ function AreYouSure(): boolean;
 procedure pause();
 
   // кнопка снять с паузы нажата
-  function checkUnpauseButtonClick(mouseX, mouseY, BUTTON_TYPE, M: integer): boolean;
+  function checkUnpauseButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
     begin
       if (mouseX in GraphBoxWidth div 2 - 100..GraphBoxWidth div 2 + 100) and (mouseY in GraphBoxHeight div 2 - 50..GraphBoxHeight div 2 + 40) and (BUTTON_TYPE = 1) then checkUnpauseButtonClick := true;
     end;
@@ -440,7 +440,7 @@ procedure pause();
     repeat
       IS_MOUSE_DOWN := false;
     until
-      checkUnpauseButtonClick(mouseX,mouseY,BUTTON_TYPE,M);
+      checkUnpauseButtonClick(mouseX,mouseY,BUTTON_TYPE,FIELD_WIDTH);
     
     // возобновляем отсчёт времени
     time0 := milliseconds;
@@ -464,7 +464,7 @@ procedure displayGameStep;
       lockdrawing();
       setPenWidth(1);
       SetBrushColor(clLightGray);
-      for i := 1 to M do
+      for i := 1 to FIELD_WIDTH do
         begin
           for j := 1 to FIELD_HEIGHT do
             begin
@@ -480,33 +480,33 @@ procedure displayGameStep;
     end;
 
   // кнопка паузы нажата
-  function checkPauseButtonClick(mouseX, mouseY, BUTTON_TYPE, M: integer): boolean;
+  function checkPauseButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
     begin
-      if (mouseX in 39 * (M + 3)..39 * (M + 3) + 39 * 2) and (mouseY in round(39*2.5)..round(39*2.5) + 39) and (BUTTON_TYPE = 1) then checkPauseButtonClick := true;
+      if (mouseX in 39 * (FIELD_WIDTH + 3)..39 * (FIELD_WIDTH + 3) + 39 * 2) and (mouseY in round(39*2.5)..round(39*2.5) + 39) and (BUTTON_TYPE = 1) then checkPauseButtonClick := true;
     end;
 
   // открытие клетки без мины (условие)
   function notMine(i, j: integer): boolean;
     begin
-      if (i in 1..M) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (FIELD[i, j].mine = False) and (FIELD[i, j].opened = False) and (FIELD[i, j].flag = false) then notMine := True;
+      if (i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (FIELD[i, j].mine = False) and (FIELD[i, j].opened = False) and (FIELD[i, j].flag = false) then notMine := True;
     end;
 
   // поставить флаг (условие)
   function WantSetFlag(i, j: integer): boolean;
     begin
-      if (i in 1..M) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 2) and (FIELD[i, j].flag = False) and (FIELD[i, j].opened = False) then WantSetFlag := True;
+      if (i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 2) and (FIELD[i, j].flag = False) and (FIELD[i, j].opened = False) then WantSetFlag := True;
     end;
 
   // убрать флаг (условие)
   function WantDeleteFlag(i, j: integer): boolean;
     begin
-      if (i in 1..M) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 2) and (FIELD[i, j].flag = True) and (FIELD[i, j].opened = False) then WantDeleteFlag := True;
+      if (i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 2) and (FIELD[i, j].flag = True) and (FIELD[i, j].opened = False) then WantDeleteFlag := True;
     end;
 
   // условие поражения
   function lose(i, j: integer): boolean;
     begin
-      if ((i in 1..M) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (FIELD[i, j].mine = True) and (FIELD[i, j].flag = False)) then lose := True;
+      if ((i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (FIELD[i, j].mine = True) and (FIELD[i, j].flag = False)) then lose := True;
     end;
 
   begin
@@ -529,10 +529,10 @@ procedure displayGameStep;
     drawField();
     
     // рисуем кнопки
-    DrawButton(39 * (M + 3), 39 * 1, 39 * (M + 3) + 39 * 2, 39 * 1 + 39, 'переиграть');
-    DrawButton(39 * (M + 3), round(39*2.5), 39 * (M + 3) + 39 * 2, round(39*2.5) + 39, 'пауза');
-    DrawButton(39 * (M + 3), 39 * 4, 39 * (M + 3) + 39 * 2, 39 * 5, 'назад в меню');
-    DrawButton(39 * (M + 3), 39 * FIELD_HEIGHT, 39 * (M + 3) + 39 * 2, 39 * (FIELD_HEIGHT+1), 'выход из игры');
+    DrawButton(39 * (FIELD_WIDTH + 3), 39 * 1, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * 1 + 39, 'переиграть');
+    DrawButton(39 * (FIELD_WIDTH + 3), round(39*2.5), 39 * (FIELD_WIDTH + 3) + 39 * 2, round(39*2.5) + 39, 'пауза');
+    DrawButton(39 * (FIELD_WIDTH + 3), 39 * 4, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * 5, 'назад в меню');
+    DrawButton(39 * (FIELD_WIDTH + 3), 39 * FIELD_HEIGHT, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * (FIELD_HEIGHT+1), 'выход из игры');
     
     redraw();
     unlockdrawing();
@@ -545,8 +545,8 @@ procedure displayGameStep;
           j := mouseY div WIDTH_CELL;
           SetFontSize(15);
           // безопасное первое открытие клетки + заполнение поля минами
-          if (i in 1..M) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (fcount = 0) then openFirstCell(i, j)
-          else if checkPauseButtonClick(mouseX,mouseY,BUTTON_TYPE,M) then pause()
+          if (i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (fcount = 0) then openFirstCell(i, j)
+          else if checkPauseButtonClick(mouseX,mouseY,BUTTON_TYPE,FIELD_WIDTH) then pause()
           // нажали на клетку без мины
           else if notMine(i, j) then
             begin
@@ -560,17 +560,17 @@ procedure displayGameStep;
           // убрали флаг
           else if WantDeleteFlag(i, j) then deleteFlag(i, j)
           // хотим нажать на кнопку выхода/в меню/заново
-          else if (checkAgainButtonClick(mouseX, mouseY, BUTTON_TYPE, M)) or (checkMenuButtonClick(mouseX, mouseY, BUTTON_TYPE, M)) or (checkEndButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_HEIGHT, M)) then
+          else if (checkAgainButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH)) or (checkMenuButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_WIDTH)) or (checkEndButtonClick(mouseX, mouseY, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH)) then
               sure := AreYouSure;
         end;
     // завершение процесса игры при одном из трёх условий
-    until sure or (fcount = M * FIELD_HEIGHT - MINES_COUNT) or lose(i, j);
+    until sure or (fcount = FIELD_WIDTH * FIELD_HEIGHT - MINES_COUNT) or lose(i, j);
     
     // если выполнилось условие проигрыша, то проиграл
     if lose(i,j) then youLose();
     
     // если открыл все поля без мин, то победил
-    if fcount = int(M * FIELD_HEIGHT) - MINES_COUNT then displayWin();
+    if fcount = int(FIELD_WIDTH * FIELD_HEIGHT) - MINES_COUNT then displayWin();
     
     // последний исход завершения процесса игры - нажата кнопка меню/выход/переиграть
     checkButtonsClick();

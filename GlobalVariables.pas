@@ -23,7 +23,7 @@ var
   // высота поля
   FIELD_HEIGHT: integer;
   // ширина поля
-  M: integer;
+  FIELD_WIDTH: integer;
   // игровое поле (матрица клеток)
   FIELD: array [1..100, 1..100] of cell;
   // число мин
