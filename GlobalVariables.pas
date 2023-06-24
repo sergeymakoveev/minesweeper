@@ -19,18 +19,18 @@ var
   // нажата ли кнопка мыши
   isMouseDown: boolean;
   // тип нажатой кнопки мыши (левая/правая)
-  button: integer;
+  BUTTON_TYPE: integer;
   // высота поля
   N: integer;
   // ширина поля
   M: integer;
   // игровое поле (матрица клеток)
-  Field: array [1..100, 1..100] of cell;
+  FIELD: array [1..100, 1..100] of cell;
   // число мин
   MINES_COUNT: integer;
-  // отвечает за активное меню
+  // шаг программы для отображения
   PROGRAM_STEP: string;
-  // отвечает за выбранный уровень 
+  // выбранный уровень сложности
   GAME_LEVEL: byte;
   // Флаг завершения пользовательского ввода
   isInputDone: boolean;

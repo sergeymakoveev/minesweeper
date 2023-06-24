@@ -15,7 +15,7 @@ procedure MouseDown(x, y, mb: integer);
     isMouseDown := true;
     mouseX := x;
     mouseY := y;
-    button := mb;
+    BUTTON_TYPE := mb;
   end;
 
 // универсальная отрисовка кнопок
