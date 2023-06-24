@@ -38,33 +38,33 @@ procedure setHardLevel;
   end;
 
 // проверка клика по кнопке: уровень "легкий"
-function isEasyLevelClick(mouseX, mouseY, button: integer): boolean;
+function checkEasyLevelButtonClick(mouseX, mouseY, button: integer): boolean;
   begin
-    if (mouseX in 40..570) and (mouseY in 220..260) and (button = 1) then isEasyLevelClick := true;
+    if (mouseX in 40..570) and (mouseY in 220..260) and (button = 1) then checkEasyLevelButtonClick := true;
   end;
 
 // проверка клика по кнопке: уровень "нормальный"
-function isNormalLevelClick(mouseX, mouseY, button: integer): boolean;
+function checkNormalLevelButtonClick(mouseX, mouseY, button: integer): boolean;
   begin
-    if (mouseX in 40..570) and (mouseY in 280..320) and (button = 1) then isNormalLevelClick := true;
+    if (mouseX in 40..570) and (mouseY in 280..320) and (button = 1) then checkNormalLevelButtonClick := true;
   end;
 
 // проверка клика по кнопке: уровень "сложный"
-function isHardLevelClick(mouseX, mouseY, button: integer): boolean;
+function checkHardLevelButtonClick(mouseX, mouseY, button: integer): boolean;
   begin
-    if (mouseX in 40..570) and (mouseY in 340..380) and (button = 1) then isHardLevelClick := true;
+    if (mouseX in 40..570) and (mouseY in 340..380) and (button = 1) then checkHardLevelButtonClick := true;
   end;
 
 // проверка клика по кнопке: уровень "пользовательский"
-function isCustomLevelClick(mouseX, mouseY, button: integer): boolean;
+function checkCustomLevelButtonClick(mouseX, mouseY, button: integer): boolean;
   begin
-    if (mouseX in 40..570) and (mouseY in 400..440) and (button = 1) then isCustomLevelClick := true;
+    if (mouseX in 40..570) and (mouseY in 400..440) and (button = 1) then checkCustomLevelButtonClick := true;
   end;
 
 // кнопка назад (в окне с правилами) нажата
-function isBackClick(mouseX, mouseY, button: integer): boolean;
+function checkBackButtonClick(mouseX, mouseY, button: integer): boolean;
   begin
-    if (mouseX in 40..570) and (mouseY in 540..580) and (button = 1) then isBackClick := true;
+    if (mouseX in 40..570) and (mouseY in 540..580) and (button = 1) then checkBackButtonClick := true;
   end;
 
 // главное меню
@@ -129,18 +129,18 @@ procedure displayMenuGameStep;
           isMouseDown := false;
         end;
     until 
-      isEasyLevelClick(mouseX, mouseY, button) or
-      isNormalLevelClick(mouseX, mouseY, button) or
-      isHardLevelClick(mouseX, mouseY, button) or
-      isCustomLevelClick(mouseX, mouseY, button) or
-      isBackClick(mouseX, mouseY, button);
+      checkEasyLevelButtonClick(mouseX, mouseY, button) or
+      checkNormalLevelButtonClick(mouseX, mouseY, button) or
+      checkHardLevelButtonClick(mouseX, mouseY, button) or
+      checkCustomLevelButtonClick(mouseX, mouseY, button) or
+      checkBackButtonClick(mouseX, mouseY, button);
     
-    if isEasyLevelClick(mouseX, mouseY, button) then setEasyLevel
-    else if isNormalLevelClick(mouseX, mouseY, button) then setNormalLevel
-    else if isHardLevelClick(mouseX, mouseY, button) then setHardLevel;
+    if checkEasyLevelButtonClick(mouseX, mouseY, button) then setEasyLevel
+    else if checkNormalLevelButtonClick(mouseX, mouseY, button) then setNormalLevel
+    else if checkHardLevelButtonClick(mouseX, mouseY, button) then setHardLevel;
 
-    if isCustomLevelClick(mouseX, mouseY, button) then programStep := 'UserLevelStep'
-    else if isBackClick(mouseX, mouseY, button) then programStep := 'MenuMainStep'
+    if checkCustomLevelButtonClick(mouseX, mouseY, button) then programStep := 'UserLevelStep'
+    else if checkBackButtonClick(mouseX, mouseY, button) then programStep := 'MenuMainStep'
     else programStep := 'GameStep';
   end;
 
@@ -201,7 +201,7 @@ procedure displayRecordsStep;
       repeat
         if IsMouseDown then
           IsMouseDown := false;
-      until isBackClick(mouseX, mouseY, button);
+      until checkBackButtonClick(mouseX, mouseY, button);
       
       programStep:='MenuMainStep';
 
@@ -227,7 +227,7 @@ procedure displayRulesStep(var programStep: string);
       begin
         IsMouseDown := false;
       end;
-    until isBackClick(mouseX, mouseY, button);
+    until checkBackButtonClick(mouseX, mouseY, button);
     
     programStep := 'MenuMainStep';
   end;
