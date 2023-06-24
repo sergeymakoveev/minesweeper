@@ -211,46 +211,19 @@ procedure deleteFlag(var i: shortint; j: shortint);
     j:=0;
   end;
 
-// открытие клетки без мины (условие)
-function notMine(i, j: integer): boolean;
-  begin
-    if (i in 1..M) and (j in 1..N) and (button = 1) and (Field[i, j].mine = False) and (Field[i, j].opened = False) and (Field[i, j].flag = false) then notMine := True;
-  end;
-
-// поставить флаг (условие)
-function WantSetFlag(i, j: integer): boolean;
-  begin
-    if (i in 1..M) and (j in 1..N) and (button = 2) and (Field[i, j].flag = False) and (Field[i, j].opened = False) then WantSetFlag := True;
-  end;
-
-// убрать флаг (условие)
-function WantDeleteFlag(i, j: integer): boolean;
-  begin
-    if (i in 1..M) and (j in 1..N) and (button = 2) and (Field[i, j].flag = True) and (Field[i, j].opened = False) then WantDeleteFlag := True;
-  end;
-
-// условие поражения
-function lose(i, j: integer): boolean;
-  begin
-    if ((i in 1..M) and (j in 1..N) and (button = 1) and (Field[i, j].mine = True) and (Field[i, j].flag = False)) then lose := True;
-  end;
-
 // проверка кнопок в окне во время игры на нажатие (которые требуют подтверждения)
 procedure IngameButtonsPressed;
   begin
-    // xtemp:=mouseX;
-    // ytemp:=mouseY;
-    
     // выход в меню
     if checkMenuButtonClick(xtemp, ytemp, button, M) then programStep := 'MenuMainStep'
     // начинаем заново
     else if checkAgainButtonClick(xtemp, ytemp, button, M) then programStep := 'GameStep'
     // выход из игры
-    else if checkEndButtonClick(xtemp, ytemp, button, N, M) then closewindow;
+    else if checkEndButtonClick(xtemp, ytemp, button, N, M) then closewindow();
   end;
 
 // поражение
-procedure youLose;
+procedure youLose();
   begin
     var finishText: string;
     var i,j: shortint;
@@ -502,12 +475,36 @@ procedure pause;
   end;
 
 // процесс игры
-procedure displayGameStep;
+procedure displayGameStep();
 
   // кнопка паузы нажата
   function checkPauseButtonClick(mouseX, mouseY, button, M: integer): boolean;
     begin
       if (mouseX in 39 * (M + 3)..39 * (M + 3) + 39 * 2) and (mouseY in round(39*2.5)..round(39*2.5) + 39) and (button = 1) then checkPauseButtonClick := true;
+    end;
+
+  // открытие клетки без мины (условие)
+  function notMine(i, j: integer): boolean;
+    begin
+      if (i in 1..M) and (j in 1..N) and (button = 1) and (Field[i, j].mine = False) and (Field[i, j].opened = False) and (Field[i, j].flag = false) then notMine := True;
+    end;
+
+  // поставить флаг (условие)
+  function WantSetFlag(i, j: integer): boolean;
+    begin
+      if (i in 1..M) and (j in 1..N) and (button = 2) and (Field[i, j].flag = False) and (Field[i, j].opened = False) then WantSetFlag := True;
+    end;
+
+  // убрать флаг (условие)
+  function WantDeleteFlag(i, j: integer): boolean;
+    begin
+      if (i in 1..M) and (j in 1..N) and (button = 2) and (Field[i, j].flag = True) and (Field[i, j].opened = False) then WantDeleteFlag := True;
+    end;
+
+  // условие поражения
+  function lose(i, j: integer): boolean;
+    begin
+      if ((i in 1..M) and (j in 1..N) and (button = 1) and (Field[i, j].mine = True) and (Field[i, j].flag = False)) then lose := True;
     end;
 
   begin

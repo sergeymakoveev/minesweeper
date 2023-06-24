@@ -254,12 +254,12 @@ begin
   // Отрисовка текущего окна
   repeat
     case programStep of
-      'MenuGameStep': displayMenuGameStep;
-      'GameStep': displayGameStep;
-      'MenuMainStep': displayMenuMainStep;
+      'MenuGameStep': displayMenuGameStep();
+      'GameStep': displayGameStep();
+      'MenuMainStep': displayMenuMainStep();
       'RulesStep': displayRulesStep(programStep);
       'UserLevelStep': displayUserLevelForm(level,M,N,Nmines,programStep);
-      'RecordsStep': displayRecordsStep;
+      'RecordsStep': displayRecordsStep();
     end;
   // игру закрывается из окна startmenu или game
   until false;
