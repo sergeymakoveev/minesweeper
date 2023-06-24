@@ -54,7 +54,7 @@ procedure fillField();
               DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, 'M');
           end;
       end;
-    until count = Nmines;
+    until count = MINES_COUNT;
   end;
 
 procedure setupField();
@@ -564,13 +564,13 @@ procedure displayGameStep;
               sure := AreYouSure;
         end;
     // завершение процесса игры при одном из трёх условий
-    until sure or (fcount = M * N - Nmines) or lose(i, j);
+    until sure or (fcount = M * N - MINES_COUNT) or lose(i, j);
     
     // если выполнилось условие проигрыша, то проиграл
     if lose(i,j) then youLose();
     
     // если открыл все поля без мин, то победил
-    if fcount = int(M * N) - Nmines then displayWin();
+    if fcount = int(M * N) - MINES_COUNT then displayWin();
     
     // последний исход завершения процесса игры - нажата кнопка меню/выход/переиграть
     checkButtonsClick();

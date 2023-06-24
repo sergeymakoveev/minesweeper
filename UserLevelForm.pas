@@ -6,7 +6,7 @@ Interface
   uses GlobalConstants, GlobalVariables;
 
   procedure inputInteger(ch: char);
-  procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var Nmines: integer; var PROGRAM_STEP: string);
+  procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var MINES_COUNT: integer; var PROGRAM_STEP: string);
   
 Implementation
  
@@ -39,7 +39,7 @@ procedure inputInteger(ch: char);
   end;
 
 // играть на пользовательской сложности
-procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var Nmines: integer; var PROGRAM_STEP: string);
+procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var MINES_COUNT: integer; var PROGRAM_STEP: string);
 
   const
     // максимальная ширина минного поля
@@ -100,8 +100,8 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var Nmine
     onKeyPress:=inputInteger;
     repeat s:=ss until isInputDone;
     isInputDone:=False;
-    val(s,Nmines,err);
-    while Nmines not in 1..(M * N - 1) do
+    val(s,MINES_COUNT,err);
+    while MINES_COUNT not in 1..(M * N - 1) do
       begin
         SetFontSize(9);
         textout(50,115,'Недопустимое значение. Повторите ввод');
@@ -112,7 +112,7 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var Nmine
         repeat s:=ss until isInputDone;
         isInputDone:=False;
         SetFontSize(15);
-        val(s,Nmines,err);
+        val(s,MINES_COUNT,err);
       end;
 
     // обратный отсчёт на 3 секунды

@@ -27,7 +27,7 @@ var
   // игровое поле (матрица клеток)
   Field: array [1..100, 1..100] of cell;
   // число мин
-  Nmines: integer;
+  MINES_COUNT: integer;
   // отвечает за активное меню
   PROGRAM_STEP: string;
   // отвечает за выбранный уровень 
