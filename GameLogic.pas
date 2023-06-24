@@ -212,7 +212,7 @@ procedure deleteFlag(var i: shortint; j: shortint);
   end;
 
 // проверка кнопок в окне во время игры на нажатие (которые требуют подтверждения)
-procedure IngameButtonsPressed;
+procedure checkButtonsClick();
   begin
     // выход в меню
     if checkMenuButtonClick(xtemp, ytemp, button, M) then programStep := 'MenuMainStep'
@@ -260,14 +260,14 @@ procedure youLose();
           ytemp:=mouseY;
         end;
     until (checkEndButtonClick(xtemp, ytemp, button, N, M)) or (checkAgainButtonClick(xtemp, ytemp, button, M)) or (checkMenuButtonClick(xtemp, ytemp, button, M));
-    IngameButtonsPressed;
+    checkButtonsClick();
   end;
 
 // нажатие на клавиатуру (имя рекордсмена)
 procedure KeyPressName(ch: char);
   begin
     InputDone := false;
-    lockdrawing;
+    lockdrawing();
     fillrect(350,20,500,36);
     if ((ch in ('А'..'Я')) or (ch in ('а'..'я'))) and (length(ss)<15) then ss+=ch;
     textout(350,20,ss);
@@ -279,8 +279,8 @@ procedure KeyPressName(ch: char);
         fillrect(350,20,500,36);
         textout(350,20,ss);
       end;
-    unlockdrawing;
-    redraw;
+    unlockdrawing();
+    redraw();
     // если нажали на Enter(конец проверки на событие)
     if ord(ch) = VK_Enter then
       begin
@@ -351,7 +351,7 @@ procedure isBest(time: integer; level: byte);
   end;
 
 // победа
-procedure youWin;
+procedure youWin();
   begin
     var finishText: string;  
     // записываем время
@@ -380,11 +380,11 @@ procedure youWin;
     until (checkEndButtonClick(mouseX, mouseY, button, N, M)) or (checkAgainButtonClick(mouseX, mouseY, button, M)) or (checkMenuButtonClick(mouseX, mouseY, button, M));
     xtemp:=mouseX;
     ytemp:=mouseY;
-    IngameButtonsPressed;
+    checkButtonsClick();
   end;
 
 // подтверждение нажатия на кнопку Переиграть/в меню/выйти
-function AreYouSure: boolean;
+function AreYouSure(): boolean;
 
   // кнопка НЕТ в подтверждении действия нажата
   function checkNoButtonClick(mouseX, mouseY, button: integer): boolean;
@@ -419,7 +419,8 @@ function AreYouSure: boolean;
     
     repeat
       IsMouseDown := false;
-    until checkYesButtonClick(mouseX,mouseY,button) or checkNoButtonClick(mouseX,mouseY,button);
+    until
+      checkYesButtonClick(mouseX,mouseY,button) or checkNoButtonClick(mouseX,mouseY,button);
     
     if checkYesButtonClick(mouseX,mouseY,button) then AreYouSure:=true
     else AreYouSure:=false;
@@ -435,7 +436,7 @@ function AreYouSure: boolean;
   end;
 
 // пауза
-procedure pause;
+procedure pause();
 
   // кнопка снять с паузы нажата
   function checkUnpauseButtonClick(mouseX, mouseY, button, M: integer): boolean;
@@ -452,7 +453,7 @@ procedure pause;
     // сохраняем окно
     SaveWindow('gamewindow');
     // очищаем окно
-    clearWindow;
+    clearWindow();
     
     setBrushColor(clLightGreen);
     DrawButton(GraphBoxWidth div 2 - 100,GraphBoxHeight div 2 - 50,GraphBoxWidth div 2 + 100,GraphBoxHeight div 2 + 40,'продолжить');
@@ -460,7 +461,8 @@ procedure pause;
     
     repeat
       IsMouseDown := false;
-    until checkUnpauseButtonClick(mouseX,mouseY,button,M);
+    until
+      checkUnpauseButtonClick(mouseX,mouseY,button,M);
     
     // возобновляем отсчёт времени
     time0 := milliseconds;
@@ -524,7 +526,7 @@ procedure displayGameStep();
     ytemp:=0;
     
     // рисуем поле
-    pole;
+    pole();
     
     // рисуем кнопки
     DrawButton(39 * (M + 3), 39 * 1, 39 * (M + 3) + 39 * 2, 39 * 1 + 39, 'переиграть');
@@ -532,8 +534,8 @@ procedure displayGameStep();
     DrawButton(39 * (M + 3), 39 * 4, 39 * (M + 3) + 39 * 2, 39 * 5, 'назад в меню');
     DrawButton(39 * (M + 3), 39 * N, 39 * (M + 3) + 39 * 2, 39 * (N+1), 'выход из игры');
     
-    redraw;
-    unlockdrawing;
+    redraw();
+    unlockdrawing();
     
     repeat
       if IsMouseDown then
@@ -544,7 +546,7 @@ procedure displayGameStep();
           SetFontSize(15);
           // безопасное первое открытие клетки + заполнение поля минами
           if (i in 1..M) and (j in 1..N) and (button = 1) and (fcount = 0) then FirstStep(i, j)
-          else if checkPauseButtonClick(mouseX,mouseY,button,M) then pause
+          else if checkPauseButtonClick(mouseX,mouseY,button,M) then pause()
           // нажали на клетку без мины
           else if notMine(i, j) then
             begin
@@ -565,13 +567,13 @@ procedure displayGameStep();
     until sure or (fcount = M * N - Nmines) or lose(i, j);
     
     // если выполнилось условие проигрыша, то проиграл
-    if lose(i,j) then youLose;
+    if lose(i,j) then youLose();
     
     // если открыл все поля без мин, то победил
-    if fcount = int(M * N) - Nmines then youWin;
+    if fcount = int(M * N) - Nmines then youWin();
     
     // последний исход завершения процесса игры - нажата кнопка меню/выход/переиграть
-    IngameButtonsPressed;
+    checkButtonsClick();
   end;
 
 begin 
