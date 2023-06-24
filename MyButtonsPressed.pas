@@ -2,7 +2,6 @@
 
 Interface
   uses graphABC;
-  function endButtonPressed(mouseX, mouseY, button, N, M: integer): boolean;
   function againButtonPressed(mouseX, mouseY, button, M: integer): boolean;
   function unpauseButtonPressed(mouseX, mouseY, button, M: integer): boolean;
   function yesButtonPressed(mouseX, mouseY, button: integer): boolean;
@@ -13,12 +12,6 @@ Implementation
 function unpauseButtonPressed(mouseX, mouseY, button, M: integer): boolean;
   begin
     if (mouseX in GraphBoxWidth div 2 - 100..GraphBoxWidth div 2 + 100) and (mouseY in GraphBoxHeight div 2 - 50..GraphBoxHeight div 2 + 40) and (button = 1) then unpauseButtonPressed := true;
-  end;
-
-// кнопка завершить программу нажата
-function endButtonPressed(mouseX, mouseY, button, N, M: integer): boolean;
-  begin
-    if (mouseX in 39 * (M + 3)..39 * (M + 3) + 39 * 2) and (mouseY in 39 * N..39 * (N+1)) and (button = 1) then endButtonPressed := true;
   end;
 
 // кнопка переиграть нажата

@@ -24,6 +24,11 @@ function menuButtonPressed(mouseX, mouseY, button, M: integer): boolean;
   begin
     if (mouseX in 39 * (M + 3)..39 * (M + 3) + 39 * 2) and (mouseY in 39 * 4..39 * 5) and (button = 1) then menuButtonPressed := true;
   end;
+// кнопка завершить программу нажата
+function endButtonPressed(mouseX, mouseY, button, N, M: integer): boolean;
+  begin
+    if (mouseX in 39 * (M + 3)..39 * (M + 3) + 39 * 2) and (mouseY in 39 * N..39 * (N+1)) and (button = 1) then endButtonPressed := true;
+  end;
 
 // поле + очищение клеток от мин + состояния открытия + флагов на случай начала новой игры без перезапуска программы
 procedure pole;
