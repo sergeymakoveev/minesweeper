@@ -6,7 +6,7 @@ const
   // DEBUG_MODE = false;
 
   // ширина клетки
-  width = 39;
+  WIDTH_CELL = 39;
 
 begin 
 end.

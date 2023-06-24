@@ -10,7 +10,7 @@ procedure setEasyLevel;
     N := 8;
     M := 8;
     Nmines := 10;
-    SetWindowSize((N + 6) * Width, (N + 2) * Width);
+    SetWindowSize((N + 6) * WIDTH_CELL, (N + 2) * WIDTH_CELL);
     CenterWindow;
   end;
 
@@ -21,7 +21,7 @@ procedure setNormalLevel;
     N := 16;
     M := 16;
     Nmines := 40;
-    SetWindowSize((N + 6) * Width, (N + 2) * Width);
+    SetWindowSize((N + 6) * WIDTH_CELL, (N + 2) * WIDTH_CELL);
     CenterWindow;
   end;
 
@@ -32,7 +32,7 @@ procedure setHardLevel;
     N := 19;
     M := 30;
     Nmines := 70;
-    SetWindowSize((M + 6) * Width, (N + 2) * Width);
+    SetWindowSize((M + 6) * WIDTH_CELL, (N + 2) * WIDTH_CELL);
     CenterWindow
   end;
 

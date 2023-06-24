@@ -123,7 +123,7 @@ procedure displayUserLevelForm(var level: byte; var M,N: integer; var Nmines: in
         sleep(1000);
       end;
     
-    SetWindowSize((M + 6) * Width, (N + 2) * Width);
+    SetWindowSize((M + 6) * WIDTH_CELL, (N + 2) * WIDTH_CELL);
     CenterWindow;
     
     programStep := 'GameStep';

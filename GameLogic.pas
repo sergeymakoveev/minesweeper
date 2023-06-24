@@ -46,7 +46,7 @@ procedure pole;
       begin
         for j := 1 to N do
           begin
-            rectangle(width * i, width * j, width * i + width, width * j + width);
+            rectangle(WIDTH_CELL * i, WIDTH_CELL * j, WIDTH_CELL * i + WIDTH_CELL, WIDTH_CELL * j + WIDTH_CELL);
             Field[i, j].opened := False;
             Field[i, j].mine := False;
             Field[i, j].flag := False;
@@ -73,7 +73,7 @@ procedure filling;
             if DEBUG_MODE = true then
               // debug
               // отладочная строка для быстрой победы (видны все мины)
-              DrawTextCentered(39 * i, 39 * j, 39 * i + width, 39 * j + width, 'M');
+              DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, 'M');
           end;
       end;
     until count = Nmines;
@@ -124,7 +124,7 @@ procedure Step(i, j: shortint);
     // счётчик открытых клеток
     fcount += 1;
     // белый фон вместо серого
-    FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + width - 2, 39 * j + width - 2);
+    FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + WIDTH_CELL - 2, 39 * j + WIDTH_CELL - 2);
     case Field[i, j].nearbyMines of 
       1: SetFontColor(clGreen);
       2: SetFontColor(clBlue);
@@ -136,7 +136,7 @@ procedure Step(i, j: shortint);
       8: SetFontColor(clOrangeRed);
     end;
     // вывод кол-ва мин вокруг клетки
-    if Field[i, j].nearbyMines <> 0 then DrawTextCentered(39 * i, 39 * j, 39 * i + width, 39 * j + width, Field[i, j].nearbyMines);
+    if Field[i, j].nearbyMines <> 0 then DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, Field[i, j].nearbyMines);
     SetFontColor(clBlack);
   end;
 
@@ -171,7 +171,7 @@ procedure FirstStep(i, j: shortint);
     filling;
     nearby;
     if Field[i,j].nearbyMines = 0 then EmptyStep(i,j,fcount);
-    FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + width - 2, 39 * j + width - 2);
+    FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + WIDTH_CELL - 2, 39 * j + WIDTH_CELL - 2);
     case Field[i, j].nearbyMines of 
       1: SetFontColor(clGreen);
       2: SetFontColor(clBlue);
@@ -184,7 +184,7 @@ procedure FirstStep(i, j: shortint);
     end;
     if not (Field[i, j].nearbyMines = 0) then
       begin 
-        DrawTextCentered(39 * i, 39 * j, 39 * i + width, 39 * j + width, Field[i, j].nearbyMines); 
+        DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, Field[i, j].nearbyMines); 
         fcount += 1;
       end;
     SetFontColor(clBlack);
@@ -194,7 +194,7 @@ procedure FirstStep(i, j: shortint);
 procedure flag(i, j: shortint);
   begin
     SetFontColor(clRed);
-    DrawTextCentered(39 * i, 39 * j, 39 * i + width, 39 * j + width, 'F');
+    DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, 'F');
     SetFontColor(clBlack);
     Field[i, j].flag := True;
   end;
@@ -204,7 +204,7 @@ procedure deleteFlag(var i: shortint; j: shortint);
   begin
     Field[i, j].flag := False;
     SetBrushColor(clLightGray);
-    FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + width - 2, 39 * j + width - 2);
+    FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + WIDTH_CELL - 2, 39 * j + WIDTH_CELL - 2);
     SetBrushColor(clWhite);
     // после выполнения действия зануляем переменную (иначе приводит к ошибке)
     i:=0;
@@ -270,10 +270,10 @@ procedure youLose;
           if Field[i, j].flag = True then
             begin
               SetBrushColor(clLightGray);
-              FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + width - 2, 39 * j + width - 2);
+              FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + WIDTH_CELL - 2, 39 * j + WIDTH_CELL - 2);
               SetBrushColor(clWhite);
             end;
-          if Field[i, j].mine = True then DrawTextCentered(39 * i, 39 * j, 39 * i + width, 39 * j + width, 'M');
+          if Field[i, j].mine = True then DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, 'M');
         end;
     SetFontSize(10);
     TextOut(38,20,finishtext);
@@ -542,8 +542,8 @@ procedure displayGameStep;
       if IsMouseDown then
         begin
           IsMouseDown := false;
-          i := mouseX div width;
-          j := mouseY div width;
+          i := mouseX div WIDTH_CELL;
+          j := mouseY div WIDTH_CELL;
           SetFontSize(15);
           // безопасное первое открытие клетки + заполнение поля минами
           if (i in 1..M) and (j in 1..N) and (button = 1) and (fcount = 0) then FirstStep(i, j)
