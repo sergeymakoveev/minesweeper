@@ -36,7 +36,7 @@ function checkAgainButtonClick(mouseX, mouseY, button, M: integer): boolean;
   end;
 
 // заполнение минами
-procedure filling;
+procedure fillField();
   begin
     var i, j, count: integer;
     count := 0;
@@ -146,7 +146,7 @@ procedure openFirstCell(i, j: shortint);
     time:=0;
     Field[i, j].opened := True;
     Field[i, j].mine := False;
-    filling;
+    fillField();
     nearby;
     if Field[i,j].nearbyMines = 0 then openEmptyCells(i,j,fcount);
     FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + WIDTH_CELL - 2, 39 * j + WIDTH_CELL - 2);
@@ -244,7 +244,7 @@ procedure youLose();
 // нажатие на клавиатуру (имя рекордсмена)
 procedure onKeyPressName(ch: char);
   begin
-    InputDone := false;
+    isInputDone := false;
     lockdrawing();
     fillrect(350,20,500,36);
     if ((ch in ('А'..'Я')) or (ch in ('а'..'я'))) and (length(ss)<15) then ss+=ch;
@@ -263,7 +263,7 @@ procedure onKeyPressName(ch: char);
     if ord(ch) = VK_Enter then
       begin
           onKeyPress:=Nil;
-          InputDone:=True;
+          isInputDone:=True;
       end;
   end;
 
@@ -281,7 +281,7 @@ procedure checkIsBest(time: integer; level: byte);
     var s: string;
     
     i:=0;
-    InputDone:=False;
+    isInputDone:=False;
 
     // открытие файла рекордов
     assign(f,'records.txt');
@@ -315,7 +315,7 @@ procedure checkIsBest(time: integer; level: byte);
           begin
             ss:='';
             onKeyPress:=onKeyPressName;
-            repeat i:=i+0 until InputDone;
+            repeat i:=i+0 until isInputDone;
             writeln(f2,ss);
           end;
       end;
