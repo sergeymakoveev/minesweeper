@@ -9,6 +9,10 @@ Interface
 
 Implementation
 
+const
+  SYMBOL_MINE = '¤';
+  SYMBOL_FLAG = '⚑';
+
 var
   // количество открытых ячеек
   fcount: integer;
@@ -50,7 +54,7 @@ procedure fillField();
             if DEBUG_MODE = true then
               // debug
               // отладочная строка для быстрой победы (видны все мины)
-              DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, 'M');
+              DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, SYMBOL_MINE);
           end;
       end;
     until count = FIELD_MINES_COUNT;
@@ -171,7 +175,7 @@ procedure openFirstCell(i, j: shortint);
 procedure setFlag(i, j: shortint);
   begin
     SetFontColor(clRed);
-    DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, 'F');
+    DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, SYMBOL_FLAG);
     SetFontColor(clBlack);
     FIELD[i, j].flag := True;
   end;
@@ -223,7 +227,7 @@ procedure youLose();
               FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + WIDTH_CELL - 2, 39 * j + WIDTH_CELL - 2);
               SetBrushColor(clWhite);
             end;
-          if FIELD[i, j].mine = True then DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, 'FIELD_WIDTH');
+          if FIELD[i, j].mine = True then DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, SYMBOL_MINE);
         end;
     SetFontSize(10);
     TextOut(38,20,finishtext);
