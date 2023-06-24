@@ -40,6 +40,13 @@ procedure inputInteger(ch: char);
 
 // играть на пользовательской сложности
 procedure displayUserLevelForm(var level: byte; var M,N: integer; var Nmines: integer; var programStep: string);
+
+  const
+    // макс.длина
+    Mmax = 34;
+    // макс.ширина
+    Nmax = 19;
+
   begin
     ClearWindow;
     SetFontSize(15);
