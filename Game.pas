@@ -1,7 +1,7 @@
 ﻿uses graphABC, PABCSystem;
 uses GlobalConstants, GlobalVariables, CommonFunctions;
 uses GameLogic;
-uses UserLevelForm;
+uses GameLevelForm;
 
 // главное меню
 procedure displayMenuMainStep;
