@@ -244,7 +244,7 @@ procedure youLose();
 // нажатие на клавиатуру (имя рекордсмена)
 procedure onKeyPressName(ch: char);
   begin
-    isInputDone := false;
+    IS_INPUT_DONE := false;
     lockdrawing();
     fillrect(350,20,500,36);
     if ((ch in ('А'..'Я')) or (ch in ('а'..'я'))) and (length(ss)<15) then ss+=ch;
@@ -263,7 +263,7 @@ procedure onKeyPressName(ch: char);
     if ord(ch) = VK_Enter then
       begin
           onKeyPress:=Nil;
-          isInputDone:=True;
+          IS_INPUT_DONE:=True;
       end;
   end;
 
@@ -281,7 +281,7 @@ procedure checkIsBest(time: integer; GAME_LEVEL: byte);
     var s: string;
     
     i:=0;
-    isInputDone:=False;
+    IS_INPUT_DONE:=False;
 
     // открытие файла рекордов
     assign(f,'records.txt');
@@ -315,7 +315,7 @@ procedure checkIsBest(time: integer; GAME_LEVEL: byte);
           begin
             ss:='';
             onKeyPress:=onKeyPressName;
-            repeat i:=i+0 until isInputDone;
+            repeat i:=i+0 until IS_INPUT_DONE;
             writeln(f2,ss);
           end;
       end;

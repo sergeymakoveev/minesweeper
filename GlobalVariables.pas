@@ -33,7 +33,7 @@ var
   // выбранный уровень сложности
   GAME_LEVEL: byte;
   // Флаг завершения пользовательского ввода
-  isInputDone: boolean;
+  IS_INPUT_DONE: boolean;
   // временная переменная для ввода данных
   ss: string;
 

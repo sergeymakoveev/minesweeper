@@ -33,7 +33,7 @@ procedure inputInteger(ch: char);
     if ord(ch) = VK_Enter then
       begin 
         onKeyPress:=Nil;
-        isInputDone:=True;
+        IS_INPUT_DONE:=True;
         delete(ss,1,length(ss));
       end;
   end;
@@ -59,8 +59,8 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var MINES
     outX:=520;
     outY:=10;
     onKeyPress:=inputInteger;
-    repeat s:=ss until isInputDone;
-    isInputDone:=False;
+    repeat s:=ss until IS_INPUT_DONE;
+    IS_INPUT_DONE:=False;
     val(s,M,err);
     while M not in 1..maxFieldWidth do
       begin
@@ -70,16 +70,16 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var MINES
         sleep(1500);
         textout(50,35,' '*100);// закрасить место, где было выведено предыдущее сообщение
         onKeyPress:=inputInteger;
-        repeat s:=ss until isInputDone;
-        isInputDone:=False;
+        repeat s:=ss until IS_INPUT_DONE;
+        IS_INPUT_DONE:=False;
         val(s,M,err);
       end;
     outX:=500;
     outY:=50;
     textout(10,50,'Введите высоту поля (поддерживается от 5 до 19):');
     onKeyPress:=inputInteger;
-    repeat s:=ss until isInputDone;
-    isInputDone:=False;
+    repeat s:=ss until IS_INPUT_DONE;
+    IS_INPUT_DONE:=False;
     val(s,N,err);
     while N not in 5..maxFieldHeight do
       begin
@@ -89,8 +89,8 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var MINES
         sleep(1500);
         textout(50,75,' '*100);
         onKeyPress:=inputInteger;
-        repeat s:=ss until isInputDone;
-        isInputDone:=False;
+        repeat s:=ss until IS_INPUT_DONE;
+        IS_INPUT_DONE:=False;
         SetFontSize(15);
         val(s,N,err);
       end;
@@ -98,8 +98,8 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var MINES
     outY:=90;
     textout(10,90,'Введите количество мин (зависит от размера поля):');
     onKeyPress:=inputInteger;
-    repeat s:=ss until isInputDone;
-    isInputDone:=False;
+    repeat s:=ss until IS_INPUT_DONE;
+    IS_INPUT_DONE:=False;
     val(s,MINES_COUNT,err);
     while MINES_COUNT not in 1..(M * N - 1) do
       begin
@@ -109,8 +109,8 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var M,N: integer; var MINES
         sleep(1500);
         textout(50,115,' '*100);
         onKeyPress:=inputInteger;
-        repeat s:=ss until isInputDone;
-        isInputDone:=False;
+        repeat s:=ss until IS_INPUT_DONE;
+        IS_INPUT_DONE:=False;
         SetFontSize(15);
         val(s,MINES_COUNT,err);
       end;
