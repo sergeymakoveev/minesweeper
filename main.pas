@@ -103,7 +103,7 @@ procedure displayMenuGameStep;
   // настройка уровня игры
   procedure configureGameLevel(gameLevel: byte; fieldWidth, fieldHeight, minesCount: integer);
     begin
-      level := gameLevel;
+      GAME_LEVEL := gameLevel;
       M := fieldWidth;
       N := fieldHeight;
       Nmines := minesCount;
@@ -258,7 +258,7 @@ begin
       'GameStep': displayGameStep();
       'MenuMainStep': displayMenuMainStep();
       'RulesStep': displayRulesStep(programStep);
-      'UserLevelStep': displayUserLevelForm(level,M,N,Nmines,programStep);
+      'UserLevelStep': displayUserLevelForm(GAME_LEVEL,M,N,Nmines,programStep);
       'RecordsStep': displayRecordsStep();
     end;
   // игру закрывается из окна startmenu или game

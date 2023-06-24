@@ -35,7 +35,7 @@ function checkAgainButtonClick(mouseX, mouseY, button, M: integer): boolean;
       checkAgainButtonClick := true;
   end;
 
-// заполнение минами
+// заполнение поля минами
 procedure fillField();
   begin
     var i, j, count: integer;
@@ -57,8 +57,7 @@ procedure fillField();
     until count = Nmines;
   end;
 
-// количество мин возле клетки
-procedure nearby;
+procedure setupField();
   begin
     var i, j, k: shortint;
     for i := 1 to M do
@@ -90,6 +89,7 @@ procedure nearby;
           // ниже правее мина
           if (i + 1 <= M) and (j + 1 <= N) and (Field[i + 1, j + 1].mine = True) then
             k := k + 1;
+          // количество мин возле клетки
           Field[i, j].nearbyMines := k;
           k := 0;
         end;     
@@ -147,7 +147,7 @@ procedure openFirstCell(i, j: shortint);
     Field[i, j].opened := True;
     Field[i, j].mine := False;
     fillField();
-    nearby;
+    setupField();
     if Field[i,j].nearbyMines = 0 then openEmptyCells(i,j,fcount);
     FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + WIDTH_CELL - 2, 39 * j + WIDTH_CELL - 2);
     case Field[i, j].nearbyMines of 
@@ -268,7 +268,7 @@ procedure onKeyPressName(ch: char);
   end;
 
 // проверка на лучшее время и изменение рекорда
-procedure checkIsBest(time: integer; level: byte);
+procedure checkIsBest(time: integer; GAME_LEVEL: byte);
   type 
     highScore = record
       name: string;
@@ -300,7 +300,7 @@ procedure checkIsBest(time: integer; level: byte);
     i:=0;
     
     // если побил рекорд или поставил новый, то ввод имени
-    if (players[level].score=0) or (time < players[level].score)  then
+    if (players[GAME_LEVEL].score=0) or (time < players[GAME_LEVEL].score)  then
     begin
       textout(38,20,'Новый рекорд! Введите ваше имя (затем Enter):');
       assign(f2,'temprecords.txt');
@@ -309,8 +309,8 @@ procedure checkIsBest(time: integer; level: byte);
       begin
         i+=1;
         readln(f,s);
-        if (i<>(2*level+2)) and (i<>(2*level+1)) then writeln(f2,s)
-        else if i=(2*level+2) then writeln(f2,time)
+        if (i<>(2*GAME_LEVEL+2)) and (i<>(2*GAME_LEVEL+1)) then writeln(f2,s)
+        else if i=(2*GAME_LEVEL+2) then writeln(f2,time)
         else
           begin
             ss:='';
@@ -347,7 +347,7 @@ procedure displayWin();
     OnMouseDown:=Nil;
     
     // если не на пользовательском уровне, то проверяем время на рекорд
-    if level <> 3 then checkIsBest(time,level);
+    if GAME_LEVEL <> 3 then checkIsBest(time,GAME_LEVEL);
     
     OnMouseDown:=MouseDown;
     repeat
