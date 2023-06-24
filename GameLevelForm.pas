@@ -24,7 +24,7 @@ procedure inputInteger(ch: char);
       // накапливаем пользовательский ввод
       then USER_INPUT+=ch;
     // нажата клавиша Delete
-    if ord(ch) = 8 then
+    if ord(ch) = VK_Back then
       begin
         // удаляем из пользовательского ввода последний символ
         delete(USER_INPUT,length(USER_INPUT),1);
