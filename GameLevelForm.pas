@@ -6,7 +6,7 @@ Interface
   uses GlobalConstants, GlobalVariables;
 
   procedure inputInteger(ch: char);
-  procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGHT: integer; var FIELD_MINES_COUNT: integer; var PROGRAM_STEP: string);
+  procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGHT: integer; var FIELD_MINES_COUNT: integer; var PROGRAM_STEP: string);
   
 Implementation
  
@@ -17,29 +17,34 @@ var
 // Процедура пользовательского ввода целого числа
 procedure inputInteger(ch: char);
   begin
-    lockdrawing;
+    lockdrawing();
     fillrect(outX,outY,2000,outY+20);
-    if (ch in ('0'..'9')) and (length(USER_INPUT)<3) then USER_INPUT+=ch;
-    textout(outX,outY,USER_INPUT);
-    // если нажал на Delete
+    // нажата клавиша 0...9 и введено менее 2х символов
+    if (ch in ('0'..'9')) and (length(USER_INPUT)<2)
+      // накапливаем пользовательский ввод
+      then USER_INPUT+=ch;
+    // нажата клавиша Delete
     if ord(ch) = 8 then
       begin
+        // удаляем из пользовательского ввода последний символ
         delete(USER_INPUT,length(USER_INPUT),1);
         fillrect(outX,outY,600,outY+20);
-        textout(outX,outY,USER_INPUT);
       end;
-    unlockdrawing;
-    redraw;
+    textout(outX,outY,USER_INPUT);
+    unlockdrawing();
+    redraw();
+    // нажата клавиша Enter
     if ord(ch) = VK_Enter then
       begin 
         onKeyPress:=Nil;
         IS_USER_INPUT_DONE:=True;
+        // очищаем пользовательский ввод
         delete(USER_INPUT,1,length(USER_INPUT));
       end;
   end;
 
-// играть на пользовательской сложности
-procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGHT: integer; var FIELD_MINES_COUNT: integer; var PROGRAM_STEP: string);
+// форма настройки уровня игры
+procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGHT: integer; var FIELD_MINES_COUNT: integer; var PROGRAM_STEP: string);
 
   const
     // максимальная ширина минного поля
@@ -68,7 +73,8 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
         textout(50,35,'Недопустимое значение. Повторите ввод');
         SetFontSize(15);
         sleep(1500);
-        textout(50,35,' '*100);// закрасить место, где было выведено предыдущее сообщение
+        // закрасить место, где было выведено предыдущее сообщение
+        textout(50,35,' '*100);
         onKeyPress:=inputInteger;
         repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
         IS_USER_INPUT_DONE:=False;

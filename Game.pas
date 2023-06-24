@@ -260,7 +260,7 @@ begin
       'GameStep': displayGameStep();
       'MenuMainStep': displayMenuMainStep();
       'RulesStep': displayRulesStep(PROGRAM_STEP);
-      'UserLevelStep': displayUserLevelForm(GAME_LEVEL,FIELD_WIDTH,FIELD_HEIGHT,FIELD_MINES_COUNT,PROGRAM_STEP);
+      'UserLevelStep': displayGameLevelForm(GAME_LEVEL,FIELD_WIDTH,FIELD_HEIGHT,FIELD_MINES_COUNT,PROGRAM_STEP);
       'RecordsStep': displayRecordsStep();
     end;
   // игру закрывается из окна startmenu или game
