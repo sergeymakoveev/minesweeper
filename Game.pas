@@ -106,7 +106,7 @@ procedure displayMenuGameStep;
       GAME_LEVEL := gameLevel;
       FIELD_WIDTH := fieldWidth;
       FIELD_HEIGHT := fieldHeight;
-      MINES_COUNT := minesCount;
+      FIELD_MINES_COUNT := minesCount;
       SetWindowSize((FIELD_HEIGHT + 6) * WIDTH_CELL, (FIELD_HEIGHT + 2) * WIDTH_CELL);
       CenterWindow;
     end;
@@ -194,19 +194,21 @@ procedure displayRecordsStep;
         2: output:='Профессионал: ';
       end;
       if not (players[i].score = 0) then output += players[i].name + ' ' + players[i].score + 'с'
-      else output += 'рекорда нет';
+        else output += 'рекорда нет';
       drawTextCentered(0,100+50*(i+1),0+620,130+50*(i+1),output);
     end;
     
     close(f);
     IS_MOUSE_DOWN := false;
     OnMouseDown := MouseDown;
-      repeat
-        if IS_MOUSE_DOWN then
-          IS_MOUSE_DOWN := false;
-      until checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE);
+
+    repeat
+      if IS_MOUSE_DOWN then
+        IS_MOUSE_DOWN := false;
+    until
+      checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE);
       
-      PROGRAM_STEP:='MenuMainStep';
+    PROGRAM_STEP:='MenuMainStep';
 
   end;
 
@@ -227,9 +229,9 @@ procedure displayRulesStep(var PROGRAM_STEP: string);
     OnMouseDown := MouseDown;
     repeat
       if IS_MOUSE_DOWN then
-      begin
-        IS_MOUSE_DOWN := false;
-      end;
+        begin
+          IS_MOUSE_DOWN := false;
+        end;
     until checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE);
     
     PROGRAM_STEP := 'MenuMainStep';
@@ -258,7 +260,7 @@ begin
       'GameStep': displayGameStep();
       'MenuMainStep': displayMenuMainStep();
       'RulesStep': displayRulesStep(PROGRAM_STEP);
-      'UserLevelStep': displayUserLevelForm(GAME_LEVEL,FIELD_WIDTH,FIELD_HEIGHT,MINES_COUNT,PROGRAM_STEP);
+      'UserLevelStep': displayUserLevelForm(GAME_LEVEL,FIELD_WIDTH,FIELD_HEIGHT,FIELD_MINES_COUNT,PROGRAM_STEP);
       'RecordsStep': displayRecordsStep();
     end;
   // игру закрывается из окна startmenu или game

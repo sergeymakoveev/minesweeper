@@ -53,7 +53,7 @@ procedure fillField();
               DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, 'M');
           end;
       end;
-    until count = MINES_COUNT;
+    until count = FIELD_MINES_COUNT;
   end;
 
 procedure setupField();
@@ -243,18 +243,18 @@ procedure youLose();
 // нажатие на клавиатуру (имя рекордсмена)
 procedure onKeyPressName(ch: char);
   begin
-    IS_INPUT_DONE := false;
+    IS_USER_INPUT_DONE := false;
     lockdrawing();
     fillrect(350,20,500,36);
-    if ((ch in ('А'..'Я')) or (ch in ('а'..'я'))) and (length(ss)<15) then ss+=ch;
-    textout(350,20,ss);
+    if ((ch in ('А'..'Я')) or (ch in ('а'..'я'))) and (length(USER_INPUT)<15) then USER_INPUT+=ch;
+    textout(350,20,USER_INPUT);
     // если нажали на Delete
     if ord(ch) = 8 then
       begin
         // удаление одного последнего символа по требованию
-        delete(ss,length(ss),1);
+        delete(USER_INPUT,length(USER_INPUT),1);
         fillrect(350,20,500,36);
-        textout(350,20,ss);
+        textout(350,20,USER_INPUT);
       end;
     unlockdrawing();
     redraw();
@@ -262,7 +262,7 @@ procedure onKeyPressName(ch: char);
     if ord(ch) = VK_Enter then
       begin
           onKeyPress:=Nil;
-          IS_INPUT_DONE:=True;
+          IS_USER_INPUT_DONE:=True;
       end;
   end;
 
@@ -280,7 +280,7 @@ procedure checkIsBest(time: integer; GAME_LEVEL: byte);
     var s: string;
     
     i:=0;
-    IS_INPUT_DONE:=False;
+    IS_USER_INPUT_DONE:=False;
 
     // открытие файла рекордов
     assign(f,'records.txt');
@@ -312,10 +312,10 @@ procedure checkIsBest(time: integer; GAME_LEVEL: byte);
         else if i=(2*GAME_LEVEL+2) then writeln(f2,time)
         else
           begin
-            ss:='';
+            USER_INPUT:='';
             onKeyPress:=onKeyPressName;
-            repeat i:=i+0 until IS_INPUT_DONE;
-            writeln(f2,ss);
+            repeat i:=i+0 until IS_USER_INPUT_DONE;
+            writeln(f2,USER_INPUT);
           end;
       end;
       close(f);
@@ -563,13 +563,13 @@ procedure displayGameStep;
               sure := AreYouSure;
         end;
     // завершение процесса игры при одном из трёх условий
-    until sure or (fcount = FIELD_WIDTH * FIELD_HEIGHT - MINES_COUNT) or lose(i, j);
+    until sure or (fcount = FIELD_WIDTH * FIELD_HEIGHT - FIELD_MINES_COUNT) or lose(i, j);
     
     // если выполнилось условие проигрыша, то проиграл
     if lose(i,j) then youLose();
     
     // если открыл все поля без мин, то победил
-    if fcount = int(FIELD_WIDTH * FIELD_HEIGHT) - MINES_COUNT then displayWin();
+    if fcount = int(FIELD_WIDTH * FIELD_HEIGHT) - FIELD_MINES_COUNT then displayWin();
     
     // последний исход завершения процесса игры - нажата кнопка меню/выход/переиграть
     checkButtonsClick();

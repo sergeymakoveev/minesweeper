@@ -14,28 +14,28 @@ type
   end;
 
 var
+  // шаг программы для отображения
+  PROGRAM_STEP: string;
+  // выбранный уровень сложности
+  GAME_LEVEL: byte;
   // игровое поле (матрица клеток)
   FIELD: array [1..100, 1..100] of cell;
   // высота поля
   FIELD_HEIGHT: integer;
   // ширина поля
   FIELD_WIDTH: integer;
-  // положение курсора в окне
-  MOUSE_X, MOUSE_Y: integer;
+  // число мин
+  FIELD_MINES_COUNT: integer;
   // нажата ли кнопка мыши
   IS_MOUSE_DOWN: boolean;
+  // положение курсора в окне
+  MOUSE_X, MOUSE_Y: integer;
   // тип нажатой кнопки мыши (левая/правая)
   BUTTON_TYPE: integer;
-  // число мин
-  MINES_COUNT: integer;
-  // шаг программы для отображения
-  PROGRAM_STEP: string;
-  // выбранный уровень сложности
-  GAME_LEVEL: byte;
   // Флаг завершения пользовательского ввода
-  IS_INPUT_DONE: boolean;
+  IS_USER_INPUT_DONE: boolean;
   // временная переменная для ввода данных
-  ss: string;
+  USER_INPUT: string;
 
 begin 
 end.

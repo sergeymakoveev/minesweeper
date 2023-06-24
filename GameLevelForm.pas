@@ -6,7 +6,7 @@ Interface
   uses GlobalConstants, GlobalVariables;
 
   procedure inputInteger(ch: char);
-  procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGHT: integer; var MINES_COUNT: integer; var PROGRAM_STEP: string);
+  procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGHT: integer; var FIELD_MINES_COUNT: integer; var PROGRAM_STEP: string);
   
 Implementation
  
@@ -19,27 +19,27 @@ procedure inputInteger(ch: char);
   begin
     lockdrawing;
     fillrect(outX,outY,2000,outY+20);
-    if (ch in ('0'..'9')) and (length(ss)<3) then ss+=ch;
-    textout(outX,outY,ss);
+    if (ch in ('0'..'9')) and (length(USER_INPUT)<3) then USER_INPUT+=ch;
+    textout(outX,outY,USER_INPUT);
     // если нажал на Delete
     if ord(ch) = 8 then
       begin
-        delete(ss,length(ss),1);
+        delete(USER_INPUT,length(USER_INPUT),1);
         fillrect(outX,outY,600,outY+20);
-        textout(outX,outY,ss);
+        textout(outX,outY,USER_INPUT);
       end;
     unlockdrawing;
     redraw;
     if ord(ch) = VK_Enter then
       begin 
         onKeyPress:=Nil;
-        IS_INPUT_DONE:=True;
-        delete(ss,1,length(ss));
+        IS_USER_INPUT_DONE:=True;
+        delete(USER_INPUT,1,length(USER_INPUT));
       end;
   end;
 
 // играть на пользовательской сложности
-procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGHT: integer; var MINES_COUNT: integer; var PROGRAM_STEP: string);
+procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGHT: integer; var FIELD_MINES_COUNT: integer; var PROGRAM_STEP: string);
 
   const
     // максимальная ширина минного поля
@@ -59,8 +59,8 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
     outX:=520;
     outY:=10;
     onKeyPress:=inputInteger;
-    repeat s:=ss until IS_INPUT_DONE;
-    IS_INPUT_DONE:=False;
+    repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
+    IS_USER_INPUT_DONE:=False;
     val(s,FIELD_WIDTH,err);
     while FIELD_WIDTH not in 1..maxFieldWidth do
       begin
@@ -70,16 +70,16 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
         sleep(1500);
         textout(50,35,' '*100);// закрасить место, где было выведено предыдущее сообщение
         onKeyPress:=inputInteger;
-        repeat s:=ss until IS_INPUT_DONE;
-        IS_INPUT_DONE:=False;
+        repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
+        IS_USER_INPUT_DONE:=False;
         val(s,FIELD_WIDTH,err);
       end;
     outX:=500;
     outY:=50;
     textout(10,50,'Введите высоту поля (поддерживается от 5 до 19):');
     onKeyPress:=inputInteger;
-    repeat s:=ss until IS_INPUT_DONE;
-    IS_INPUT_DONE:=False;
+    repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
+    IS_USER_INPUT_DONE:=False;
     val(s,FIELD_HEIGHT,err);
     while FIELD_HEIGHT not in 5..maxFieldHeight do
       begin
@@ -89,8 +89,8 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
         sleep(1500);
         textout(50,75,' '*100);
         onKeyPress:=inputInteger;
-        repeat s:=ss until IS_INPUT_DONE;
-        IS_INPUT_DONE:=False;
+        repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
+        IS_USER_INPUT_DONE:=False;
         SetFontSize(15);
         val(s,FIELD_HEIGHT,err);
       end;
@@ -98,10 +98,10 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
     outY:=90;
     textout(10,90,'Введите количество мин (зависит от размера поля):');
     onKeyPress:=inputInteger;
-    repeat s:=ss until IS_INPUT_DONE;
-    IS_INPUT_DONE:=False;
-    val(s,MINES_COUNT,err);
-    while MINES_COUNT not in 1..(FIELD_WIDTH * FIELD_HEIGHT - 1) do
+    repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
+    IS_USER_INPUT_DONE:=False;
+    val(s,FIELD_MINES_COUNT,err);
+    while FIELD_MINES_COUNT not in 1..(FIELD_WIDTH * FIELD_HEIGHT - 1) do
       begin
         SetFontSize(9);
         textout(50,115,'Недопустимое значение. Повторите ввод');
@@ -109,10 +109,10 @@ procedure displayUserLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
         sleep(1500);
         textout(50,115,' '*100);
         onKeyPress:=inputInteger;
-        repeat s:=ss until IS_INPUT_DONE;
-        IS_INPUT_DONE:=False;
+        repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
+        IS_USER_INPUT_DONE:=False;
         SetFontSize(15);
-        val(s,MINES_COUNT,err);
+        val(s,FIELD_MINES_COUNT,err);
       end;
 
     // обратный отсчёт на 3 секунды
