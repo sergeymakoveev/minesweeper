@@ -73,12 +73,6 @@ procedure displayMenuMainStep;
     if checkExitButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) then closewindow;
   end;
 
-// кнопка назад (в окне с правилами) нажата
-function checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
-  begin
-    if (MOUSE_X in 40..570) and (MOUSE_Y in 540..580) and (BUTTON_TYPE = 1) then checkBackButtonClick := true;
-  end;
-
 // Меню игры
 procedure displayMenuGameStep;
 
@@ -126,8 +120,7 @@ procedure displayMenuGameStep;
   begin
     MOUSE_X := 0;
     MOUSE_Y := 0;
-    SetWindowSize(600, 400);
-    CenterWindow();
+
     clearwindow();
     Window.load('./GameBackground.png');
     
@@ -166,11 +159,16 @@ procedure displayMenuGameStep;
   end;
 
 // Вывод таблицы рекордов
-procedure displayRecordsStep;
+procedure displayRecordsStep();
   type 
     highScore = record
       name: string;
       score: integer;
+    end;
+
+  function checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
+    begin
+      if (MOUSE_X in 0..200) and (MOUSE_Y in 340..380) and (BUTTON_TYPE = 1) then checkBackButtonClick := true;
     end;
 
   begin
@@ -182,16 +180,26 @@ procedure displayRecordsStep;
     MOUSE_X:=-1;
     MOUSE_Y:=-1;
     
-    clearWindow;
+    clearWindow();
+    Window.load('./GameBackground.png');
     
+    SetBrushColor(ARGB(200,255,255,255));
+    FillRect(0, 20, 250, 60);
+    SetFontSize(20);
+    SetFontStyle(fsBold);
+    DrawTextCentered(0, 20, 250, 60, 'Рекорды:');
+
+    SetBrushColor(ARGB(230,255,255,255));
+    FillRect(0, 80, 560, 320);
+    SetBrushColor(ARGB(0,255,255,255));
+    SetFontSize(18);
+    SetFontStyle(fsNormal);
+
     i:=0;
 
-    drawButton(40, 540, 570, 580, 'назад');
-
     assign(f,'records.txt');
-    // открытие файла
+    // открытие файла с рекордами
     reset(f);
-    
     // запись содержимого в переменные
     while (not eof(f)) do
     begin
@@ -199,10 +207,8 @@ procedure displayRecordsStep;
       readln(f,players[i].score);
       i+=1;
     end;
-    
-    SetFontSize(50);
-    drawTextCentered(0,0,600,100,'Лучшее время');
-    SetFontSize(20);
+    // закрытие файла с рекордами
+    close(f);
     
     for i:=0 to 2 do
     begin
@@ -211,15 +217,20 @@ procedure displayRecordsStep;
         1: output:='Любитель: ';
         2: output:='Профессионал: ';
       end;
-      if not (players[i].score = 0) then output += players[i].name + ' ' + players[i].score + 'с'
+      
+      if not (players[i].score = 0)
+        then output += players[i].name + ' ' + players[i].score + 'сек.'
         else output += 'рекорда нет';
-      drawTextCentered(0,100+50*(i+1),0+620,130+50*(i+1),output);
+      
+      TextOut(40, 120 + i*60, output);
     end;
-    
-    close(f);
+
+    SetFontSize(18);
+    SetBrushColor(ARGB(200,255,255,255));
+    drawButton(0, 340, 200, 380, 'Назад');
+
     IS_MOUSE_DOWN := false;
     OnMouseDown := handleMouseDown;
-
     repeat
       if IS_MOUSE_DOWN then
         IS_MOUSE_DOWN := false;
