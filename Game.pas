@@ -34,7 +34,7 @@ procedure displayMenuMainStep;
     MOUSE_X := 0;
     MOUSE_Y := 0;
 
-    SetWindowSize(800, 400);
+    SetWindowSize(600, 400);
     CenterWindow();
     clearwindow();
     Window.load('./GameBackground.png');
@@ -45,6 +45,7 @@ procedure displayMenuMainStep;
     FillRect(0, 20, 250, 60);
     DrawTextCentered(0, 20, 250, 60, 'Игра ¤ Сапёр ⚑');
     
+    SetFontSize(18);
     SetFontStyle(fsNormal);
     drawButton(0,100,200,140,'Игра');
     drawButton(0,160,200,200,'Правила');
@@ -84,25 +85,31 @@ procedure displayMenuGameStep;
   // проверка клика по кнопке: уровень "легкий"
   function checkEasyLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (MOUSE_X in 40..570) and (MOUSE_Y in 220..260) and (BUTTON_TYPE = 1) then checkEasyLevelButtonClick := true;
+      if (MOUSE_X in 0..200) and (MOUSE_Y in 100..140) and (BUTTON_TYPE = 1) then checkEasyLevelButtonClick := true;
     end;
 
   // проверка клика по кнопке: уровень "нормальный"
   function checkNormalLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (MOUSE_X in 40..570) and (MOUSE_Y in 280..320) and (BUTTON_TYPE = 1) then checkNormalLevelButtonClick := true;
+      if (MOUSE_X in 0..200) and (MOUSE_Y in 160..200) and (BUTTON_TYPE = 1) then checkNormalLevelButtonClick := true;
     end;
 
   // проверка клика по кнопке: уровень "сложный"
   function checkHardLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (MOUSE_X in 40..570) and (MOUSE_Y in 340..380) and (BUTTON_TYPE = 1) then checkHardLevelButtonClick := true;
+      if (MOUSE_X in 0..200) and (MOUSE_Y in 220..260) and (BUTTON_TYPE = 1) then checkHardLevelButtonClick := true;
     end;
 
-  // проверка клика по кнопке: уровень "пользовательский"
+  // проверка клика по кнопке: уровень "свой"
   function checkCustomLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (MOUSE_X in 40..570) and (MOUSE_Y in 400..440) and (BUTTON_TYPE = 1) then checkCustomLevelButtonClick := true;
+      if (MOUSE_X in 0..200) and (MOUSE_Y in 280..320) and (BUTTON_TYPE = 1) then checkCustomLevelButtonClick := true;
+    end;
+
+  // проверка клика по кнопке: "назад"
+  function checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
+    begin
+      if (MOUSE_X in 0..200) and (MOUSE_Y in 340..380) and (BUTTON_TYPE = 1) then checkBackButtonClick := true;
     end;
 
   // настройка уровня игры
@@ -117,19 +124,25 @@ procedure displayMenuGameStep;
     end;
 
   begin
-    clearwindow;
     MOUSE_X := 0;
     MOUSE_Y := 0;
-    SetWindowSize(620, 700);
-    CenterWindow;
+    SetWindowSize(600, 400);
+    CenterWindow();
+    clearwindow();
+    Window.load('./GameBackground.png');
     
     SetFontSize(20);
-    DrawTextCentered(40, 140, 570, 190, 'Выберите уровень:');
-    drawButton(40,220,570,260,'Легкий: поле 8х8, 10 мин');
-    drawButton(40,280,570,320,'Нормальный: поле 16х16, 40 мин');
-    drawButton(40,340,570,380,'Сложный: поле 19х30, 70 мин');
-    drawButton(40,400,570,440,'Пользовательский');
-    drawButton(40,540,570,580,'Назад');
+    SetFontStyle(fsBold);
+    SetBrushColor(ARGB(200,255,255,255));
+    FillRect(0, 20, 270, 60);
+    DrawTextCentered(0, 20, 270, 60, 'Уровень:');
+    SetFontSize(18);
+    SetFontStyle(fsNormal);
+    drawButton(0,100,200,140,'Легкий');
+    drawButton(0,160,200,200,'Нормальный');
+    drawButton(0,220,200,260,'Сложный');
+    drawButton(0,280,200,320,'Свой');
+    drawButton(0,340,200,380,'Назад');
 
     repeat
       if IS_MOUSE_DOWN then
