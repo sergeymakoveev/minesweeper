@@ -40,11 +40,12 @@ procedure displayMenuMainStep;
     Window.load('./GameBackground.png');
 
     SetFontSize(20);
+    SetFontStyle(fsBold);
     SetBrushColor(ARGB(200,255,255,255));
-    rectangle(0, 20, 250, 60);
-    DrawTextCentered(0, 20, 250, 60, 'Игра ¤ Сапёр');
+    FillRect(0, 20, 250, 60);
+    DrawTextCentered(0, 20, 250, 60, 'Игра ¤ Сапёр ⚑');
     
-    SetFontSize(20);
+    SetFontStyle(fsNormal);
     drawButton(0,100,200,140,'Игра');
     drawButton(0,160,200,200,'Правила');
     drawButton(0,220,200,260,'Рекорды');
