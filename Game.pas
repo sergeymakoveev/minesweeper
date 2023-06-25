@@ -232,17 +232,40 @@ procedure displayRecordsStep;
 
 // вывод правил игры
 procedure displayRulesStep(var PROGRAM_STEP: string);
+
+  function checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
+    begin
+      if (MOUSE_X in 0..200) and (MOUSE_Y in 340..380) and (BUTTON_TYPE = 1) then checkBackButtonClick := true;
+    end;
+
   begin
     MOUSE_X:=-1;
     MOUSE_Y:=-1;
     
-    clearwindow;
+    clearwindow();
+    Window.load('./GameBackground.png');
+
+    SetBrushColor(ARGB(200,255,255,255));
+    FillRect(0, 20, 250, 60);
     SetFontSize(20);
+    SetFontStyle(fsBold);
+    DrawTextCentered(0, 20, 250, 60, 'Правила игры:');
+
+
     Assign(input, 'Rules.txt');
-    var rules := ReadString;
-    DrawTextCentered(40, 20, 570, 450, rules);
-    
-    drawButton(40, 540, 570, 580, 'назад');
+    var rules := input.ReadToEnd();
+    CloseFile(input);
+
+    SetBrushColor(ARGB(230,255,255,255));
+    FillRect(0, 80, 560, 320);
+    SetBrushColor(ARGB(0,255,255,255));
+    SetFontSize(10);
+    SetFontStyle(fsNormal);
+    TextOut(40, 120, rules);
+
+    SetFontSize(18);
+    SetBrushColor(ARGB(200,255,255,255));
+    drawButton(0, 340, 200, 380, 'Назад');
     
     OnMouseDown := handleMouseDown;
     repeat
