@@ -5,6 +5,7 @@ Interface
   uses GraphABC;
   uses GlobalVariables;
   procedure drawButton(x0,y0,x,y: integer; text: string);
+  procedure drawTitle(x0,y0,x,y: integer; text: string);
   procedure handleMouseDown(x, y, mb: integer);
 
 Implementation
@@ -18,12 +19,25 @@ procedure handleMouseDown(x, y, mb: integer);
     BUTTON_TYPE := mb;
   end;
 
-// универсальная отрисовка кнопок
+// отрисовка кнопок
 procedure drawButton(x0,y0,x,y: integer; text: string);
   begin
     SetBrushColor(ARGB(200,255,255,255));
     Rectangle(x0, y0, x, y);
+    SetFontSize(18);
+    SetFontStyle(fsNormal);
     DrawTextCentered(x0, y0, x, y, text);
+  end;
+
+// отрисовка кнопок
+procedure drawTitle(x0,y0,x,y: integer; text: string);
+  begin
+    SetBrushColor(ARGB(200,255,255,255));
+    FillRect(x0, y0, x, y);
+    SetFontSize(20);
+    SetFontStyle(fsBold);
+    DrawTextCentered(x0, y0, x, y, text);
+    SetFontStyle(fsNormal);
   end;
 
 begin 
