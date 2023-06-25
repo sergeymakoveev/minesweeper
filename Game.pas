@@ -124,13 +124,7 @@ procedure displayMenuGameStep;
     clearwindow();
     Window.load('./GameBackground.png');
     
-    SetFontSize(20);
-    SetFontStyle(fsBold);
-    SetBrushColor(ARGB(200,255,255,255));
-    FillRect(0, 20, 270, 60);
-    DrawTextCentered(0, 20, 270, 60, 'Уровень:');
-    SetFontSize(18);
-    SetFontStyle(fsNormal);
+    drawTitle(0, 20, 270, 60, 'Уровень:');
     drawButton(0,100,200,140,'Легкий');
     drawButton(0,160,200,200,'Нормальный');
     drawButton(0,220,200,260,'Сложный');
@@ -183,17 +177,12 @@ procedure displayRecordsStep();
     clearWindow();
     Window.load('./GameBackground.png');
     
-    SetBrushColor(ARGB(200,255,255,255));
-    FillRect(0, 20, 250, 60);
-    SetFontSize(20);
-    SetFontStyle(fsBold);
-    DrawTextCentered(0, 20, 250, 60, 'Рекорды:');
+    drawTitle(0, 20, 250, 60, 'Рекорды:');
 
     SetBrushColor(ARGB(230,255,255,255));
     FillRect(0, 80, 560, 320);
     SetBrushColor(ARGB(0,255,255,255));
     SetFontSize(18);
-    SetFontStyle(fsNormal);
 
     i:=0;
 
@@ -256,12 +245,7 @@ procedure displayRulesStep(var PROGRAM_STEP: string);
     clearwindow();
     Window.load('./GameBackground.png');
 
-    SetBrushColor(ARGB(200,255,255,255));
-    FillRect(0, 20, 250, 60);
-    SetFontSize(20);
-    SetFontStyle(fsBold);
-    DrawTextCentered(0, 20, 250, 60, 'Правила игры:');
-
+    drawTitle(0, 20, 250, 60, 'Правила игры:');
 
     Assign(input, 'Rules.txt');
     var rules := input.ReadToEnd();
@@ -271,11 +255,8 @@ procedure displayRulesStep(var PROGRAM_STEP: string);
     FillRect(0, 80, 560, 320);
     SetBrushColor(ARGB(0,255,255,255));
     SetFontSize(10);
-    SetFontStyle(fsNormal);
     TextOut(40, 120, rules);
 
-    SetFontSize(18);
-    SetBrushColor(ARGB(200,255,255,255));
     drawButton(0, 340, 200, 380, 'Назад');
     
     OnMouseDown := handleMouseDown;
