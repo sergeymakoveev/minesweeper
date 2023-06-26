@@ -2,8 +2,8 @@
 
 Interface
 
-  uses graphABC;
-  uses GlobalConstants, GlobalVariables;
+  uses GraphABC;
+  uses GlobalConstants, GlobalVariables, CommonFunctions;
 
   procedure inputInteger(ch: char);
   procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGHT: integer; var FIELD_MINES_COUNT: integer; var PROGRAM_STEP: string);
@@ -18,7 +18,8 @@ var
 procedure inputInteger(ch: char);
   begin
     lockdrawing();
-    fillrect(outX,outY,2000,outY+20);
+    SetBrushColor(RGB(255,255,255));
+    fillrect(outX, outY, outX+30, outY+20);
     // нажата клавиша 0...9 и введено менее 2х символов
     if (ch in ('0'..'9')) and (length(USER_INPUT)<2)
       // накапливаем пользовательский ввод
@@ -28,7 +29,7 @@ procedure inputInteger(ch: char);
       begin
         // удаляем из пользовательского ввода последний символ
         delete(USER_INPUT,length(USER_INPUT),1);
-        fillrect(outX,outY,600,outY+20);
+        fillrect(outX, outY, outX+30, outY+20);
       end;
     textout(outX,outY,USER_INPUT);
     unlockdrawing();
@@ -51,18 +52,31 @@ procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
     maxFieldWidth = 34;
     // максимальная высота минного поля
     maxFieldHeight = 19;
+    // сообщение об ошибке ввода
+    errorText = 'Недопустимое значение. Повторите ввод.';
 
   begin
-    ClearWindow;
-    SetFontSize(15);
     var s: string;
     var err: integer;
-    
+
     GAME_LEVEL := 3;
-    
-    textout(10,10,'Введите ширину поля (поддерживается не более 34):');
-    outX:=520;
-    outY:=10;
+
+    clearwindow();
+    Window.load('./GameBackground.png');
+
+    drawTitle(0, 20, 270, 60, 'Настройки уровня:');
+    // drawButton(0, 340, 200, 380, 'Назад');
+
+    SetBrushColor(ARGB(230,255,255,255));
+    FillRect(0, 80, 350, 340);
+    SetBrushColor(ARGB(0,255,255,255));
+    SetFontSize(15);
+
+    outX:=260;
+    outY:=120;
+    SetBrushColor(ARGB(255,255,255,255));
+    FillRect(0, outY - 20, 350 - 20, outY + 20 + 20);
+    TextOut(TEXT_PADDING, outY, 'Ширина поля (max 34):');
     onKeyPress:=inputInteger;
     repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
     IS_USER_INPUT_DONE:=False;
@@ -70,19 +84,19 @@ procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
     while FIELD_WIDTH not in 1..maxFieldWidth do
       begin
         SetFontSize(9);
-        textout(50,35,'Недопустимое значение. Повторите ввод');
-        SetFontSize(15);
+        textout(TEXT_PADDING, outY+23, errorText);
         sleep(1500);
-        // закрасить место, где было выведено предыдущее сообщение
-        textout(50,35,' '*100);
+        // закрасить место, где было выведено сообщение об ошибке
+        FillRect(0, outY + 20, 350 - 20, outY + 20 + 20);
+        SetFontSize(15);
         onKeyPress:=inputInteger;
         repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
         IS_USER_INPUT_DONE:=False;
         val(s,FIELD_WIDTH,err);
       end;
-    outX:=500;
-    outY:=50;
-    textout(10,50,'Введите высоту поля (поддерживается от 5 до 19):');
+    outY:=200;
+    FillRect(0, outY - 20, 350 - 20, outY + 20 + 20);
+    textout(TEXT_PADDING, outY, 'Высота поля (5...19):');
     onKeyPress:=inputInteger;
     repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
     IS_USER_INPUT_DONE:=False;
@@ -90,19 +104,19 @@ procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
     while FIELD_HEIGHT not in 5..maxFieldHeight do
       begin
         SetFontSize(9);
-        textout(50,75,'Недопустимое значение. Повторите ввод');
-        SetFontSize(15);
+        textout(TEXT_PADDING, outY+23, errorText);
         sleep(1500);
-        textout(50,75,' '*100);
+        // закрасить место, где было выведено сообщение об ошибке
+        FillRect(0, outY + 20, 350 - 20, outY + 20 + 20);
+        SetFontSize(15);
         onKeyPress:=inputInteger;
         repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
         IS_USER_INPUT_DONE:=False;
-        SetFontSize(15);
         val(s,FIELD_HEIGHT,err);
       end;
-    outX:=510;
-    outY:=90;
-    textout(10,90,'Введите количество мин (зависит от размера поля):');
+    outY:=280;
+    FillRect(0, outY - 20, 350 - 20, outY + 20 + 20);
+    textout(TEXT_PADDING, outY, 'Количество мин:');
     onKeyPress:=inputInteger;
     repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
     IS_USER_INPUT_DONE:=False;
@@ -110,10 +124,11 @@ procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
     while FIELD_MINES_COUNT not in 1..(FIELD_WIDTH * FIELD_HEIGHT - 1) do
       begin
         SetFontSize(9);
-        textout(50,115,'Недопустимое значение. Повторите ввод');
-        SetFontSize(15);
+        textout(TEXT_PADDING, outY+23, errorText);
         sleep(1500);
-        textout(50,115,' '*100);
+        // закрасить место, где было выведено сообщение об ошибке
+        FillRect(0, outY + 20, 350 - 20, outY + 20 + 20);
+        SetFontSize(15);
         onKeyPress:=inputInteger;
         repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
         IS_USER_INPUT_DONE:=False;
@@ -125,8 +140,11 @@ procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
     setFontSize(30);
     for i: byte := 3 downto 1 do
       begin
-        textout(300,150,i);
+        DrawTextCentered(0, 0, 600, 400, i);
         sleep(1000);
+        SetFontColor(RGB(255,255,255));
+        DrawTextCentered(0, 0, 600, 400, i);
+        SetFontColor(RGB(0,0,0));
       end;
     
     SetWindowSize((FIELD_WIDTH + 6) * WIDTH_CELL, (FIELD_HEIGHT + 2) * WIDTH_CELL);
