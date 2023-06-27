@@ -57,11 +57,13 @@ procedure inputInteger(ch: char);
     lockdrawing();
     SetBrushColor(RGB(255,255,255));
     fillrect(outX, outY, outX+30, outY+20);
+    // ввод символов
     // нажата клавиша 0...9 и введено менее 2х символов
     if (ch in ('0'..'9')) and (length(USER_INPUT)<2)
       // накапливаем пользовательский ввод
       then USER_INPUT+=ch;
-    // нажата клавиша Delete
+    // удаление символов
+    // нажата клавиша BackSpace
     if ord(ch) = VK_Back then
       begin
         // удаляем из пользовательского ввода последний символ
@@ -71,13 +73,16 @@ procedure inputInteger(ch: char);
     textout(outX,outY,USER_INPUT);
     unlockdrawing();
     redraw();
+    // завершение ввода символов
     // нажата клавиша Enter
     if ord(ch) = VK_Enter then
-      begin 
+      begin
+        // сбрасываем обработчик нажатия клавиш
         onKeyPress:=Nil;
+        // устанавливаем глобальный флаг окончания ввода
         IS_USER_INPUT_DONE:=True;
         // очищаем пользовательский ввод
-        delete(USER_INPUT,1,length(USER_INPUT));
+        USER_INPUT := '';
       end;
   end;
 
@@ -100,7 +105,7 @@ procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
 
     SetBrushColor(ARGB(230,255,255,255));
     FillRect(0, 80, 350, 340);
-    SetBrushColor(ARGB(0,255,255,255));
+    SetBrushColor(RGB(255,255,255));
     SetFontSize(15);
 
     outX:=260;
@@ -115,11 +120,11 @@ procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
     setFontSize(30);
     for i: byte := 3 downto 1 do
       begin
-        DrawTextCentered(0, 0, 600, 400, i);
-        sleep(1000);
-        SetFontColor(RGB(255,255,255));
-        DrawTextCentered(0, 0, 600, 400, i);
+        SetBrushColor(RGB(255,255,255));
+        FillRect(0, 80, 350, 340);
         SetFontColor(RGB(0,0,0));
+        DrawTextCentered(0, 80, 350, 340, i);
+        sleep(1000);
       end;
     
     SetWindowSize((FIELD_WIDTH + 6) * WIDTH_CELL, (FIELD_HEIGHT + 2) * WIDTH_CELL);
