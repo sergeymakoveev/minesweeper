@@ -458,10 +458,10 @@ procedure pause();
   end;
 
 // процесс игры
-procedure displayGameStep;
+procedure displayGameStep();
 
   // поле + очищение клеток от мин + состояния открытия + флагов на случай начала новой игры без перезапуска программы
-  procedure drawField;
+  procedure drawField();
     begin
       var i, j: shortint;
       lockdrawing();
@@ -515,8 +515,23 @@ procedure displayGameStep;
   begin
     var  i, j: shortint;
     var sure: boolean;
-    clearwindow;
-    lockDrawing;
+
+    var windowWidth := FIELD_WIDTH * WIDTH_CELL + 240;
+    var windowHeight := FIELD_HEIGHT * WIDTH_CELL + TEXT_PADDING*2;
+    if(BACKGROUND_WIDTH > windowWidth)
+      then windowWidth := BACKGROUND_WIDTH;
+    if(BACKGROUND_HEIGHT > windowHeight)
+      then windowHeight := BACKGROUND_HEIGHT;
+
+
+    clearWindow();
+    setWindowSize(windowWidth, windowHeight);
+    centerWindow();
+    var background := Picture.Create(BACKGROUND_SRC);
+    background.SetSize(windowWidth, windowHeight);
+    background.Draw(0, 0);
+
+    lockDrawing();
     SetFontSize(10);
     
     // обнуляем переменные
@@ -525,17 +540,17 @@ procedure displayGameStep;
     j := 0;
     MOUSE_X := 0;
     MOUSE_Y := 0;
-    xtemp:=0;
-    ytemp:=0;
+    xtemp := 0;
+    ytemp := 0;
     
     // рисуем поле
     drawField();
     
     // рисуем кнопки
-    drawButton(39 * (FIELD_WIDTH + 3), 39 * 1, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * 1 + 39, 'переиграть');
-    drawButton(39 * (FIELD_WIDTH + 3), round(39*2.5), 39 * (FIELD_WIDTH + 3) + 39 * 2, round(39*2.5) + 39, 'пауза');
-    drawButton(39 * (FIELD_WIDTH + 3), 39 * 4, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * 5, 'назад в меню');
-    drawButton(39 * (FIELD_WIDTH + 3), 39 * FIELD_HEIGHT, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * (FIELD_HEIGHT+1), 'выход из игры');
+    drawButton(windowWidth - 150, 39 * 1, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * 1 + 39, 'Рестарт');
+    drawButton(windowWidth - 150, round(39*2.5), 39 * (FIELD_WIDTH + 3) + 39 * 2, round(39*2.5) + 39, 'Пауза');
+    drawButton(windowWidth - 150, 39 * 4, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * 5, 'Меню');
+    drawButton(windowWidth - 150, 39 * FIELD_HEIGHT, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * (FIELD_HEIGHT+1), 'Выход');
     
     redraw();
     unlockdrawing();

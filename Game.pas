@@ -37,7 +37,7 @@ procedure displayMenuMainStep;
     SetWindowSize(600, 400);
     CenterWindow();
     clearwindow();
-    Window.load('./GameBackground.png');
+    Window.load(BACKGROUND_SRC);
 
     SetFontSize(20);
     SetFontStyle(fsBold);
@@ -122,7 +122,7 @@ procedure displayMenuGameStep;
     MOUSE_Y := 0;
 
     clearwindow();
-    Window.load('./GameBackground.png');
+    Window.load(BACKGROUND_SRC);
     
     drawTitle(0, 20, 270, 60, 'Уровень:');
     drawButton(0,100,200,140,'Легкий');
@@ -175,7 +175,7 @@ procedure displayRecordsStep();
     MOUSE_Y:=-1;
     
     clearWindow();
-    Window.load('./GameBackground.png');
+    Window.load(BACKGROUND_SRC);
     
     drawTitle(0, 20, 250, 60, 'Рекорды:');
 
@@ -215,7 +215,7 @@ procedure displayRecordsStep();
     end;
 
     SetFontSize(18);
-    SetBrushColor(ARGB(200,255,255,255));
+    SetBrushColor(ARGB(200, 255, 255, 255));
     drawButton(0, 340, 200, 380, 'Назад');
 
     IS_MOUSE_DOWN := false;
@@ -243,7 +243,7 @@ procedure displayRulesStep(var PROGRAM_STEP: string);
     MOUSE_Y:=-1;
     
     clearwindow();
-    Window.load('./GameBackground.png');
+    Window.load(BACKGROUND_SRC);
 
     drawTitle(0, 20, 250, 60, 'Правила игры:');
 

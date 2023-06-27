@@ -11,5 +11,10 @@ const
   // стандартный отступ при выводе текста
   TEXT_PADDING = 40;
 
+  // 
+  BACKGROUND_SRC = './GameBackground.png';
+  BACKGROUND_WIDTH = 600;
+  BACKGROUND_HEIGHT = 400;
+
 begin 
 end.

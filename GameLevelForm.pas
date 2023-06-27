@@ -99,7 +99,7 @@ procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
     GAME_LEVEL := 3;
 
     clearwindow();
-    Window.load('./GameBackground.png');
+    Window.load(BACKGROUND_SRC);
 
     drawTitle(0, 20, 270, 60, 'Настройки уровня:');
 
@@ -122,13 +122,10 @@ procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
       begin
         SetBrushColor(RGB(255,255,255));
         FillRect(0, 80, 350, 340);
-        SetFontColor(RGB(0,0,0));
+        SetFontColor(RGB(0, 0, 0));
         DrawTextCentered(0, 80, 350, 340, i);
         sleep(1000);
       end;
-    
-    SetWindowSize((FIELD_WIDTH + 6) * WIDTH_CELL, (FIELD_HEIGHT + 2) * WIDTH_CELL);
-    CenterWindow;
     
     PROGRAM_STEP := 'GameStep';
   end;
