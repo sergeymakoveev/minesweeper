@@ -11,8 +11,45 @@ Interface
 Implementation
  
 var 
-  // отвечают за то, в из какой точки выводить введённые пользователем параметры поля
+  // координаты отображения поля для ввода
   outX,outY: integer;
+
+// отображения поля для ввода
+procedure diaplayInputField(const title: string; var fieldParam: integer; const fieldRange: IntRange);
+  var
+    userInput: string;
+    err: integer;
+
+  const
+    // сообщение об ошибке ввода
+    errorText = 'Недопустимое значение. Повторите ввод.';
+
+  begin
+    SetBrushColor(ARGB(255,255,255,255));
+    FillRect(0, outY - 20, 350 - 20, outY + 20 + 20);
+    // вывод заголовка поля ввода
+    TextOut(TEXT_PADDING, outY, title);
+    // задаем обработчик событий нажатия клавиатуры
+    onKeyPress:=inputInteger;
+    // сохраняем пользовательский ввод во временную переменную
+    repeat userInput:=USER_INPUT until IS_USER_INPUT_DONE;
+    IS_USER_INPUT_DONE:=False;
+    val(userInput, fieldParam, err);
+    while fieldParam not in fieldRange do
+      begin
+        SetFontSize(9);
+        // вывод сообщения об ошибке
+        textout(TEXT_PADDING, outY+23, errorText);
+        sleep(1500);
+        // закрасить место, где было выведено сообщение об ошибке
+        FillRect(0, outY + 20, 350 - 20, outY + 20 + 20);
+        SetFontSize(15);
+        onKeyPress:=inputInteger;
+        repeat userInput:=USER_INPUT until IS_USER_INPUT_DONE;
+        IS_USER_INPUT_DONE:=False;
+        val(userInput, fieldParam, err);
+      end;
+  end;
 
 // Процедура пользовательского ввода целого числа
 procedure inputInteger(ch: char);
@@ -52,20 +89,14 @@ procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
     maxFieldWidth = 34;
     // максимальная высота минного поля
     maxFieldHeight = 19;
-    // сообщение об ошибке ввода
-    errorText = 'Недопустимое значение. Повторите ввод.';
 
   begin
-    var s: string;
-    var err: integer;
-
     GAME_LEVEL := 3;
 
     clearwindow();
     Window.load('./GameBackground.png');
 
     drawTitle(0, 20, 270, 60, 'Настройки уровня:');
-    // drawButton(0, 340, 200, 380, 'Назад');
 
     SetBrushColor(ARGB(230,255,255,255));
     FillRect(0, 80, 350, 340);
@@ -74,67 +105,11 @@ procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
 
     outX:=260;
     outY:=120;
-    SetBrushColor(ARGB(255,255,255,255));
-    FillRect(0, outY - 20, 350 - 20, outY + 20 + 20);
-    TextOut(TEXT_PADDING, outY, 'Ширина поля (max 34):');
-    onKeyPress:=inputInteger;
-    repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
-    IS_USER_INPUT_DONE:=False;
-    val(s,FIELD_WIDTH,err);
-    while FIELD_WIDTH not in 1..maxFieldWidth do
-      begin
-        SetFontSize(9);
-        textout(TEXT_PADDING, outY+23, errorText);
-        sleep(1500);
-        // закрасить место, где было выведено сообщение об ошибке
-        FillRect(0, outY + 20, 350 - 20, outY + 20 + 20);
-        SetFontSize(15);
-        onKeyPress:=inputInteger;
-        repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
-        IS_USER_INPUT_DONE:=False;
-        val(s,FIELD_WIDTH,err);
-      end;
+    diaplayInputField('Ширина поля (max 34):', FIELD_WIDTH, 1..maxFieldWidth);
     outY:=200;
-    FillRect(0, outY - 20, 350 - 20, outY + 20 + 20);
-    textout(TEXT_PADDING, outY, 'Высота поля (5...19):');
-    onKeyPress:=inputInteger;
-    repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
-    IS_USER_INPUT_DONE:=False;
-    val(s,FIELD_HEIGHT,err);
-    while FIELD_HEIGHT not in 5..maxFieldHeight do
-      begin
-        SetFontSize(9);
-        textout(TEXT_PADDING, outY+23, errorText);
-        sleep(1500);
-        // закрасить место, где было выведено сообщение об ошибке
-        FillRect(0, outY + 20, 350 - 20, outY + 20 + 20);
-        SetFontSize(15);
-        onKeyPress:=inputInteger;
-        repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
-        IS_USER_INPUT_DONE:=False;
-        val(s,FIELD_HEIGHT,err);
-      end;
+    diaplayInputField('Высота поля (5...19):', FIELD_HEIGHT, 5..maxFieldHeight);
     outY:=280;
-    FillRect(0, outY - 20, 350 - 20, outY + 20 + 20);
-    textout(TEXT_PADDING, outY, 'Количество мин:');
-    onKeyPress:=inputInteger;
-    repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
-    IS_USER_INPUT_DONE:=False;
-    val(s,FIELD_MINES_COUNT,err);
-    while FIELD_MINES_COUNT not in 1..(FIELD_WIDTH * FIELD_HEIGHT - 1) do
-      begin
-        SetFontSize(9);
-        textout(TEXT_PADDING, outY+23, errorText);
-        sleep(1500);
-        // закрасить место, где было выведено сообщение об ошибке
-        FillRect(0, outY + 20, 350 - 20, outY + 20 + 20);
-        SetFontSize(15);
-        onKeyPress:=inputInteger;
-        repeat s:=USER_INPUT until IS_USER_INPUT_DONE;
-        IS_USER_INPUT_DONE:=False;
-        SetFontSize(15);
-        val(s,FIELD_MINES_COUNT,err);
-      end;
+    diaplayInputField('Количество мин:', FIELD_MINES_COUNT, 1..(FIELD_WIDTH * FIELD_HEIGHT - 1));
 
     // обратный отсчёт на 3 секунды
     setFontSize(30);
