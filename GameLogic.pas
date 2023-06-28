@@ -365,7 +365,7 @@ procedure displayWin();
   end;
 
 // подтверждение нажатия на кнопку Переиграть/Меню/Выйти
-function AreYouSure(const message: string): boolean;
+function confirmation(const message: string): boolean;
 
   var
     fieldCenterX := (FIELD_WIDTH * WIDTH_CELL - WIDTH_CELL) div 2 + WIDTH_CELL;
@@ -424,8 +424,8 @@ function AreYouSure(const message: string): boolean;
       checkNoButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE);
     
     if checkYesButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE)
-      then AreYouSure := true
-      else AreYouSure := false;
+      then confirmation := true
+      else confirmation := false;
 
     // если пользователь не хочет переигрывать/выходить в меню/закрывать игру
     // то отрисовываем сохранённое окно с прохождением уровня
@@ -536,7 +536,7 @@ procedure displayGameStep();
 
   begin
     var  i, j: shortint;
-    var sure: boolean;
+    var isConfirmed: boolean;
 
     var windowWidth := FIELD_WIDTH * WIDTH_CELL + 240;
     var windowHeight := FIELD_HEIGHT * WIDTH_CELL + TEXT_PADDING*2;
@@ -603,14 +603,14 @@ procedure displayGameStep();
               else if WantDeleteFlag(i, j) then deleteFlag(i, j)
               // Нажата кнопка выход/меню/рестарт
               else if checkAgainButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)
-                then sure := AreYouSure('Начать игру заново?')
+                then isConfirmed := confirmation('Начать игру заново?')
               else if checkMenuButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)
-                then sure := AreYouSure('Выйти в меню?')
+                then isConfirmed := confirmation('Выйти в меню?')
               else if (checkEndButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH))
-                then sure := AreYouSure('Выйти из игры?')
+                then isConfirmed := confirmation('Выйти из игры?')
         end;
     // завершение процесса игры при одном из трёх условий
-    until sure or (fcount = FIELD_WIDTH * FIELD_HEIGHT - FIELD_MINES_COUNT) or checkLose(i, j);
+    until isConfirmed or (fcount = FIELD_WIDTH * FIELD_HEIGHT - FIELD_MINES_COUNT) or checkLose(i, j);
     
     // если выполнилось условие проигрыша, то проиграл
     if checkLose(i,j) then youLose();
