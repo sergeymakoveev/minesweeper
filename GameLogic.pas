@@ -364,51 +364,73 @@ procedure displayWin();
     checkButtonsClick();
   end;
 
-// подтверждение нажатия на кнопку Переиграть/в меню/выйти
-function AreYouSure(): boolean;
+// подтверждение нажатия на кнопку Переиграть/Меню/Выйти
+function AreYouSure(const message: string): boolean;
+
+  var
+    fieldCenterX := (FIELD_WIDTH * WIDTH_CELL - WIDTH_CELL) div 2 + WIDTH_CELL;
+    fieldCenterY := GraphBoxHeight div 2;
 
   // кнопка НЕТ в подтверждении действия нажата
   function checkNoButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (MOUSE_X in (GraphBoxWidth div 2 - 200)..(GraphBoxWidth div 2 - 100)) and (MOUSE_Y in (GraphBoxHeight div 2)..(GraphBoxHeight div 2 + 40)) and (BUTTON_TYPE = 1) then
+      if
+        (MOUSE_X in (fieldCenterX + 20)..(fieldCenterX + 120))
+        and (MOUSE_Y in (fieldCenterY + 50)..(fieldCenterY + 50 + 40))
+        and (BUTTON_TYPE = 1)
+      then
         checkNoButtonClick := true;
     end;
   // кнопка ДА в подтверждении действия нажата
   function checkYesButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
-      if (MOUSE_X in (GraphBoxWidth div 2 + 100)..(GraphBoxWidth div 2 + 200)) and (MOUSE_Y in (GraphBoxHeight div 2)..(GraphBoxHeight div 2 + 40)) and (BUTTON_TYPE = 1) then
+      if
+        (MOUSE_X in (fieldCenterX - 120)..(fieldCenterX - 20))
+        and (MOUSE_Y in (fieldCenterY + 50)..(fieldCenterY + 50 + 40))
+        and (BUTTON_TYPE = 1)
+      then
         checkYesButtonClick := true;
     end;
 
   begin
     SaveWindow('gamewindow');
-    clearwindow;
-    
+
+    SetBrushColor(ARGB(200,255,255,255));
+    FillRect(0, 0, GraphBoxWidth, GraphBoxHeight);
+
     // для запоминания, какую кнопку хотел нажать игрок
     xtemp:=MOUSE_X;
     ytemp:=MOUSE_Y;
     
-    drawTextCentered(GraphBoxWidth div 2 - 200,GraphBoxHeight div 2 - 100,GraphBoxWidth div 2 + 200,GraphBoxHeight div 2 - 50,'Вы уверены? Прогресс будет утерян!');
+    setFontSize(25);
+    drawTextCentered(
+      WIDTH_CELL, WIDTH_CELL, FIELD_WIDTH * WIDTH_CELL, FIELD_HEIGHT * WIDTH_CELL,
+      message
+    );
+
     
-    SetBrushColor(clIndianRed);
-    drawButton(GraphBoxWidth div 2 + 100,GraphBoxHeight div 2,GraphBoxWidth div 2 + 200,GraphBoxHeight div 2 + 40,'да');
+    SetBrushColor(RGB(255,0,0));
+    drawButton(fieldCenterX - 120, fieldCenterY + 50, fieldCenterX - 20, fieldCenterY + 50 + 40, 'Да');
     
-    setBrushColor(clLightGreen);
-    drawButton(GraphBoxWidth div 2 - 200,GraphBoxHeight div 2,GraphBoxWidth div 2 - 100,GraphBoxHeight div 2 + 40,'нет');
+    SetBrushColor(RGB(0,255,0));
+    drawButton(fieldCenterX + 20, fieldCenterY + 50, fieldCenterX + 120, fieldCenterY + 50 + 40, 'Нет');
     
     SetBrushColor(clWhite);
     
     repeat
       IS_MOUSE_DOWN := false;
     until
-      checkYesButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE) or checkNoButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE);
+      checkYesButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE) or
+      checkNoButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE);
     
-    if checkYesButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE) then AreYouSure:=true
-    else AreYouSure:=false;
-    
+    if checkYesButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE)
+      then AreYouSure := true
+      else AreYouSure := false;
+
     // если пользователь не хочет переигрывать/выходить в меню/закрывать игру
     // то отрисовываем сохранённое окно с прохождением уровня
-    if checkNoButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE) then loadwindow('gamewindow');
+    if checkNoButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE)
+      then loadwindow('gamewindow');
     
     // зануляем положение курсора чтобы
     // не открылась ячейка сразу после отрисовки игрового поля
@@ -507,9 +529,9 @@ procedure displayGameStep();
     end;
 
   // условие поражения
-  function lose(i, j: integer): boolean;
+  function checkLose(i, j: integer): boolean;
     begin
-      if ((i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (FIELD[i, j].mine = True) and (FIELD[i, j].flag = False)) then lose := True;
+      if ((i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (FIELD[i, j].mine = True) and (FIELD[i, j].flag = False)) then checkLose := True;
     end;
 
   begin
@@ -563,29 +585,35 @@ procedure displayGameStep();
           j := MOUSE_Y div WIDTH_CELL;
           SetFontSize(15);
           // безопасное первое открытие клетки + заполнение поля минами
-          if (i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (fcount = 0) then openFirstCell(i, j)
-          else if checkPauseButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE,FIELD_WIDTH) then pause()
-          // нажали на клетку без мины
-          else if notMine(i, j) then
-            begin
-                // открыли клетку без мины с минами вокруг
-                if (FIELD[i,j].nearbyMines <> 0) then openCell(i, j)
-                // открыли клетку без мины без мин вокруг
-                else openEmptyCells(i,j,fcount);
-            end
-          // поставили флаг
-          else if WantSetFlag(i, j) then setFlag(i, j)
-          // убрали флаг
-          else if WantDeleteFlag(i, j) then deleteFlag(i, j)
-          // хотим нажать на кнопку выхода/в меню/заново
-          else if (checkAgainButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)) or (checkMenuButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)) or (checkEndButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH)) then
-              sure := AreYouSure;
+          if (i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (fcount = 0)
+            then openFirstCell(i, j)
+            else if checkPauseButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE,FIELD_WIDTH)
+              then pause()
+              // нажали на клетку без мины
+              else if notMine(i, j) then
+                begin
+                    // открыли клетку без мины с минами вокруг
+                    if (FIELD[i,j].nearbyMines <> 0) then openCell(i, j)
+                    // открыли клетку без мины без мин вокруг
+                    else openEmptyCells(i,j,fcount);
+                end
+              // поставили флаг
+              else if WantSetFlag(i, j) then setFlag(i, j)
+              // Убран флаг
+              else if WantDeleteFlag(i, j) then deleteFlag(i, j)
+              // Нажата кнопка выход/меню/рестарт
+              else if checkAgainButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)
+                then sure := AreYouSure('Начать игру заново?')
+              else if checkMenuButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)
+                then sure := AreYouSure('Выйти в меню?')
+              else if (checkEndButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH))
+                then sure := AreYouSure('Выйти из игры?')
         end;
     // завершение процесса игры при одном из трёх условий
-    until sure or (fcount = FIELD_WIDTH * FIELD_HEIGHT - FIELD_MINES_COUNT) or lose(i, j);
+    until sure or (fcount = FIELD_WIDTH * FIELD_HEIGHT - FIELD_MINES_COUNT) or checkLose(i, j);
     
     // если выполнилось условие проигрыша, то проиграл
-    if lose(i,j) then youLose();
+    if checkLose(i,j) then youLose();
     
     // если открыл все поля без мин, то победил
     if fcount = int(FIELD_WIDTH * FIELD_HEIGHT) - FIELD_MINES_COUNT then displayWin();
