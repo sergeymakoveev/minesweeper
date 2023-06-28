@@ -20,22 +20,37 @@ var
   xtemp, ytemp: integer;
   // переменные, отвечающие за время прохождения
   time0, time1, time: integer;
+  // ширина игрового поля
+  windowWidth: integer;
+  // высота игрового поля
+  windowHeight: integer;
 
 // кнопа вернуться в главное меню нажата
 function checkMenuButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
   begin
-    if (MOUSE_X in 39 * (FIELD_WIDTH + 3)..39 * (FIELD_WIDTH + 3) + 39 * 2) and (MOUSE_Y in 39 * 4..39 * 5) and (BUTTON_TYPE = 1) then checkMenuButtonClick := true;
+    if
+      (MOUSE_X in windowWidth - 150..windowWidth - 50)
+      and (MOUSE_Y in WIDTH_CELL * 5..WIDTH_CELL * 6)
+      and (BUTTON_TYPE = 1)
+    then checkMenuButtonClick := true;
   end;
 // кнопка завершить программу нажата
-function checkEndButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH: integer): boolean;
+function checkExitButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH: integer): boolean;
   begin
-    if (MOUSE_X in 39 * (FIELD_WIDTH + 3)..39 * (FIELD_WIDTH + 3) + 39 * 2) and (MOUSE_Y in 39 * FIELD_HEIGHT..39 * (FIELD_HEIGHT+1)) and (BUTTON_TYPE = 1) then checkEndButtonClick := true;
+    if
+      (MOUSE_X in windowWidth - 150..windowWidth - 50)
+      and (MOUSE_Y in WIDTH_CELL * 7..WIDTH_CELL * 8)
+      and (BUTTON_TYPE = 1) then checkExitButtonClick := true;
   end;
 // кнопка переиграть нажата
-function checkAgainButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
+function checkRestartButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
   begin
-    if (MOUSE_X in (39 * (FIELD_WIDTH + 3))..(39 * (FIELD_WIDTH + 3) + 39 * 2)) and (MOUSE_Y in 39 * 1..39 * 1 + 39) and (BUTTON_TYPE = 1) then
-      checkAgainButtonClick := true;
+    if
+      (MOUSE_X in windowWidth - 150..windowWidth - 50)
+      and (MOUSE_Y in WIDTH_CELL * 1..WIDTH_CELL * 2)
+      and (BUTTON_TYPE = 1)
+    then
+      checkRestartButtonClick := true;
   end;
 
 // заполнение поля минами
@@ -198,9 +213,9 @@ procedure checkButtonsClick();
     // выход в меню
     if checkMenuButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH) then PROGRAM_STEP := 'MenuMainStep'
     // начинаем заново
-    else if checkAgainButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH) then PROGRAM_STEP := 'GameStep'
+    else if checkRestartButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH) then PROGRAM_STEP := 'GameStep'
     // выход из игры
-    else if checkEndButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH) then closewindow();
+    else if checkExitButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH) then closewindow();
   end;
 
 // поражение
@@ -240,7 +255,10 @@ procedure youLose();
           xtemp:=MOUSE_X;
           ytemp:=MOUSE_Y;
         end;
-    until (checkEndButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH)) or (checkAgainButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH)) or (checkMenuButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH));
+    until
+      (checkExitButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH))
+      or (checkRestartButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH))
+      or (checkMenuButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH));
     checkButtonsClick();
   end;
 
@@ -358,7 +376,10 @@ procedure displayWin();
         begin
           IS_MOUSE_DOWN := false;
         end;
-    until (checkEndButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH)) or (checkAgainButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)) or (checkMenuButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH));
+    until
+      (checkExitButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH))
+      or (checkRestartButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH))
+      or (checkMenuButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH));
     xtemp:=MOUSE_X;
     ytemp:=MOUSE_Y;
     checkButtonsClick();
@@ -507,7 +528,12 @@ procedure displayGameStep();
   // кнопка паузы нажата
   function checkPauseButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
     begin
-      if (MOUSE_X in 39 * (FIELD_WIDTH + 3)..39 * (FIELD_WIDTH + 3) + 39 * 2) and (MOUSE_Y in round(39*2.5)..round(39*2.5) + 39) and (BUTTON_TYPE = 1) then checkPauseButtonClick := true;
+      if
+        (MOUSE_X in windowWidth - 150..windowWidth - 50)
+        and (MOUSE_Y in WIDTH_CELL * 3..WIDTH_CELL * 4)
+        and (BUTTON_TYPE = 1)
+      then
+        checkPauseButtonClick := true;
     end;
 
   // открытие клетки без мины (условие)
@@ -538,8 +564,11 @@ procedure displayGameStep();
     var  i, j: shortint;
     var isConfirmed: boolean;
 
-    var windowWidth := FIELD_WIDTH * WIDTH_CELL + 240;
-    var windowHeight := FIELD_HEIGHT * WIDTH_CELL + TEXT_PADDING*2;
+    // ширина игрового поля
+    windowWidth := FIELD_WIDTH * WIDTH_CELL + 240;
+    // высота игрового поля
+    windowHeight := FIELD_HEIGHT * WIDTH_CELL + TEXT_PADDING*2;
+
     if(BACKGROUND_WIDTH > windowWidth)
       then windowWidth := BACKGROUND_WIDTH;
     if(BACKGROUND_HEIGHT > windowHeight)
@@ -569,10 +598,10 @@ procedure displayGameStep();
     drawField();
     
     // рисуем кнопки
-    drawButton(windowWidth - 150, 39 * 1, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * 1 + 39, 'Рестарт');
-    drawButton(windowWidth - 150, round(39*2.5), 39 * (FIELD_WIDTH + 3) + 39 * 2, round(39*2.5) + 39, 'Пауза');
-    drawButton(windowWidth - 150, 39 * 4, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * 5, 'Меню');
-    drawButton(windowWidth - 150, 39 * FIELD_HEIGHT, 39 * (FIELD_WIDTH + 3) + 39 * 2, 39 * (FIELD_HEIGHT+1), 'Выход');
+    drawButton(windowWidth - 150, WIDTH_CELL * 1, windowWidth - 50, WIDTH_CELL * 2, 'Рестарт');
+    drawButton(windowWidth - 150, WIDTH_CELL * 3, windowWidth - 50, WIDTH_CELL * 4, 'Пауза');
+    drawButton(windowWidth - 150, WIDTH_CELL * 5, windowWidth - 50, WIDTH_CELL * 6, 'Меню');
+    drawButton(windowWidth - 150, WIDTH_CELL * 7, windowWidth - 50, WIDTH_CELL * 8, 'Выход');
     
     redraw();
     unlockdrawing();
@@ -602,11 +631,11 @@ procedure displayGameStep();
               // Убран флаг
               else if WantDeleteFlag(i, j) then deleteFlag(i, j)
               // Нажата кнопка выход/меню/рестарт
-              else if checkAgainButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)
+              else if checkRestartButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)
                 then isConfirmed := confirmation('Начать игру заново?')
               else if checkMenuButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)
                 then isConfirmed := confirmation('Выйти в меню?')
-              else if (checkEndButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH))
+              else if (checkExitButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH))
                 then isConfirmed := confirmation('Выйти из игры?')
         end;
     // завершение процесса игры при одном из трёх условий
