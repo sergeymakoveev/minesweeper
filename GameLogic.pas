@@ -211,11 +211,20 @@ procedure deleteFlag(var i: shortint; j: shortint);
 procedure checkButtonsClick();
   begin
     // выход в меню
-    if checkMenuButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH) then PROGRAM_STEP := 'MenuMainStep'
+    if
+      checkMenuButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH)
+    then
+      PROGRAM_STEP := 'MenuMainStep'
     // начинаем заново
-    else if checkRestartButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH) then PROGRAM_STEP := 'GameStep'
+    else if
+      checkRestartButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH)
+    then
+      PROGRAM_STEP := 'GameStep'
     // выход из игры
-    else if checkExitButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH) then closewindow();
+    else if
+      checkExitButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH)
+    then
+      closewindow();
   end;
 
 // поражение
