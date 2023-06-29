@@ -39,20 +39,20 @@ procedure displayMenuMainStep;
     clearwindow();
     Window.load(BACKGROUND_SRC);
 
-    SetFontSize(20);
+    setFontSize(20);
     SetFontStyle(fsBold);
-    SetBrushColor(ARGB(200,255,255,255));
+    setBrushColor(ARGB(200,255,255,255));
     FillRect(0, 20, 250, 60);
     DrawTextCentered(0, 20, 250, 60, 'Игра ¤ Сапёр ⚑');
     
-    SetFontSize(18);
+    setFontSize(18);
     SetFontStyle(fsNormal);
     drawButton(0,100,200,140,'Игра');
     drawButton(0,160,200,200,'Правила');
     drawButton(0,220,200,260,'Рекорды');
     drawButton(0,280,200,320,'Выход');
     
-    SetFontSize(10);
+    setFontSize(10);
     TextOut(0, 360, '   © Николаев Максим, группа 243   ');
     
     OnMouseDown := handleMouseDown;
@@ -179,10 +179,10 @@ procedure displayRecordsStep();
     
     drawTitle(0, 20, 250, 60, 'Рекорды:');
 
-    SetBrushColor(ARGB(230,255,255,255));
+    setBrushColor(ARGB(230,255,255,255));
     FillRect(0, 80, 560, 320);
-    SetBrushColor(ARGB(0,255,255,255));
-    SetFontSize(18);
+    setBrushColor(ARGB(0,255,255,255));
+    setFontSize(18);
 
     i:=0;
 
@@ -214,8 +214,8 @@ procedure displayRecordsStep();
       TextOut(40, 120 + i*60, output);
     end;
 
-    SetFontSize(18);
-    SetBrushColor(ARGB(200, 255, 255, 255));
+    setFontSize(18);
+    setBrushColor(ARGB(200, 255, 255, 255));
     drawButton(0, 340, 200, 380, 'Назад');
 
     IS_MOUSE_DOWN := false;
@@ -251,10 +251,10 @@ procedure displayRulesStep(var PROGRAM_STEP: string);
     var rules := input.ReadToEnd();
     CloseFile(input);
 
-    SetBrushColor(ARGB(230,255,255,255));
+    setBrushColor(ARGB(230,255,255,255));
     FillRect(0, 80, 560, 320);
-    SetBrushColor(ARGB(0,255,255,255));
-    SetFontSize(10);
+    setBrushColor(ARGB(0,255,255,255));
+    setFontSize(10);
     TextOut(40, 120, rules);
 
     drawButton(0, 340, 200, 380, 'Назад');
@@ -278,7 +278,7 @@ begin
   
   if not (fileexists('rules.txt') and fileexists('records.txt')) then
     begin
-      SetFontSize(20);
+      setFontSize(20);
       textout(0,0,'Ошибка! Отсутствуют необходимые файлы');
       sleep(4000);
       closewindow;

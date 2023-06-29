@@ -34,9 +34,9 @@ procedure drawButton(x0,y0,x,y: integer; text: string; color: Color);
 // отрисовка кнопок
 procedure drawTitle(x0,y0,x,y: integer; text: string);
   begin
-    SetBrushColor(ARGB(200,255,255,255));
+    setBrushColor(ARGB(200,255,255,255));
     FillRect(x0, y0, x, y);
-    SetFontSize(20);
+    setFontSize(20);
     SetFontStyle(fsBold);
     DrawTextCentered(x0, y0, x, y, text);
     SetFontStyle(fsNormal);

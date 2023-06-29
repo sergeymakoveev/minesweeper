@@ -210,9 +210,9 @@ procedure setFlag(i, j: shortint);
 procedure deleteFlag(var i: shortint; j: shortint);
   begin
     FIELD[i, j].flag := False;
-    SetBrushColor(clLightGray);
+    setBrushColor(clLightGray);
     FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + WIDTH_CELL - 2, 39 * j + WIDTH_CELL - 2);
-    SetBrushColor(clWhite);
+    setBrushColor(clWhite);
     // после выполнения действия зануляем переменную (иначе приводит к ошибке)
     i:=0;
     j:=0;
@@ -239,7 +239,7 @@ procedure checkButtonsClick();
   end;
 
 // поражение
-procedure youLose();
+procedure displayLose();
   begin
     var finishText: string;
     var i,j: shortint;
@@ -258,13 +258,13 @@ procedure youLose();
         begin
           if FIELD[i, j].flag = True then
             begin
-              SetBrushColor(clLightGray);
+              setBrushColor(clLightGray);
               FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + WIDTH_CELL - 2, 39 * j + WIDTH_CELL - 2);
-              SetBrushColor(clWhite);
+              setBrushColor(clWhite);
             end;
           if FIELD[i, j].mine = True then DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, SYMBOL_MINE);
         end;
-    SetFontSize(10);
+    setFontSize(10);
     TextOut(38,20,finishtext);
       
     repeat
@@ -381,7 +381,7 @@ procedure displayWin();
     fillrectangle(39 * (FIELD_WIDTH + 3), round(39*2.5), 39 * (FIELD_WIDTH + 3) + 39 * 2, round(39*2.5) + 39);// убрать кнопку паузы
     
     finishText := 'Вы победили! Секунд затрачено: ' + time;
-    SetFontSize(10);
+    setFontSize(10);
     TextOut(38,0,finishtext);
     
     // отключаем мышь на время записи рекорда
@@ -430,7 +430,7 @@ function confirmation(const message: string): boolean;
     end;
 
   begin
-    SaveWindow('gamewindow');
+    saveWindow('gamewindow');
 
     displayOverlay();
 
@@ -521,7 +521,7 @@ procedure displayGameStep();
       var i, j: shortint;
       lockdrawing();
       setPenWidth(1);
-      SetBrushColor(clLightGray);
+      setBrushColor(clLightGray);
       for i := 1 to FIELD_WIDTH do
         begin
           for j := 1 to FIELD_HEIGHT do
@@ -534,7 +534,7 @@ procedure displayGameStep();
         end;
       redraw();
       unlockdrawing();
-      SetBrushColor(clWhite);
+      setBrushColor(clWhite);
     end;
 
   // кнопка паузы нажата
@@ -608,7 +608,7 @@ procedure displayGameStep();
     background.Draw(0, 0);
 
     lockDrawing();
-    SetFontSize(10);
+    setFontSize(10);
     
     // обнуляем переменные
     fcount := 0;
@@ -637,7 +637,7 @@ procedure displayGameStep();
           IS_MOUSE_DOWN := false;
           i := MOUSE_X div WIDTH_CELL;
           j := MOUSE_Y div WIDTH_CELL;
-          SetFontSize(15);
+          setFontSize(15);
           // безопасное первое открытие клетки + заполнение поля минами
           if (i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (fcount = 0)
             then openFirstCell(i, j)
@@ -667,7 +667,7 @@ procedure displayGameStep();
     until isConfirmed or (fcount = FIELD_WIDTH * FIELD_HEIGHT - FIELD_MINES_COUNT) or checkLose(i, j);
     
     // если выполнилось условие проигрыша, то проиграл
-    if checkLose(i,j) then youLose();
+    if checkLose(i,j) then displayLose();
     
     // если открыл все поля без мин, то победил
     if fcount = int(FIELD_WIDTH * FIELD_HEIGHT) - FIELD_MINES_COUNT then displayWin();

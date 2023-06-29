@@ -25,7 +25,7 @@ procedure diaplayInputField(const title: string; var fieldParam: integer; const 
     errorText = 'Недопустимое значение. Повторите ввод.';
 
   begin
-    SetBrushColor(ARGB(255,255,255,255));
+    setBrushColor(ARGB(255,255,255,255));
     FillRect(0, outY - 20, 350 - 20, outY + 20 + 20);
     // вывод заголовка поля ввода
     TextOut(TEXT_PADDING, outY, title);
@@ -37,13 +37,13 @@ procedure diaplayInputField(const title: string; var fieldParam: integer; const 
     val(userInput, fieldParam, err);
     while fieldParam not in fieldRange do
       begin
-        SetFontSize(9);
+        setFontSize(9);
         // вывод сообщения об ошибке
         textout(TEXT_PADDING, outY+23, errorText);
         sleep(1500);
         // закрасить место, где было выведено сообщение об ошибке
         FillRect(0, outY + 20, 350 - 20, outY + 20 + 20);
-        SetFontSize(15);
+        setFontSize(15);
         onKeyPress:=inputInteger;
         repeat userInput:=USER_INPUT until IS_USER_INPUT_DONE;
         IS_USER_INPUT_DONE:=False;
@@ -55,7 +55,7 @@ procedure diaplayInputField(const title: string; var fieldParam: integer; const 
 procedure inputInteger(ch: char);
   begin
     lockdrawing();
-    SetBrushColor(RGB(255,255,255));
+    setBrushColor(RGB(255,255,255));
     fillrect(outX, outY, outX+30, outY+20);
     // ввод символов
     // нажата клавиша 0...9 и введено менее 2х символов
@@ -103,10 +103,10 @@ procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
 
     drawTitle(0, 20, 270, 60, 'Настройки уровня:');
 
-    SetBrushColor(ARGB(230,255,255,255));
+    setBrushColor(ARGB(230,255,255,255));
     FillRect(0, 80, 350, 340);
-    SetBrushColor(RGB(255,255,255));
-    SetFontSize(15);
+    setBrushColor(RGB(255,255,255));
+    setFontSize(15);
 
     outX:=260;
     outY:=120;
@@ -120,7 +120,7 @@ procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGH
     setFontSize(30);
     for i: byte := 3 downto 1 do
       begin
-        SetBrushColor(RGB(255,255,255));
+        setBrushColor(RGB(255,255,255));
         FillRect(0, 80, 350, 340);
         SetFontColor(RGB(0, 0, 0));
         DrawTextCentered(0, 80, 350, 340, i);
