@@ -444,14 +444,8 @@ function confirmation(const message: string): boolean;
       message
     );
 
-    
-    SetBrushColor(RGB(255,0,0));
-    drawButton(fieldCenterX - 120, fieldCenterY + 50, fieldCenterX - 20, fieldCenterY + 50 + 40, 'Да');
-    
-    SetBrushColor(RGB(0,255,0));
-    drawButton(fieldCenterX + 20, fieldCenterY + 50, fieldCenterX + 120, fieldCenterY + 50 + 40, 'Нет');
-    
-    SetBrushColor(clWhite);
+    drawButton(fieldCenterX - 120, fieldCenterY + 50, fieldCenterX - 20, fieldCenterY + 50 + 40, 'Да', clLightGreen);
+    drawButton(fieldCenterX + 20, fieldCenterY + 50, fieldCenterX + 120, fieldCenterY + 50 + 40, 'Нет', clIndianRed);
     
     repeat
       IS_MOUSE_DOWN := false;
