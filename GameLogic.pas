@@ -563,7 +563,7 @@ procedure displayGameStep();
     end;
 
   // поставить флаг (условие)
-  function WantSetFlag(i, j: integer): boolean;
+  function checkSetFlag(i, j: integer): boolean;
     begin
       if
         (i in 1..FIELD_WIDTH)
@@ -572,11 +572,11 @@ procedure displayGameStep();
         and (FIELD[i, j].flag = False)
         and (FIELD[i, j].opened = False)
       then
-        WantSetFlag := True;
+        checkSetFlag := True;
     end;
 
   // убрать флаг (условие)
-  function WantDeleteFlag(i, j: integer): boolean;
+  function checkDeleteFlag(i, j: integer): boolean;
     begin
       if
         (i in 1..FIELD_WIDTH)
@@ -585,11 +585,11 @@ procedure displayGameStep();
         and (FIELD[i, j].flag = True)
         and (FIELD[i, j].opened = False)
       then
-        WantDeleteFlag := True;
+        checkDeleteFlag := True;
     end;
 
   // условие поражения
-  function checkLose(i, j: integer): boolean;
+  function checkIsLose(i, j: integer): boolean;
     begin
       if
         ((i in 1..FIELD_WIDTH)
@@ -598,11 +598,11 @@ procedure displayGameStep();
         and (FIELD[i, j].mine = True)
         and (FIELD[i, j].flag = False))
       then
-        checkLose := True;
+        checkIsLose := True;
     end;
 
   begin
-    var  i, j: shortint;
+    var i, j: shortint;
     var isConfirmed: boolean;
 
     // ширина игрового поля
@@ -614,12 +614,10 @@ procedure displayGameStep();
     // центр игрового поля по высоте
     fieldCenterY := GraphBoxHeight div 2;
 
-
     if(BACKGROUND_WIDTH > windowWidth)
       then windowWidth := BACKGROUND_WIDTH;
     if(BACKGROUND_HEIGHT > windowHeight)
       then windowHeight := BACKGROUND_HEIGHT;
-
 
     clearWindow();
     setWindowSize(windowWidth, windowHeight);
@@ -673,9 +671,9 @@ procedure displayGameStep();
                     else openEmptyCells(i,j,fcount);
                 end
               // поставили флаг
-              else if WantSetFlag(i, j) then setFlag(i, j)
+              else if checkSetFlag(i, j) then setFlag(i, j)
               // Убран флаг
-              else if WantDeleteFlag(i, j) then deleteFlag(i, j)
+              else if checkDeleteFlag(i, j) then deleteFlag(i, j)
               // Нажата кнопка выход/меню/рестарт
               else if checkRestartButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH)
                 then isConfirmed := confirmation('Начать игру заново?')
@@ -685,10 +683,10 @@ procedure displayGameStep();
                 then isConfirmed := confirmation('Выйти из игры?')
         end;
     // завершение процесса игры при одном из трёх условий
-    until isConfirmed or (fcount = FIELD_WIDTH * FIELD_HEIGHT - FIELD_MINES_COUNT) or checkLose(i, j);
+    until isConfirmed or (fcount = FIELD_WIDTH * FIELD_HEIGHT - FIELD_MINES_COUNT) or checkIsLose(i, j);
     
     // если выполнилось условие проигрыша, то проиграл
-    if checkLose(i,j) then displayLose();
+    if checkIsLose(i,j) then displayLose();
     
     // если открыл все поля без мин, то победил
     if fcount = int(FIELD_WIDTH * FIELD_HEIGHT) - FIELD_MINES_COUNT then displayWin();
