@@ -36,6 +36,118 @@ begin
   FillRect(0, 0, GraphBoxWidth, GraphBoxHeight);
 end;
 
+procedure alert(message: string := '');
+  var verticalPadding := 0;
+
+  // Проверка нажатия кнопки "Продолжить"
+  function checkContinueButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
+    begin
+      if
+        (MOUSE_X in fieldCenterX - 100..fieldCenterX + 100)
+        and (MOUSE_Y in fieldCenterY + verticalPadding - 20..fieldCenterY + verticalPadding + 20)
+        and (BUTTON_TYPE = 1)
+      then
+        checkContinueButtonClick := true;
+    end;
+
+  begin
+    // сохраняем окно
+    saveWindow('gamewindow');
+
+    displayOverlay();
+
+    if (length(message) > 0) then
+      verticalPadding := 100;
+
+    drawTextCentered(
+      WIDTH_CELL, WIDTH_CELL, FIELD_WIDTH * WIDTH_CELL, FIELD_HEIGHT * WIDTH_CELL,
+      message
+    );
+    drawButton(fieldCenterX - 100, fieldCenterY + verticalPadding - 20, fieldCenterX + 100, fieldCenterY + verticalPadding + 20, 'Продолжить', clLightGreen);
+
+    OnMouseDown:=handleMouseDown;
+    repeat
+      if IS_MOUSE_DOWN then
+        IS_MOUSE_DOWN := false;
+    until
+      checkContinueButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE,FIELD_WIDTH);
+    
+    // рисуем окно заново
+    loadwindow('gamewindow');
+
+    // зануляем положение курсора чтобы
+    // не открылась ячейка сразу после отрисовки игрового поля
+    MOUSE_X:=0;
+    MOUSE_Y:=0;
+  end;
+
+// подтверждение нажатия на кнопку Переиграть/Меню/Выйти
+function confirmation(const message: string): boolean;
+
+  // кнопка НЕТ в подтверждении действия нажата
+  function checkNoButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
+    begin
+      if
+        (MOUSE_X in (fieldCenterX + 20)..(fieldCenterX + 120))
+        and (MOUSE_Y in (fieldCenterY + 50)..(fieldCenterY + 50 + 40))
+        and (BUTTON_TYPE = 1)
+      then
+        checkNoButtonClick := true;
+    end;
+  // кнопка ДА в подтверждении действия нажата
+  function checkYesButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
+    begin
+      if
+        (MOUSE_X in (fieldCenterX - 120)..(fieldCenterX - 20))
+        and (MOUSE_Y in (fieldCenterY + 50)..(fieldCenterY + 50 + 40))
+        and (BUTTON_TYPE = 1)
+      then
+        checkYesButtonClick := true;
+    end;
+
+  begin
+    saveWindow('gamewindow');
+
+    displayOverlay();
+
+    // для запоминания, какую кнопку хотел нажать игрок
+    xtemp:=MOUSE_X;
+    ytemp:=MOUSE_Y;
+    
+    setFontSize(25);
+    drawTextCentered(
+      WIDTH_CELL, WIDTH_CELL, FIELD_WIDTH * WIDTH_CELL, FIELD_HEIGHT * WIDTH_CELL,
+      message
+    );
+
+    drawButton(fieldCenterX - 120, fieldCenterY + 50, fieldCenterX - 20, fieldCenterY + 50 + 40, 'Да', clLightGreen);
+    drawButton(fieldCenterX + 20, fieldCenterY + 50, fieldCenterX + 120, fieldCenterY + 50 + 40, 'Нет', clIndianRed);
+    
+    OnMouseDown:=handleMouseDown;
+    repeat
+      if IS_MOUSE_DOWN then
+        begin
+          IS_MOUSE_DOWN := false;
+        end;
+    until
+      checkYesButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE) or
+      checkNoButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE);
+    
+    if checkYesButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE)
+      then confirmation := true
+      else confirmation := false;
+
+    // если пользователь не хочет переигрывать/выходить в меню/закрывать игру
+    // то отрисовываем сохранённое окно с прохождением уровня
+    if checkNoButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE)
+      then loadwindow('gamewindow');
+    
+    // зануляем положение курсора чтобы
+    // не открылась ячейка сразу после отрисовки игрового поля
+    MOUSE_X:=0;
+    MOUSE_Y:=0;
+  end;
+
 // кнопа вернуться в главное меню нажата
 function checkMenuButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
   begin
@@ -241,45 +353,11 @@ procedure checkButtonsClick();
 // поражение
 procedure displayLose();
   begin
-    var finishText: string;
-    var i,j: shortint;
-    
-    xtemp:=0;
-    ytemp:=0;
-    
     time1 := Milliseconds;
     time := time + (time1 - time0) div 1000 + 1;
-    finishText := 'Вы проиграли потратив ' + time + ' секунд(ы)...';
-    for i := 1 to FIELD_WIDTH do
-      for j := 1 to FIELD_HEIGHT do
-        begin
-          if FIELD[i, j].flag = True then
-            begin
-              setBrushColor(clLightGray);
-              FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + WIDTH_CELL - 2, 39 * j + WIDTH_CELL - 2);
-              setBrushColor(clWhite);
-            end;
-          if
-            FIELD[i, j].mine = True
-          then
-            DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, SYMBOL_MINE);
-        end;
-    setFontSize(10);
-    TextOut(38,20,finishtext);
-      
-    repeat
-      if IS_MOUSE_DOWN then
-        begin
-          IS_MOUSE_DOWN := false;
-          // обязательно, так как иначе возможно неопределённое действие
-          xtemp:=MOUSE_X;
-          ytemp:=MOUSE_Y;
-        end;
-    until
-      (checkExitButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH))
-      or (checkRestartButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH))
-      or (checkMenuButtonClick(xtemp, ytemp, BUTTON_TYPE, FIELD_WIDTH));
-    checkButtonsClick();
+    setFontSize(15);
+    alert('Вы проиграли потратив ' + time + ' секунд(ы)...');
+    PROGRAM_STEP := 'MenuMainStep';
   end;
 
 // нажатие на клавиатуру (имя рекордсмена)
@@ -393,9 +471,7 @@ procedure displayWin();
     OnMouseDown:=handleMouseDown;
     repeat
       if IS_MOUSE_DOWN then
-        begin
-          IS_MOUSE_DOWN := false;
-        end;
+        IS_MOUSE_DOWN := false;
     until
       (checkExitButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH))
       or (checkRestartButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH))
@@ -403,106 +479,6 @@ procedure displayWin();
     xtemp:=MOUSE_X;
     ytemp:=MOUSE_Y;
     checkButtonsClick();
-  end;
-
-procedure alert(message: string := '');
-  // Проверка нажатия кнопки "Продолжить"
-  function checkContinueButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
-    begin
-      if
-        (MOUSE_X in GraphBoxWidth div 2 - 100..GraphBoxWidth div 2 + 100)
-        and (MOUSE_Y in GraphBoxHeight div 2 - 50..GraphBoxHeight div 2 + 40)
-        and (BUTTON_TYPE = 1)
-      then
-        checkContinueButtonClick := true;
-    end;
-
-  begin
-    var verticalPadding := 0;
-    // сохраняем окно
-    saveWindow('gamewindow');
-
-    displayOverlay();
-
-    if (length(message) > 0) then
-      verticalPadding := 100;
-
-    drawTextCentered(
-      WIDTH_CELL, WIDTH_CELL, FIELD_WIDTH * WIDTH_CELL, FIELD_HEIGHT * WIDTH_CELL,
-      message
-    );
-    drawButton(fieldCenterX - 100, fieldCenterY + verticalPadding - 20, fieldCenterX + 100, fieldCenterY + verticalPadding + 20, 'Продолжить', clLightGreen);
-
-    repeat
-      IS_MOUSE_DOWN := false;
-    until
-      checkContinueButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE,FIELD_WIDTH);
-    
-    // рисуем окно заново
-    loadwindow('gamewindow');
-  end;
-
-// подтверждение нажатия на кнопку Переиграть/Меню/Выйти
-function confirmation(const message: string): boolean;
-
-  // кнопка НЕТ в подтверждении действия нажата
-  function checkNoButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
-    begin
-      if
-        (MOUSE_X in (fieldCenterX + 20)..(fieldCenterX + 120))
-        and (MOUSE_Y in (fieldCenterY + 50)..(fieldCenterY + 50 + 40))
-        and (BUTTON_TYPE = 1)
-      then
-        checkNoButtonClick := true;
-    end;
-  // кнопка ДА в подтверждении действия нажата
-  function checkYesButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
-    begin
-      if
-        (MOUSE_X in (fieldCenterX - 120)..(fieldCenterX - 20))
-        and (MOUSE_Y in (fieldCenterY + 50)..(fieldCenterY + 50 + 40))
-        and (BUTTON_TYPE = 1)
-      then
-        checkYesButtonClick := true;
-    end;
-
-  begin
-    saveWindow('gamewindow');
-
-    displayOverlay();
-
-    // для запоминания, какую кнопку хотел нажать игрок
-    xtemp:=MOUSE_X;
-    ytemp:=MOUSE_Y;
-    
-    setFontSize(25);
-    drawTextCentered(
-      WIDTH_CELL, WIDTH_CELL, FIELD_WIDTH * WIDTH_CELL, FIELD_HEIGHT * WIDTH_CELL,
-      message
-    );
-
-    drawButton(fieldCenterX - 120, fieldCenterY + 50, fieldCenterX - 20, fieldCenterY + 50 + 40, 'Да', clLightGreen);
-    drawButton(fieldCenterX + 20, fieldCenterY + 50, fieldCenterX + 120, fieldCenterY + 50 + 40, 'Нет', clIndianRed);
-    
-    repeat
-      IS_MOUSE_DOWN := false;
-    until
-      checkYesButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE) or
-      checkNoButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE);
-    
-    if checkYesButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE)
-      then confirmation := true
-      else confirmation := false;
-
-    // если пользователь не хочет переигрывать/выходить в меню/закрывать игру
-    // то отрисовываем сохранённое окно с прохождением уровня
-    if checkNoButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE)
-      then loadwindow('gamewindow');
-    
-    // зануляем положение курсора чтобы
-    // не открылась ячейка сразу после отрисовки игрового поля
-    MOUSE_X:=0;
-    MOUSE_Y:=0;
   end;
 
 // пауза
