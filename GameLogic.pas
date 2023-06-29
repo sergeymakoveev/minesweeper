@@ -565,19 +565,40 @@ procedure displayGameStep();
   // поставить флаг (условие)
   function WantSetFlag(i, j: integer): boolean;
     begin
-      if (i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 2) and (FIELD[i, j].flag = False) and (FIELD[i, j].opened = False) then WantSetFlag := True;
+      if
+        (i in 1..FIELD_WIDTH)
+        and (j in 1..FIELD_HEIGHT)
+        and (BUTTON_TYPE = 2)
+        and (FIELD[i, j].flag = False)
+        and (FIELD[i, j].opened = False)
+      then
+        WantSetFlag := True;
     end;
 
   // убрать флаг (условие)
   function WantDeleteFlag(i, j: integer): boolean;
     begin
-      if (i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 2) and (FIELD[i, j].flag = True) and (FIELD[i, j].opened = False) then WantDeleteFlag := True;
+      if
+        (i in 1..FIELD_WIDTH)
+        and (j in 1..FIELD_HEIGHT)
+        and (BUTTON_TYPE = 2)
+        and (FIELD[i, j].flag = True)
+        and (FIELD[i, j].opened = False)
+      then
+        WantDeleteFlag := True;
     end;
 
   // условие поражения
   function checkLose(i, j: integer): boolean;
     begin
-      if ((i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (FIELD[i, j].mine = True) and (FIELD[i, j].flag = False)) then checkLose := True;
+      if
+        ((i in 1..FIELD_WIDTH)
+        and (j in 1..FIELD_HEIGHT)
+        and (BUTTON_TYPE = 1)
+        and (FIELD[i, j].mine = True)
+        and (FIELD[i, j].flag = False))
+      then
+        checkLose := True;
     end;
 
   begin
