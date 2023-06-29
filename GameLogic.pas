@@ -546,9 +546,17 @@ procedure displayGameStep();
     end;
 
   // открытие клетки без мины (условие)
-  function notMine(i, j: integer): boolean;
+  function checkMine(i, j: integer): boolean;
     begin
-      if (i in 1..FIELD_WIDTH) and (j in 1..FIELD_HEIGHT) and (BUTTON_TYPE = 1) and (FIELD[i, j].mine = False) and (FIELD[i, j].opened = False) and (FIELD[i, j].flag = false) then notMine := True;
+      if
+        (i in 1..FIELD_WIDTH)
+        and (j in 1..FIELD_HEIGHT)
+        and (BUTTON_TYPE = 1)
+        and (FIELD[i, j].mine = False)
+        and (FIELD[i, j].opened = False)
+        and (FIELD[i, j].flag = false)
+      then
+        checkMine := True;
     end;
 
   // поставить флаг (условие)
@@ -628,7 +636,7 @@ procedure displayGameStep();
             else if checkPauseButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE,FIELD_WIDTH)
               then pause()
               // нажали на клетку без мины
-              else if notMine(i, j) then
+              else if checkMine(i, j) then
                 begin
                     // открыли клетку без мины с минами вокруг
                     if (FIELD[i,j].nearbyMines <> 0) then openCell(i, j)
