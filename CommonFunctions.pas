@@ -22,7 +22,7 @@ procedure handleMouseDown(x, y, mb: integer);
 // отрисовка кнопок
 procedure drawButton(x0,y0,x,y: integer; text: string; color: Color);
   begin
-    var currentColor := FontColor();
+    var currentColor := BrushColor();
     setBrushColor(color);
     Rectangle(x0, y0, x, y);
     setFontSize(18);
