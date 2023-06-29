@@ -4,7 +4,7 @@ Interface
 
   uses GraphABC;
   uses GlobalVariables;
-  procedure drawButton(x0,y0,x,y: integer; text: string);
+  procedure drawButton(x0,y0,x,y: integer; text: string; color: Color := ARGB(200,255,255,255));
   procedure drawTitle(x0,y0,x,y: integer; text: string);
   procedure handleMouseDown(x, y, mb: integer);
 
@@ -20,13 +20,15 @@ procedure handleMouseDown(x, y, mb: integer);
   end;
 
 // отрисовка кнопок
-procedure drawButton(x0,y0,x,y: integer; text: string);
+procedure drawButton(x0,y0,x,y: integer; text: string; color: Color);
   begin
-    SetBrushColor(ARGB(200,255,255,255));
+    var currentColor := FontColor();
+    setBrushColor(color);
     Rectangle(x0, y0, x, y);
-    SetFontSize(18);
-    SetFontStyle(fsNormal);
+    setFontSize(18);
+    setFontStyle(fsNormal);
     DrawTextCentered(x0, y0, x, y, text);
+    setBrushColor(currentColor);
   end;
 
 // отрисовка кнопок

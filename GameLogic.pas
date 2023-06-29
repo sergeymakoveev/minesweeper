@@ -24,6 +24,17 @@ var
   windowWidth: integer;
   // высота игрового поля
   windowHeight: integer;
+  // высота игрового поля по ширине
+  fieldCenterX: integer;
+  // высота игрового поля по высоте
+  fieldCenterY: integer;
+
+// отображение оверлея
+procedure displayOverlay();
+begin
+  setBrushColor(ARGB(200,255,255,255));
+  FillRect(0, 0, GraphBoxWidth, GraphBoxHeight);
+end;
 
 // кнопа вернуться в главное меню нажата
 function checkMenuButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
@@ -397,10 +408,6 @@ procedure displayWin();
 // подтверждение нажатия на кнопку Переиграть/Меню/Выйти
 function confirmation(const message: string): boolean;
 
-  var
-    fieldCenterX := (FIELD_WIDTH * WIDTH_CELL - WIDTH_CELL) div 2 + WIDTH_CELL;
-    fieldCenterY := GraphBoxHeight div 2;
-
   // кнопка НЕТ в подтверждении действия нажата
   function checkNoButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
@@ -425,8 +432,7 @@ function confirmation(const message: string): boolean;
   begin
     SaveWindow('gamewindow');
 
-    SetBrushColor(ARGB(200,255,255,255));
-    FillRect(0, 0, GraphBoxWidth, GraphBoxHeight);
+    displayOverlay();
 
     // для запоминания, какую кнопку хотел нажать игрок
     xtemp:=MOUSE_X;
@@ -471,10 +477,15 @@ function confirmation(const message: string): boolean;
 // пауза
 procedure pause();
 
-  // кнопка снять с паузы нажата
-  function checkUnpauseButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
+  // Проверка нажатия кнопки "Продолжить"
+  function checkContinueButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
     begin
-      if (MOUSE_X in GraphBoxWidth div 2 - 100..GraphBoxWidth div 2 + 100) and (MOUSE_Y in GraphBoxHeight div 2 - 50..GraphBoxHeight div 2 + 40) and (BUTTON_TYPE = 1) then checkUnpauseButtonClick := true;
+      if
+        (MOUSE_X in GraphBoxWidth div 2 - 100..GraphBoxWidth div 2 + 100)
+        and (MOUSE_Y in GraphBoxHeight div 2 - 50..GraphBoxHeight div 2 + 40)
+        and (BUTTON_TYPE = 1)
+      then
+        checkContinueButtonClick := true;
     end;
 
   begin
@@ -484,18 +495,16 @@ procedure pause();
     time := (time1 - time0) div 1000 + 1;
     
     // сохраняем окно
-    SaveWindow('gamewindow');
-    // очищаем окно
-    clearWindow();
+    saveWindow('gamewindow');
+
+    displayOverlay();
     
-    setBrushColor(clLightGreen);
-    drawButton(GraphBoxWidth div 2 - 100,GraphBoxHeight div 2 - 50,GraphBoxWidth div 2 + 100,GraphBoxHeight div 2 + 40,'продолжить');
-    SetBrushColor(clWhite);
+    drawButton(fieldCenterX - 100, fieldCenterY - 20, fieldCenterX + 100, fieldCenterY + 20, 'Продолжить', clLightGreen);
     
     repeat
       IS_MOUSE_DOWN := false;
     until
-      checkUnpauseButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE,FIELD_WIDTH);
+      checkContinueButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE,FIELD_WIDTH);
     
     // возобновляем отсчёт времени
     time0 := milliseconds;
@@ -585,6 +594,11 @@ procedure displayGameStep();
     windowWidth := FIELD_WIDTH * WIDTH_CELL + 240;
     // высота игрового поля
     windowHeight := FIELD_HEIGHT * WIDTH_CELL + TEXT_PADDING*2;
+    // центр игрового поля по ширине
+    fieldCenterX := (FIELD_WIDTH * WIDTH_CELL - WIDTH_CELL) div 2 + WIDTH_CELL;
+    // центр игрового поля по высоте
+    fieldCenterY := GraphBoxHeight div 2;
+
 
     if(BACKGROUND_WIDTH > windowWidth)
       then windowWidth := BACKGROUND_WIDTH;
