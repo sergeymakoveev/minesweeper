@@ -247,9 +247,6 @@ procedure displayLose();
     xtemp:=0;
     ytemp:=0;
     
-    // спрятать кнопку паузы
-    fillrectangle(39 * (FIELD_WIDTH + 3), round(39*2.5), 39 * (FIELD_WIDTH + 3) + 39 * 2, round(39*2.5) + 39);
-      
     time1 := Milliseconds;
     time := time + (time1 - time0) div 1000 + 1;
     finishText := 'Вы проиграли потратив ' + time + ' секунд(ы)...';
@@ -262,7 +259,10 @@ procedure displayLose();
               FillRectangle(39 * i + 2, 39 * j + 2, 39 * i + WIDTH_CELL - 2, 39 * j + WIDTH_CELL - 2);
               setBrushColor(clWhite);
             end;
-          if FIELD[i, j].mine = True then DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, SYMBOL_MINE);
+          if
+            FIELD[i, j].mine = True
+          then
+            DrawTextCentered(39 * i, 39 * j, 39 * i + WIDTH_CELL, 39 * j + WIDTH_CELL, SYMBOL_MINE);
         end;
     setFontSize(10);
     TextOut(38,20,finishtext);
@@ -405,6 +405,43 @@ procedure displayWin();
     checkButtonsClick();
   end;
 
+procedure alert(message: string := '');
+  // Проверка нажатия кнопки "Продолжить"
+  function checkContinueButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
+    begin
+      if
+        (MOUSE_X in GraphBoxWidth div 2 - 100..GraphBoxWidth div 2 + 100)
+        and (MOUSE_Y in GraphBoxHeight div 2 - 50..GraphBoxHeight div 2 + 40)
+        and (BUTTON_TYPE = 1)
+      then
+        checkContinueButtonClick := true;
+    end;
+
+  begin
+    var verticalPadding := 0;
+    // сохраняем окно
+    saveWindow('gamewindow');
+
+    displayOverlay();
+
+    if (length(message) > 0) then
+      verticalPadding := 100;
+
+    drawTextCentered(
+      WIDTH_CELL, WIDTH_CELL, FIELD_WIDTH * WIDTH_CELL, FIELD_HEIGHT * WIDTH_CELL,
+      message
+    );
+    drawButton(fieldCenterX - 100, fieldCenterY + verticalPadding - 20, fieldCenterX + 100, fieldCenterY + verticalPadding + 20, 'Продолжить', clLightGreen);
+
+    repeat
+      IS_MOUSE_DOWN := false;
+    until
+      checkContinueButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE,FIELD_WIDTH);
+    
+    // рисуем окно заново
+    loadwindow('gamewindow');
+  end;
+
 // подтверждение нажатия на кнопку Переиграть/Меню/Выйти
 function confirmation(const message: string): boolean;
 
@@ -471,45 +508,16 @@ function confirmation(const message: string): boolean;
 // пауза
 procedure pause();
 
-  // Проверка нажатия кнопки "Продолжить"
-  function checkContinueButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
-    begin
-      if
-        (MOUSE_X in GraphBoxWidth div 2 - 100..GraphBoxWidth div 2 + 100)
-        and (MOUSE_Y in GraphBoxHeight div 2 - 50..GraphBoxHeight div 2 + 40)
-        and (BUTTON_TYPE = 1)
-      then
-        checkContinueButtonClick := true;
-    end;
-
   begin
     // приостанавливаем отсчёт времени
     time1 := milliseconds;
     // записываем, сколько пользователь уже играл (секунд)
     time := (time1 - time0) div 1000 + 1;
     
-    // сохраняем окно
-    saveWindow('gamewindow');
+    alert();
 
-    displayOverlay();
-    
-    drawButton(fieldCenterX - 100, fieldCenterY - 20, fieldCenterX + 100, fieldCenterY + 20, 'Продолжить', clLightGreen);
-    
-    repeat
-      IS_MOUSE_DOWN := false;
-    until
-      checkContinueButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE,FIELD_WIDTH);
-    
     // возобновляем отсчёт времени
     time0 := milliseconds;
-    
-    // рисуем окно заново
-    loadwindow('gamewindow');
-    
-    // зануляем положение курсора чтобы
-    // не открылась ячейка сразу после отрисовки игрового поля
-    MOUSE_X:=0;
-    MOUSE_Y:=0;
   end;
 
 // процесс игры
