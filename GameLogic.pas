@@ -59,10 +59,7 @@ procedure alert(message: string := '');
     if (length(message) > 0) then
       verticalPadding := 100;
 
-    drawTextCentered(
-      WIDTH_CELL, WIDTH_CELL, FIELD_WIDTH * WIDTH_CELL, FIELD_HEIGHT * WIDTH_CELL,
-      message
-    );
+    drawTextCentered(0, 0, GraphBoxWidth, GraphBoxHeight, message);
     drawButton(fieldCenterX - 100, fieldCenterY + verticalPadding - 20, fieldCenterX + 100, fieldCenterY + verticalPadding + 20, 'Продолжить', clLightGreen);
 
     repeat
@@ -116,10 +113,7 @@ function confirmation(const message: string): boolean;
     ytemp:=MOUSE_Y;
     
     setFontSize(25);
-    drawTextCentered(
-      WIDTH_CELL, WIDTH_CELL, FIELD_WIDTH * WIDTH_CELL, FIELD_HEIGHT * WIDTH_CELL,
-      message
-    );
+    drawTextCentered(0, 0, GraphBoxWidth, GraphBoxHeight, message);
 
     drawButton(fieldCenterX - 120, fieldCenterY + 50, fieldCenterX - 20, fieldCenterY + 50 + 40, 'Да', clLightGreen);
     drawButton(fieldCenterX + 20, fieldCenterY + 50, fieldCenterX + 120, fieldCenterY + 50 + 40, 'Нет', clIndianRed);
@@ -579,9 +573,9 @@ procedure displayGameStep();
     windowWidth := FIELD_WIDTH * WIDTH_CELL + 240;
     // высота игрового поля
     windowHeight := FIELD_HEIGHT * WIDTH_CELL + TEXT_PADDING*2;
-    // центр игрового поля по ширине
-    fieldCenterX := (FIELD_WIDTH * WIDTH_CELL - WIDTH_CELL) div 2 + WIDTH_CELL;
-    // центр игрового поля по высоте
+    // центр окна по ширине
+    fieldCenterX := GraphBoxWidth div 2;
+    // центр окна по высоте
     fieldCenterY := GraphBoxHeight div 2;
 
     if(BACKGROUND_WIDTH > windowWidth)
