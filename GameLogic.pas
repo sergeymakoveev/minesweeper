@@ -415,11 +415,11 @@ procedure checkIsBest(time: integer; GAME_LEVEL: byte);
     end;
     
     reset(f);
-    
+
     i:=0;
     
     // если побил рекорд или поставил новый, то ввод имени
-    if (players[GAME_LEVEL].score=0) or (time < players[GAME_LEVEL].score)  then
+    if (players[GAME_LEVEL].score = 0) or (time < players[GAME_LEVEL].score)  then
     begin
       textout(38,20,'Новый рекорд! Введите ваше имя (затем Enter):');
       assign(f2,'temprecords.txt');
@@ -456,27 +456,15 @@ procedure displayWin();
     // считаем суммарное время прохождения уровня
     time := time + (time1 - time0) div 1000 + 1;
     
-    fillrectangle(39 * (FIELD_WIDTH + 3), round(39*2.5), 39 * (FIELD_WIDTH + 3) + 39 * 2, round(39*2.5) + 39);// убрать кнопку паузы
-    
-    finishText := 'Вы победили! Секунд затрачено: ' + time;
-    setFontSize(10);
-    TextOut(38,0,finishtext);
-    
-    // если не на пользовательском уровне, то проверяем время на рекорд
-    if GAME_LEVEL <> 3 then checkIsBest(time,GAME_LEVEL);
-    
-    repeat
-      // Пауза в 1мс позволяет меньше грузить процессор при бесконечном цикле
-      sleep(1);
-      if IS_MOUSE_DOWN then
-        IS_MOUSE_DOWN := false;
-    until
-      (checkExitButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_HEIGHT, FIELD_WIDTH))
-      or (checkRestartButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH))
-      or (checkMenuButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH));
-    xtemp:=MOUSE_X;
-    ytemp:=MOUSE_Y;
-    checkButtonsClick();
+    if GAME_LEVEL <> 3 
+      // проверка на рекорд для остальных уровней сложности
+      then checkIsBest(time, GAME_LEVEL)
+      // для пользовательского уровня выводим время прохождения
+      else
+        begin
+          alert('Победа! Время прохождения: ' + time + ' сек.');
+          PROGRAM_STEP := 'MenuMainStep';
+        end;
   end;
 
 // пауза
@@ -670,7 +658,8 @@ procedure displayGameStep();
     until isConfirmed or (fcount = FIELD_WIDTH * FIELD_HEIGHT - FIELD_MINES_COUNT) or checkIsLose(i, j);
     
     // если выполнилось условие проигрыша, то проиграл
-    if checkIsLose(i,j) then displayLose();
+    if checkIsLose(i,j) then displayWin();
+    // if checkIsLose(i,j) then displayLose();
     
     // если открыл все поля без мин, то победил
     if fcount = int(FIELD_WIDTH * FIELD_HEIGHT) - FIELD_MINES_COUNT then displayWin();
