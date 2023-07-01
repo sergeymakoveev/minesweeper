@@ -25,9 +25,9 @@ var
   // высота игрового поля
   windowHeight: integer;
   // высота игрового поля по ширине
-  fieldCenterX: integer;
+  windowCenterX: integer;
   // высота игрового поля по высоте
-  fieldCenterY: integer;
+  windowCenterY: integer;
 
 // отображение оверлея
 procedure displayOverlay();
@@ -43,8 +43,8 @@ procedure alert(message: string := '');
   function checkContinueButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE, FIELD_WIDTH: integer): boolean;
     begin
       if
-        (MOUSE_X in fieldCenterX - 100..fieldCenterX + 100)
-        and (MOUSE_Y in fieldCenterY + verticalPadding - 20..fieldCenterY + verticalPadding + 20)
+        (MOUSE_X in windowCenterX - 100..windowCenterX + 100)
+        and (MOUSE_Y in windowCenterY + verticalPadding - 20..windowCenterY + verticalPadding + 20)
         and (BUTTON_TYPE = 1)
       then
         checkContinueButtonClick := true;
@@ -60,7 +60,7 @@ procedure alert(message: string := '');
       verticalPadding := 100;
 
     drawTextCentered(0, 0, GraphBoxWidth, GraphBoxHeight, message);
-    drawButton(fieldCenterX - 100, fieldCenterY + verticalPadding - 20, fieldCenterX + 100, fieldCenterY + verticalPadding + 20, 'Продолжить', clLightGreen);
+    drawButton(windowCenterX - 100, windowCenterY + verticalPadding - 20, windowCenterX + 100, windowCenterY + verticalPadding + 20, 'Продолжить', clLightGreen);
 
     repeat
       // Пауза в 1мс позволяет меньше грузить процессор при бесконечном цикле
@@ -86,8 +86,8 @@ function confirmation(const message: string): boolean;
   function checkNoButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
       if
-        (MOUSE_X in (fieldCenterX + 20)..(fieldCenterX + 120))
-        and (MOUSE_Y in (fieldCenterY + 50)..(fieldCenterY + 50 + 40))
+        (MOUSE_X in (windowCenterX + 20)..(windowCenterX + 120))
+        and (MOUSE_Y in (windowCenterY + 50)..(windowCenterY + 50 + 40))
         and (BUTTON_TYPE = 1)
       then
         checkNoButtonClick := true;
@@ -96,8 +96,8 @@ function confirmation(const message: string): boolean;
   function checkYesButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE: integer): boolean;
     begin
       if
-        (MOUSE_X in (fieldCenterX - 120)..(fieldCenterX - 20))
-        and (MOUSE_Y in (fieldCenterY + 50)..(fieldCenterY + 50 + 40))
+        (MOUSE_X in (windowCenterX - 120)..(windowCenterX - 20))
+        and (MOUSE_Y in (windowCenterY + 50)..(windowCenterY + 50 + 40))
         and (BUTTON_TYPE = 1)
       then
         checkYesButtonClick := true;
@@ -115,8 +115,8 @@ function confirmation(const message: string): boolean;
     setFontSize(25);
     drawTextCentered(0, 0, GraphBoxWidth, GraphBoxHeight, message);
 
-    drawButton(fieldCenterX - 120, fieldCenterY + 50, fieldCenterX - 20, fieldCenterY + 50 + 40, 'Да', clLightGreen);
-    drawButton(fieldCenterX + 20, fieldCenterY + 50, fieldCenterX + 120, fieldCenterY + 50 + 40, 'Нет', clIndianRed);
+    drawButton(windowCenterX - 120, windowCenterY + 50, windowCenterX - 20, windowCenterY + 50 + 40, 'Да', clLightGreen);
+    drawButton(windowCenterX + 20, windowCenterY + 50, windowCenterX + 120, windowCenterY + 50 + 40, 'Нет', clIndianRed);
     
     repeat
       // Пауза в 1мс позволяет меньше грузить процессор при бесконечном цикле
@@ -574,9 +574,9 @@ procedure displayGameStep();
     // высота игрового поля
     windowHeight := FIELD_HEIGHT * WIDTH_CELL + TEXT_PADDING*2;
     // центр окна по ширине
-    fieldCenterX := GraphBoxWidth div 2;
+    windowCenterX := GraphBoxWidth div 2;
     // центр окна по высоте
-    fieldCenterY := GraphBoxHeight div 2;
+    windowCenterY := GraphBoxHeight div 2;
 
     if(BACKGROUND_WIDTH > windowWidth)
       then windowWidth := BACKGROUND_WIDTH;
@@ -650,9 +650,11 @@ procedure displayGameStep();
         end;
     // завершение процесса игры при одном из трёх условий
     until isConfirmed or (fcount = FIELD_WIDTH * FIELD_HEIGHT - FIELD_MINES_COUNT) or checkIsLose(i, j);
-    
-    // если выполнилось условие проигрыша, то проиграл
+
+    // Отладка: отображение выигрыша при проигрыше
     // if checkIsLose(i,j) then displayWin();
+
+    // если выполнилось условие проигрыша, то проиграл
     if checkIsLose(i,j) then displayLose();
     
     // если открыл все поля без мин, то победил
