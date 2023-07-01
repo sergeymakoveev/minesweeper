@@ -122,7 +122,7 @@ function confirmation(const message: string): boolean;
       // Пауза в 1мс позволяет меньше грузить процессор при бесконечном цикле
       sleep(1);
       if IS_MOUSE_DOWN then
-          IS_MOUSE_DOWN := false;
+        IS_MOUSE_DOWN := false;
     until
       checkYesButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE) or
       checkNoButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE);
@@ -652,8 +652,8 @@ procedure displayGameStep();
     until isConfirmed or (fcount = FIELD_WIDTH * FIELD_HEIGHT - FIELD_MINES_COUNT) or checkIsLose(i, j);
     
     // если выполнилось условие проигрыша, то проиграл
-    if checkIsLose(i,j) then displayWin();
-    // if checkIsLose(i,j) then displayLose();
+    // if checkIsLose(i,j) then displayWin();
+    if checkIsLose(i,j) then displayLose();
     
     // если открыл все поля без мин, то победил
     if fcount = int(FIELD_WIDTH * FIELD_HEIGHT) - FIELD_MINES_COUNT then displayWin();
