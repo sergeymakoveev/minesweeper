@@ -65,8 +65,9 @@ procedure alert(message: string := '');
     );
     drawButton(fieldCenterX - 100, fieldCenterY + verticalPadding - 20, fieldCenterX + 100, fieldCenterY + verticalPadding + 20, 'Продолжить', clLightGreen);
 
-    OnMouseDown:=handleMouseDown;
     repeat
+      // Пауза в 1мс позволяет меньше грузить процессор при бесконечном цикле
+      sleep(1);
       if IS_MOUSE_DOWN then
         IS_MOUSE_DOWN := false;
     until
@@ -123,12 +124,11 @@ function confirmation(const message: string): boolean;
     drawButton(fieldCenterX - 120, fieldCenterY + 50, fieldCenterX - 20, fieldCenterY + 50 + 40, 'Да', clLightGreen);
     drawButton(fieldCenterX + 20, fieldCenterY + 50, fieldCenterX + 120, fieldCenterY + 50 + 40, 'Нет', clIndianRed);
     
-    OnMouseDown:=handleMouseDown;
     repeat
+      // Пауза в 1мс позволяет меньше грузить процессор при бесконечном цикле
+      sleep(1);
       if IS_MOUSE_DOWN then
-        begin
           IS_MOUSE_DOWN := false;
-        end;
     until
       checkYesButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE) or
       checkNoButtonClick(MOUSE_X,MOUSE_Y,BUTTON_TYPE);
@@ -462,14 +462,12 @@ procedure displayWin();
     setFontSize(10);
     TextOut(38,0,finishtext);
     
-    // отключаем мышь на время записи рекорда
-    OnMouseDown:=Nil;
-    
     // если не на пользовательском уровне, то проверяем время на рекорд
     if GAME_LEVEL <> 3 then checkIsBest(time,GAME_LEVEL);
     
-    OnMouseDown:=handleMouseDown;
     repeat
+      // Пауза в 1мс позволяет меньше грузить процессор при бесконечном цикле
+      sleep(1);
       if IS_MOUSE_DOWN then
         IS_MOUSE_DOWN := false;
     until
@@ -637,6 +635,8 @@ procedure displayGameStep();
     repeat
       if IS_MOUSE_DOWN then
         begin
+          // Пауза в 1мс позволяет меньше грузить процессор при бесконечном цикле
+          sleep(1);
           IS_MOUSE_DOWN := false;
           i := MOUSE_X div WIDTH_CELL;
           j := MOUSE_Y div WIDTH_CELL;

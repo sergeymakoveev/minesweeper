@@ -55,12 +55,11 @@ procedure displayMenuMainStep;
     setFontSize(10);
     TextOut(0, 360, '   © Николаев Максим, группа 243   ');
     
-    OnMouseDown := handleMouseDown;
     repeat
+      // Пауза в 1мс позволяет меньше грузить процессор при бесконечном цикле
+      sleep(1);
       if IS_MOUSE_DOWN then
-        begin
-          IS_MOUSE_DOWN := false;
-        end;
+        IS_MOUSE_DOWN := false;
     until
       checkPlayButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) or
       checkRulesButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) or
@@ -132,10 +131,10 @@ procedure displayMenuGameStep;
     drawButton(0,340,200,380,'Назад');
 
     repeat
+      // Пауза в 1мс позволяет меньше грузить процессор при бесконечном цикле
+      sleep(1);
       if IS_MOUSE_DOWN then
-        begin
-          IS_MOUSE_DOWN := false;
-        end;
+        IS_MOUSE_DOWN := false;
     until 
       checkEasyLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) or
       checkNormalLevelButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE) or
@@ -218,9 +217,9 @@ procedure displayRecordsStep();
     setBrushColor(ARGB(200, 255, 255, 255));
     drawButton(0, 340, 200, 380, 'Назад');
 
-    IS_MOUSE_DOWN := false;
-    OnMouseDown := handleMouseDown;
     repeat
+      // Пауза в 1мс позволяет меньше грузить процессор при бесконечном цикле
+      sleep(1);
       if IS_MOUSE_DOWN then
         IS_MOUSE_DOWN := false;
     until
@@ -259,12 +258,11 @@ procedure displayRulesStep(var PROGRAM_STEP: string);
 
     drawButton(0, 340, 200, 380, 'Назад');
     
-    OnMouseDown := handleMouseDown;
     repeat
+      // Пауза в 1мс позволяет меньше грузить процессор при бесконечном цикле
+      sleep(1);
       if IS_MOUSE_DOWN then
-        begin
-          IS_MOUSE_DOWN := false;
-        end;
+        IS_MOUSE_DOWN := false;
     until checkBackButtonClick(MOUSE_X, MOUSE_Y, BUTTON_TYPE);
     
     PROGRAM_STEP := 'MenuMainStep';
@@ -273,8 +271,15 @@ procedure displayRulesStep(var PROGRAM_STEP: string);
 // Запуск игры
 begin
   
+  // Устанавливаем заголовок окна
   SetWindowCaption('Игра "Сапёр"');
   SetWindowIsFixedSize(true);
+
+  // Задаем глобальный обработчик нажатия клавиш мыши
+  // для обработки кликов по элементам интерфейса.
+  // Действует постоянно в течении всего времени работы программы.
+  OnMouseDown := handleMouseDown;
+
   
   if not (fileexists('rules.txt') and fileexists('records.txt')) then
     begin
@@ -286,8 +291,10 @@ begin
   
   PROGRAM_STEP := 'MenuMainStep';
   
-  // Отрисовка текущего окна
+  // Отрисовка текущего шага игры
   repeat
+    // Пауза в 1мс позволяет меньше грузить процессор при бесконечном цикле
+    sleep(1);
     case PROGRAM_STEP of
       'MenuGameStep': displayMenuGameStep();
       'GameStep': displayGameStep();
