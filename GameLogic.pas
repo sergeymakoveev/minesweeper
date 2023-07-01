@@ -344,16 +344,6 @@ procedure checkButtonsClick();
       closewindow();
   end;
 
-// поражение
-procedure displayLose();
-  begin
-    time1 := Milliseconds;
-    time := time + (time1 - time0) div 1000 + 1;
-    setFontSize(15);
-    alert('Вы проиграли потратив ' + time + ' секунд(ы)...');
-    PROGRAM_STEP := 'MenuMainStep';
-  end;
-
 // нажатие на клавиатуру (имя рекордсмена)
 procedure onKeyPressName(ch: char);
   begin
@@ -563,6 +553,16 @@ procedure displayGameStep();
         and (FIELD[i, j].flag = False))
       then
         checkIsLose := True;
+    end;
+
+  // поражение
+  procedure displayLose();
+    begin
+      time1 := Milliseconds;
+      time := time + (time1 - time0) div 1000 + 1;
+      setFontSize(15);
+      alert('Вы проиграли потратив ' + time + ' секунд(ы)...');
+      PROGRAM_STEP := 'MenuMainStep';
     end;
 
   begin
