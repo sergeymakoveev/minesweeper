@@ -5,7 +5,6 @@ Interface
   uses GraphABC;
   uses GlobalConstants, GlobalVariables, CommonFunctions;
 
-  procedure inputInteger(ch: char);
   procedure displayGameLevelForm(var GAME_LEVEL: byte; var FIELD_WIDTH,FIELD_HEIGHT: integer; var FIELD_MINES_COUNT: integer; var PROGRAM_STEP: string);
   
 Implementation
@@ -13,6 +12,41 @@ Implementation
 var 
   // координаты отображения поля для ввода
   outX,outY: integer;
+
+// Процедура пользовательского ввода целого числа
+procedure inputInteger(ch: char);
+  begin
+    lockdrawing();
+    setBrushColor(RGB(255,255,255));
+    fillrect(outX, outY, outX+30, outY+20);
+    // ввод символов
+    // нажата клавиша 0...9 и введено менее 2х символов
+    if (ch in ('0'..'9')) and (length(USER_INPUT)<2)
+      // накапливаем пользовательский ввод
+      then USER_INPUT+=ch;
+    // удаление символов
+    // нажата клавиша BackSpace
+    if ord(ch) = VK_Back then
+      begin
+        // удаляем из пользовательского ввода последний символ
+        delete(USER_INPUT,length(USER_INPUT),1);
+        fillrect(outX, outY, outX+30, outY+20);
+      end;
+    textout(outX,outY,USER_INPUT);
+    unlockdrawing();
+    redraw();
+    // завершение ввода символов
+    // нажата клавиша Enter
+    if ord(ch) = VK_Enter then
+      begin
+        // сбрасываем обработчик нажатия клавиш
+        onKeyPress:=Nil;
+        // устанавливаем глобальный флаг окончания ввода
+        IS_USER_INPUT_DONE:=True;
+        // очищаем пользовательский ввод
+        USER_INPUT := '';
+      end;
+  end;
 
 // отображения поля для ввода
 procedure diaplayInputField(const title: string; var fieldParam: integer; const fieldRange: IntRange);
@@ -48,41 +82,6 @@ procedure diaplayInputField(const title: string; var fieldParam: integer; const 
         repeat userInput:=USER_INPUT until IS_USER_INPUT_DONE;
         IS_USER_INPUT_DONE:=False;
         val(userInput, fieldParam, err);
-      end;
-  end;
-
-// Процедура пользовательского ввода целого числа
-procedure inputInteger(ch: char);
-  begin
-    lockdrawing();
-    setBrushColor(RGB(255,255,255));
-    fillrect(outX, outY, outX+30, outY+20);
-    // ввод символов
-    // нажата клавиша 0...9 и введено менее 2х символов
-    if (ch in ('0'..'9')) and (length(USER_INPUT)<2)
-      // накапливаем пользовательский ввод
-      then USER_INPUT+=ch;
-    // удаление символов
-    // нажата клавиша BackSpace
-    if ord(ch) = VK_Back then
-      begin
-        // удаляем из пользовательского ввода последний символ
-        delete(USER_INPUT,length(USER_INPUT),1);
-        fillrect(outX, outY, outX+30, outY+20);
-      end;
-    textout(outX,outY,USER_INPUT);
-    unlockdrawing();
-    redraw();
-    // завершение ввода символов
-    // нажата клавиша Enter
-    if ord(ch) = VK_Enter then
-      begin
-        // сбрасываем обработчик нажатия клавиш
-        onKeyPress:=Nil;
-        // устанавливаем глобальный флаг окончания ввода
-        IS_USER_INPUT_DONE:=True;
-        // очищаем пользовательский ввод
-        USER_INPUT := '';
       end;
   end;
 
