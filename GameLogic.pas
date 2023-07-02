@@ -349,17 +349,19 @@ procedure onKeyPressName(ch: char);
   begin
     IS_USER_INPUT_DONE := false;
     lockdrawing();
-    fillrect(350,20,500,36);
-    if ((ch in ('А'..'Я')) or (ch in ('а'..'я'))) and (length(USER_INPUT)<15) then USER_INPUT+=ch;
-    textout(350,20,USER_INPUT);
+    setFontSize(20);
+    setBrushColor(clWhite);
+
+    if ((ch in ('А'..'Я')) or (ch in ('а'..'я')) or (ch in ('A'..'z')) or (ch in ('a'..'z')))
+      and (length(USER_INPUT)<15)
+    then USER_INPUT+=ch;
     // если нажали на Delete
     if ord(ch) = 8 then
-      begin
-        // удаление одного последнего символа по требованию
-        delete(USER_INPUT,length(USER_INPUT),1);
-        fillrect(350,20,500,36);
-        textout(350,20,USER_INPUT);
-      end;
+      // удаление одного последнего символа по требованию
+      delete(USER_INPUT,length(USER_INPUT),1);
+
+    fillrect(windowCenterX - 100, windowCenterY, windowCenterX + 100, windowCenterY + 40);
+    drawTextCentered(windowCenterX - 170, windowCenterY, windowCenterX + 170, windowCenterY + 40, USER_INPUT);
     unlockdrawing();
     redraw();
     // если нажали на Enter(конец проверки на событие)
@@ -380,55 +382,56 @@ procedure checkIsBest(time: integer; GAME_LEVEL: byte);
   begin
     var players: array [0..2] of highscore;
     var i: byte;
-    var f,f2: text;
+    var f: Text;
     var s: string;
     
-    i:=0;
     IS_USER_INPUT_DONE:=False;
 
     // открытие файла рекордов
     assign(f,'records.txt');
     reset(f);
-    
-    // запись содержимого в переменные
+    // чтение содержимого файла
+    i:=0;
     while (not eof(f)) do
     begin
-      readln(f,players[i].name);
-      readln(f,players[i].score);
+      readln(f, players[i].name);
+      readln(f, players[i].score);
       i+=1;
     end;
-    
-    reset(f);
-
-    i:=0;
+    // закрываем файл
+    close(f);
     
     // если побил рекорд или поставил новый, то ввод имени
     if (players[GAME_LEVEL].score = 0) or (time < players[GAME_LEVEL].score)  then
-    begin
-      textout(38,20,'Новый рекорд! Введите ваше имя (затем Enter):');
-      assign(f2,'temprecords.txt');
-      rewrite(f2);
-      while not eof(f) do
       begin
-        i+=1;
-        readln(f,s);
-        if (i<>(2*GAME_LEVEL+2)) and (i<>(2*GAME_LEVEL+1)) then writeln(f2,s)
-        else if i=(2*GAME_LEVEL+2) then writeln(f2,time)
-        else
-          begin
-            USER_INPUT:='';
-            onKeyPress:=onKeyPressName;
-            repeat i:=i+0 until IS_USER_INPUT_DONE;
-            writeln(f2,USER_INPUT);
-          end;
+        displayOverlay();
+        setFontSize(30);
+        DrawTextCentered(0, windowCenterY - 100, GraphBoxWidth, windowCenterY - 100 + 40, 'Новый рекорд!');
+        setFontSize(20);
+        DrawTextCentered(0, windowCenterY - 50, GraphBoxWidth, windowCenterY - 50 + 30, 'Введите ваше имя (затем Enter):');
+
+        USER_INPUT:='';
+        onKeyPress:=onKeyPressName;
+        repeat sleep(1) until IS_USER_INPUT_DONE;
+
+        players[GAME_LEVEL].name := USER_INPUT;
+        players[GAME_LEVEL].score := time;
+
+        rewrite(f);
+        for i := 0 to 2 do
+        begin
+          writeln(f,players[i].name);
+          writeln(f,players[i].score);
+        end;
+        // записываем содержимое буфера файла на диск
+        flush(f);
+        // закрываем файл рекордов
+        close(f);
       end;
-      close(f);
-      close(f2);
-      erase(f);
-      rename(f2,'records.txt');
-    end
-    // иначе закрываем файл рекордов
-    else close(f);
+
+    // выходим в основное меню
+    PROGRAM_STEP := 'MenuMainStep';
+
   end;
 
 // победа
@@ -440,15 +443,13 @@ procedure displayWin();
     // считаем суммарное время прохождения уровня
     time := time + (time1 - time0) div 1000 + 1;
     
+    alert('Победа! Время прохождения: ' + time + ' сек.');
+
     if GAME_LEVEL <> 3 
       // проверка на рекорд для остальных уровней сложности
       then checkIsBest(time, GAME_LEVEL)
-      // для пользовательского уровня выводим время прохождения
-      else
-        begin
-          alert('Победа! Время прохождения: ' + time + ' сек.');
-          PROGRAM_STEP := 'MenuMainStep';
-        end;
+      // для пользовательского уровня выходим в основное меню
+      else PROGRAM_STEP := 'MenuMainStep';
   end;
 
 // пауза
