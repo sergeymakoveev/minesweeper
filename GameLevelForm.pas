@@ -30,7 +30,6 @@ procedure inputInteger(ch: char);
       begin
         // удаляем из пользовательского ввода последний символ
         delete(USER_INPUT,length(USER_INPUT),1);
-        fillrect(outX, outY, outX+30, outY+20);
       end;
     textout(outX,outY,USER_INPUT);
     unlockdrawing();
@@ -66,7 +65,11 @@ procedure diaplayInputField(const title: string; var fieldParam: integer; const 
     // задаем обработчик событий нажатия клавиатуры
     onKeyPress:=inputInteger;
     // сохраняем пользовательский ввод во временную переменную
-    repeat userInput:=USER_INPUT until IS_USER_INPUT_DONE;
+    repeat 
+      sleep(1);
+      userInput:=USER_INPUT
+    until
+      IS_USER_INPUT_DONE;
     IS_USER_INPUT_DONE:=False;
     val(userInput, fieldParam, err);
     while fieldParam not in fieldRange do
