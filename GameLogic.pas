@@ -574,10 +574,6 @@ procedure displayGameStep();
     windowWidth := FIELD_WIDTH * WIDTH_CELL + 240;
     // высота игрового поля
     windowHeight := FIELD_HEIGHT * WIDTH_CELL + TEXT_PADDING*2;
-    // центр окна по ширине
-    windowCenterX := GraphBoxWidth div 2;
-    // центр окна по высоте
-    windowCenterY := GraphBoxHeight div 2;
 
     if(BACKGROUND_WIDTH > windowWidth)
       then windowWidth := BACKGROUND_WIDTH;
@@ -586,6 +582,11 @@ procedure displayGameStep();
 
     clearWindow();
     setWindowSize(windowWidth, windowHeight);
+      // центр окна по ширине
+    windowCenterX := GraphBoxWidth div 2;
+    // центр окна по высоте
+    windowCenterY := GraphBoxHeight div 2;
+
     centerWindow();
     var background := Picture.Create(BACKGROUND_SRC);
     background.SetSize(windowWidth, windowHeight);
